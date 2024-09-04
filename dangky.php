@@ -2,10 +2,56 @@
     include './laytouts/header.php';
 ?>
 
+<?php 
+	$error_taiKhoan = "";
+	$token = md5(uniqid());
+	
+	// echo $_POST['_token'] . '<br>'; // biến $_POST['_token'] không thay đổi vì nó không thực hiện submit
+	// echo $_SESSION['token'];
+
+    if(isset($_POST['submit']) && $_SESSION['token'] == $_POST['_token']) {
+
+        $hoVaTen = $_POST['hoVaTen'];
+        $taiKhoan = $_POST['taiKhoan'];
+        $matKhau = $_POST['matKhau'];
+		$matKhau_hashed = md5($matKhau);
+        $gioiTinh = $_POST['gioiTinh'];
+        $ngaySinh = $_POST['ngaySinh'];
+        $diaChi = $_POST['diaChi'];
+        $soDienThoai = $_POST['soDienThoai'];
+        $email = $_POST['email'];
+
+		
+		$s = "SELECT taiKhoan FROM user WHERE taiKhoan='$taiKhoan'";
+		$query = mysqli_query($connect, $s);
+		if(mysqli_num_rows($query) > 0){
+			$error_taiKhoan = 'Tài khoản đã tồn tại';
+		} else {
+			$sql = "INSERT INTO user(hoVaTen, taiKhoan, matKhau, gioiTinh, ngaySinh, diaChi, soDienThoai, email) VALUES 
+			('$hoVaTen', '$taiKhoan', '$matKhau_hashed', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$email');";
+	
+		   $result = mysqli_query($connect, $sql);
+	
+			if($result){
+				$affected_row = mysqli_affected_rows($connect);
+				if($affected_row > 0){
+					$_SESSION['taiKhoan'] = $taiKhoan;
+					?>
+					<script>
+						alert("Xin chào <?php $hoVaTen?>");
+						window.location.href="index.php";
+					</script>
+				<?php 
+				}
+			}
+		}
+    }
+?>
+
 	<div class="container" style="width: 70%; padding-top: 20px;">
 		<h3 style="text-align: center; color: highlight; font-size: 40px;">Đăng ký tài khoản</h3><br>
 		<div class="red" id="baoLoi">
-			<?php $errors = "" ?>
+			<?php $error_taiKhoan ?>
 		</div>
 		<form action="<?php echo $_SERVER['PHP_SELF']?>" method="post" class="form">
 			<div class="row">
@@ -71,6 +117,9 @@
 				  	</div>
 			  	</div>
 			  	<input type="submit" class="btn btn-primary" value="Đăng ký" name="submit" id="submit" style="visibility: hidden;"/>
+
+				<input type="hidden" name="_token" value="<?php echo $token ?>">
+				<?php $_SESSION['token'] = $token; ?>
 		  	</div>
 		</form>
 	</div>
@@ -101,25 +150,6 @@
 </script>
 
 
-<?php 
-    if(isset($_POST['submit'])) {
-        $hoVaTen = $_POST['hoVaTen'];
-        $taiKhoan = $_POST['taiKhoan'];
-        $matKhau = $_POST['matKhau'];
-        $gioiTinh = $_POST['gioiTinh'];
-        $ngaySinh = $_POST['ngaySinh'];
-        $diaChi = $_POST['diaChi'];
-        $soDienThoai = $_POST['soDienThoai'];
-        $email = $_POST['email'];
-
-        // echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email; 
-
-        $sql = "INSERT INTO user(hoVaTen, taiKhoan, matKhau, gioiTinh, ngaySinh, diaChi, soDienThoai, email) VALUES 
-        ('$hoVaTen', '$taiKhoan', '$matKhau', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$email');";
-
-        mysqli_query($connect, $sql);
-    }
-?>
 
 <?php 
     include './laytouts/footer.php'

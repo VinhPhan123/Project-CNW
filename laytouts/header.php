@@ -1,5 +1,6 @@
 <?php 
     include './database/connect.php';
+	session_start();
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +14,7 @@
     <link rel="stylesheet" href="./assets/css/header.css">
 </head>
 <body>
+
 
 <nav class="container navbar navbar-expand-lg bg-light">
 		<div class="container-fluid">
@@ -50,7 +52,7 @@
 					<button class="btn btn-outline-success" type="submit">Tìm</button>
                 
                 <?php 
-                    if(isset($_SESSION['user'])){
+                    if(isset($_SESSION['taiKhoan'])){
                 ?>
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0 bg-infor ">
 						<li class="nav-item dropdown dropstart"><a
@@ -62,7 +64,7 @@
 								<li><a class="dropdown-item" href="thaydoithongtin.jsp">Thay đổi thông tin</a></li>
 								<li><a class="dropdown-item" href="doimatkhau.jsp">Đổi mật khẩu</a></li>
 								<li><hr class="dropdown-divider"></li>
-								<li><a class="dropdown-item" href="dang-xuat">Thoát tài khoản</a></li>
+								<li><a class="dropdown-item" href="logout.php" id="logout">Thoát tài khoản</a></li>
 							</ul></li>
 					</ul>			
                 <?php } else { ?>	
