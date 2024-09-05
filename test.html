@@ -7,8 +7,20 @@
 </head>
 <body>
     <form action="">
-        <button></button>
-
+        <input type="text" placeholder="Name">
+        <input type="button" value="Click" onclick="saveName()">
+        <input type="checkbox" id="check1">
     </form>
+
+    <script>
+        function saveName() {
+            var inputValue = document.querySelector('input[type="text"]').value;
+            // localStorage.setItem("name", inputValue);
+        }
+
+        var checked = document.getElementById('check1').checked;
+        console.log(checked);
+    </script>
+    
 </body>
 </html>
