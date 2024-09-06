@@ -1,28 +1,59 @@
 <?php 
     include './layouts/header.php';
 ?>
-
+<pre>
 <?php 
     if(isset($_POST['submit'])) {
         $taiKhoan = $_POST['taiKhoan'];
         $matKhau = $_POST['matKhau'];
         $matKhau_hashed = md5($matKhau);
 
-        // $sql = "SELECT * FROM admins WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
-        $sql = "SELECT * FROM admins WHERE username ='$taiKhoan' AND password ='$matKhau'";
+        if($taiKhoan == "" || $matKhau == "") {
+            echo("<script>alert('Vui lòng nhập đầy đủ tài khoản và mật khẩu!')</script>");
+        } else {
+            // $sql = "SELECT * FROM admins WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
+            $sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
+            $sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
+            $sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
 
+            $query_admins = mysqli_query($connect, $sql_admins);
+            $query_teachers = mysqli_query($connect, $sql_teachers);
+            $query_students = mysqli_query($connect, $sql_students);
+    
+            $result_admins = mysqli_num_rows($query_admins);
+            $result_teachers = mysqli_num_rows($query_teachers);
+            $result_students = mysqli_num_rows($query_students);
 
-        $result = mysqli_query($connect, $sql);
-
-        if(mysqli_num_rows($result) == 1){
-            $_SESSION['taiKhoan'] = $taiKhoan;
-            header("location: index.php");
+            $check = false;
+            if($result_admins == 1) {
+                $arr = mysqli_fetch_array($query_admins);
+                $check = true;
+            } elseif($result_teachers == 1) {
+                $arr = mysqli_fetch_array($query_teachers);
+                $check = true;
+            } elseif($result_students == 1) {
+                $arr = mysqli_fetch_array($query_students);
+                $check = true;
+            }
+            
+            if($check) {
+                $_SESSION['hoVaTen'] = $arr['fullname'];
+                $_SESSION['taiKhoan'] = $arr['username'];
+                $_SESSION['matKhau'] = $arr['password'];
+                $_SESSION['gioiTinh'] = $arr['gender'];
+                $_SESSION['ngaySinh'] = $arr['ngaysinh'];
+                $_SESSION['diaChi'] = $arr['address'];
+                $_SESSION['soDienThoai'] = $arr['phone_number'];
+                $_SESSION['email'] = $arr['email'];
+    
+                header("location: index.php");
+            } else {
+                echo("<script>alert('Tài khoản hoặc mật khẩu chưa đúng!')</script>");
+            }
         }
-
     }
-
 ?>
-
+</pre>
 
 <main class="form-signin w-50 m-auto">
     <form class="text-center" action="<?php echo $_SERVER['PHP_SELF']?>" method="post">

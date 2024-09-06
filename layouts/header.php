@@ -61,7 +61,9 @@
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0 bg-infor ">
 						<li class="nav-item dropdown dropstart"><a
 							class="nav-link dropdown-toggle" href="#" role="button"
-							data-bs-toggle="dropdown" aria-expanded="false"> Tài khoản</a>
+							data-bs-toggle="dropdown" aria-expanded="false">
+							<?php echo($_SESSION['hoVaTen']);
+							?></a>
 							<ul class="dropdown-menu">
 								<li><a class="dropdown-item" href="#">Đơn hàng của tôi</a></li>
 								<li><a class="dropdown-item" href="#">Thông báo</a></li>
