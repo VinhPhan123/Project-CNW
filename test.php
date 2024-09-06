@@ -6,9 +6,14 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="" method="post">
-        <input type="text">
-        <input type="submit" value="Click">
-    </form>
+    
+
 </body>
 </html>
+
+<?php 
+    $arr = [1, 2, 3];
+    $_SESSION['a'] = $arr;
+
+    print_r($_SESSION['a']);
+?>

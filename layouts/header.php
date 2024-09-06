@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./assets/css/header.css">
     <link rel="stylesheet" href="./assets/css/footer.css">
     <link rel="stylesheet" href="./assets/css/dangky.css">
+    <link rel="stylesheet" href="./assets/css/admin.css">
 </head>
 <body>
 
@@ -49,7 +50,7 @@
 					</li>
 				</ul>
 				
-				<form class="d-flex" role="search" style="position: relative;display: block;float: right;">
+				<form class="d-flex" method="post" role="search" style="position: relative;display: block;float: right;">
 					<input class="form-control me-2" type="search"
 						placeholder="Nội dung tìm kiếm" aria-label="Search">
 					<button class="btn btn-outline-success" type="submit">Tìm</button>
