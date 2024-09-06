@@ -51,6 +51,7 @@
                 echo("<script>alert('Tài khoản hoặc mật khẩu chưa đúng!')</script>");
             }
         }
+        echo "<meta http-equiv='refresh' content='0'>";     #reload trang không gửi request
     }
 ?>
 </pre>
