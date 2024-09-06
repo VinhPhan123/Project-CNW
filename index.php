@@ -1,5 +1,5 @@
 <?php 
-    include './laytouts/header.php';
+    include './layouts/header.php';
 ?>
 
 
@@ -131,5 +131,5 @@
 	<!-- End Page content -->
 
 <?php 
-    include './laytouts/footer.php';
+    include './layouts/footer.php';
 ?>

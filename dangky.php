@@ -1,5 +1,5 @@
 <?php 
-    include './laytouts/header.php';
+    include './layouts/header.php';
 	use PHPMailer\PHPMailer\PHPMailer;
 	use PHPMailer\PHPMailer\Exception;
 	
@@ -17,6 +17,7 @@
 
 <?php 
 	$error_taiKhoan = "";
+	$error_mail = "";
 	$token = md5(uniqid());
 	
 	// echo $_POST['_token'] . '<br>'; // biến $_POST['_token'] không thay đổi vì nó không thực hiện submit
@@ -28,7 +29,7 @@
 
         $hoVaTen = $_POST['hoVaTen'];
         $taiKhoan = $_POST['taiKhoan'];
-        $matKhau_a = $_POST['matKhau'];
+        $matKhau_unhash = $_POST['matKhau'];
 		$matKhau = md5($matKhau_a);
         $gioiTinh = $_POST['gioiTinh'];
         $ngaySinh = $_POST['ngaySinh'];
@@ -40,6 +41,7 @@
 		$_SESSION['hoVaTen'] = $hoVaTen;
 		$_SESSION['taiKhoan'] = $taiKhoan;
 		$_SESSION['matKhau'] = $matKhau;
+		$_SESSION['matKhau_unhash'] = $matKhau_unhash;
 		$_SESSION['gioiTinh'] = $gioiTinh;
 		$_SESSION['ngaySinh'] = $ngaySinh;
 		$_SESSION['diaChi'] = $diaChi;
@@ -80,7 +82,7 @@
 
         $hoVaTen = $_POST['hoVaTen'];
         $taiKhoan = $_POST['taiKhoan'];
-        $matKhau_a = $_POST['matKhau'];
+        $matKhau_unhash = $_POST['matKhau'];
 		$matKhau = md5($matKhau_a);
         $gioiTinh = $_POST['gioiTinh'];
         $ngaySinh = $_POST['ngaySinh'];
@@ -92,18 +94,17 @@
 		$_SESSION['hoVaTen'] = $hoVaTen;
 		$_SESSION['taiKhoan'] = $taiKhoan;
 		$_SESSION['matKhau'] = $matKhau;
+		$_SESSION['matKhau_unhash'] = $matKhau_unhash;
 		$_SESSION['gioiTinh'] = $gioiTinh;
 		$_SESSION['ngaySinh'] = $ngaySinh;
 		$_SESSION['diaChi'] = $diaChi;
 		$_SESSION['soDienThoai'] = $soDienThoai;
 		$_SESSION['email'] = $email;
 
-		echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
-
-        header("location: xacthuc.php");
-		
+		header("location: xacthuc.php");
     }
 ?>
+
 
 	<div class="container" style="width: 70%; padding-top: 20px;">
 		<h3 style="text-align: center; color: highlight; font-size: 40px;">Đăng ký tài khoản</h3><br>
@@ -116,35 +117,36 @@
 					<h3>Tài khoản</h3>
 				  	<div class="mb-3">
 					    <label for="taiKhoan" class="form-label">Tên đăng nhập</label><span class="red">*</span>
-					    <input type="text" class="form-control" id="taiKhoan" name="taiKhoan" required="required" value="">
+					    <input type="text" class="form-control" id="taiKhoan" name="taiKhoan" required="required" 
+						value="<?php echo isset($_SESSION['taiKhoan']) ? $_SESSION['taiKhoan'] : "" ?>">
 				  	</div>
 				  	<div class="mb-3">
 					    <label for="matKhau" class="form-label">Mật khẩu</label><span class="red">*</span>
-					    <input type="password" class="form-control" id="matKhau" name="matKhau" required="required" onkeyup="kiemTraMatKhau()">
+					    <input type="password" class="form-control" id="matKhau" name="matKhau" value="<?php echo isset($_SESSION['matKhau_unhash']) ? $_SESSION['matKhau_unhash'] : "" ?>" required="required" onkeyup="kiemTraMatKhau()">
 				  	</div>
 				  	<div class="mb-3">
 					    <label for="matKhauNhapLai" class="form-label">Nhập lại mật khẩu</label><span class="red">*</span>
-					    <input type="password" class="form-control" id="matKhauNhapLai" name="matKhauNhapLai" required="required" onkeyup="kiemTraMatKhau()">
+					    <input type="password" class="form-control" id="matKhauNhapLai" name="matKhauNhapLai" value="<?php echo isset($_SESSION['matKhau_unhash']) ? $_SESSION['matKhau_unhash'] : "" ?>" required="required" onkeyup="kiemTraMatKhau()">
 					    <span class="red" id="msg"></span>
 				  	</div>
 				
 					<h3>Thông tin khách hàng</h3>
 				  	<div class="mb-3">
 					    <label for="hoVaTen" class="form-label">Họ và tên</label>
-					    <input type="text" class="form-control" id="hoVaTen" name="hoVaTen" value="">
+					    <input type="text" class="form-control" id="hoVaTen" name="hoVaTen" value="<?php echo isset($_SESSION['hoVaTen']) ? $_SESSION['hoVaTen'] : "" ?>">
 				  	</div>
 				  	<div class="mb-3">
 					    <label for="gioiTinh" class="form-label">Giới tính</label>
 					    <select class="form-control" id="gioiTinh" name="gioiTinh">
 					    	<option></option>	
-					    	<option value="Nam">Nam</option>
-					    	<option value="Nữ">Nữ</option>
-					    	<option value="Khác">Khác</option>
+					    	<option value="Nam" check <?php echo isset($_SESSION['gioiTinh']) ? ($_SESSION['gioiTinh'] == "Nam" ? "selected" : "") : ""?>>Nam</option>
+					    	<option value="Nữ" <?php echo isset($_SESSION['gioiTinh']) ? ($_SESSION['gioiTinh'] == "Nữ" ? "selected" : "") : ""?>>Nữ</option>
+					    	<option value="Khác" <?php echo isset($_SESSION['gioiTinh']) ? ($_SESSION['gioiTinh'] == "Khác" ? "selected" : "") : ""?>>Khác</option>
 					    </select>
 				  	</div>
 				  	<div class="mb-3">
 					    <label for="ngaySinh" class="form-label">Ngày sinh</label>
-					    <input type="date" class="form-control" id="ngaySinh" name="ngaySinh" value="">
+					    <input type="date" class="form-control" id="ngaySinh" name="ngaySinh" value="<?php echo isset($_SESSION['ngaySinh']) ? $_SESSION['ngaySinh'] : ""?>">
 				  	</div>
 			  	</div>
 			  	
@@ -152,11 +154,11 @@
 				  	<h3>Địa chỉ</h3>
 				  	<div class="mb-3">
 					    <label for="diaChi" class="form-label">Địa chỉ</label>
-					    <input type="text" class="form-control" id="diaChi" name="diaChi" value="">
+					    <input type="text" class="form-control" id="diaChi" name="diaChi" value="<?php echo isset($_SESSION['diaChi']) ? $_SESSION['diaChi'] : ""?>">
 				  	</div>
 				  	<div class="mb-3">
 					    <label for="soDienThoai" class="form-label">Điện thoại</label>
-					    <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" value="">
+					    <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" value="<?php echo isset($_SESSION['soDienThoai']) ? $_SESSION['soDienThoai'] : ""?>">
 				  	</div>
 				  	<div class="mb-3">
 					    <label for="email" class="form-label">Email</label>
@@ -232,7 +234,7 @@
 
 
 <?php 
-    include './laytouts/footer.php'
+    include './layouts/footer.php'
 ?>
 
 

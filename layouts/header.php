@@ -1,6 +1,7 @@
 <?php 
     include './database/connect.php';
 	session_start();
+	$current_page = $_SERVER['PHP_SELF'];
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +55,8 @@
 					<button class="btn btn-outline-success" type="submit">Tìm</button>
                 
                 <?php 
-                    if(isset($_SESSION['taiKhoan'])){
+					// if(isset($_SESSION['taiKhoan'])){
+                    if(isset($_SESSION['taiKhoan']) && (!strpos($current_page, 'dangky.php')) && (!strpos($current_page, 'xacthuc.php'))){
                 ?>
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0 bg-infor ">
 						<li class="nav-item dropdown dropstart"><a
@@ -71,7 +73,7 @@
 					</ul>			
                 <?php } else { ?>	
                     <?php 
-                        $current_page = $_SERVER['PHP_SELF'];
+                       
                         // echo $current_page;
                         if(strpos($current_page, 'dangky.php')) {    
                     ?>

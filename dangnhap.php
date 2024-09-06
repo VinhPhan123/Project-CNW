@@ -1,5 +1,5 @@
 <?php 
-    include './laytouts/header.php';
+    include './layouts/header.php';
 ?>
 
 <?php 
@@ -8,7 +8,9 @@
         $matKhau = $_POST['matKhau'];
         $matKhau_hashed = md5($matKhau);
 
-        $sql = "SELECT * FROM user WHERE taiKhoan='$taiKhoan' AND matKhau='$matKhau_hashed'";
+        // $sql = "SELECT * FROM admins WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
+        $sql = "SELECT * FROM admins WHERE username ='$taiKhoan' AND password ='$matKhau'";
+
 
         $result = mysqli_query($connect, $sql);
 
@@ -16,6 +18,7 @@
             $_SESSION['taiKhoan'] = $taiKhoan;
             header("location: index.php");
         }
+
     }
 
 ?>
@@ -51,5 +54,5 @@
 
 
 <?php 
-    include './laytouts/footer.php'
+    include './layouts/footer.php'
 ?>
