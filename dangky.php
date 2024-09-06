@@ -9,13 +9,6 @@
 ?>
 
 <?php 
-	
-?>
-
-
-<?php ?>
-
-<?php 
 	$error_taiKhoan = "";
 	$error_mail = "";
 	$token = md5(uniqid());
@@ -30,13 +23,12 @@
         $hoVaTen = $_POST['hoVaTen'];
         $taiKhoan = $_POST['taiKhoan'];
         $matKhau_unhash = $_POST['matKhau'];
-		$matKhau = md5($matKhau_a);
+		$matKhau = md5($matKhau_unhash);
         $gioiTinh = $_POST['gioiTinh'];
         $ngaySinh = $_POST['ngaySinh'];
         $diaChi = $_POST['diaChi'];
         $soDienThoai = $_POST['soDienThoai'];
         $email = $_POST['email'];
-
 
 		$_SESSION['hoVaTen'] = $hoVaTen;
 		$_SESSION['taiKhoan'] = $taiKhoan;
@@ -57,7 +49,7 @@
 			$error_taiKhoan = 'Tài khoản đã tồn tại';
 		} else {
 			$sql = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
-			('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$eanail');";
+			('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$email');";
 	
 		   $result = mysqli_query($connect, $sql);
 	
@@ -83,7 +75,7 @@
         $hoVaTen = $_POST['hoVaTen'];
         $taiKhoan = $_POST['taiKhoan'];
         $matKhau_unhash = $_POST['matKhau'];
-		$matKhau = md5($matKhau_a);
+		$matKhau = md5($matKhau_unhash);
         $gioiTinh = $_POST['gioiTinh'];
         $ngaySinh = $_POST['ngaySinh'];
         $diaChi = $_POST['diaChi'];

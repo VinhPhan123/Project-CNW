@@ -1,14 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="" method="post">
-        <input type="text">
-        <input type="submit" value="Click">
-    </form>
-</body>
-</html>
+<script>
+    var div = document.getElementById("test");
+
+    var a = array(
+        "phanxuanvinh4592@gmail.com",
+        "blabla@gmail.com"
+    );
+
+    var str = "";
+
+    for(i=0; i<=1; i++) {
+        str +="";
+    }
+</script>
+<div id="test">
+    <table id="table">
+        <tr>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Access</th>
+            <th>Deny</th>
+        </tr>
+    </table>
+</div>
