@@ -4,6 +4,48 @@
 	$current_page = $_SERVER['PHP_SELF'];
 ?>
 
+<?php
+	$uri = $_SERVER['REQUEST_URI'];
+	if(!strpos($uri, "/xacthuc.php")) {
+		if (isset($_SESSION['taiKhoan'])) {
+			$taiKhoan = $_SESSION['taiKhoan'];
+
+			$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan'";
+			$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan'";
+			$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan'";
+	
+			$query_admins = mysqli_query($connect, $sql_admins);
+			$query_teachers = mysqli_query($connect, $sql_teachers);
+			$query_students = mysqli_query($connect, $sql_students);
+	
+			$result_admins = mysqli_num_rows($query_admins);
+			$result_teachers = mysqli_num_rows($query_teachers);
+			$result_students = mysqli_num_rows($query_students);
+		
+			$check = true;
+			if($result_admins == 1) {
+				$_SESSION['role'] = "admin";
+				$arr = mysqli_fetch_array($query_admins);
+			} elseif($result_teachers == 1) {
+				$_SESSION['role'] = "teacher";
+				$arr = mysqli_fetch_array($query_teachers);
+			} elseif($result_students == 1) {
+				$_SESSION['role'] = "student";
+				$arr = mysqli_fetch_array($query_students);
+			} else {
+				$check = false;
+			}
+			if($check == false) {
+				$email = $_SESSION['email'];
+				$sql = "DELETE FROM guest WHERE teacher_email = '$email'";
+				mysqli_query($connect, $sql);
+
+				header("location: ./logout.php");
+			}
+		}
+	}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +57,6 @@
     <link rel="stylesheet" href="./assets/css/header.css">
     <link rel="stylesheet" href="./assets/css/footer.css">
     <link rel="stylesheet" href="./assets/css/dangky.css">
-    <link rel="stylesheet" href="./assets/css/admin.css">
 </head>
 <body>
 
@@ -50,7 +91,7 @@
 					</li>
 				</ul>
 				
-				<form class="d-flex" method="post" role="search" style="position: relative;display: block;float: right;">
+				<form class="d-flex" role="search" style="position: relative;display: block;float: right;">
 					<input class="form-control me-2" type="search"
 						placeholder="Nội dung tìm kiếm" aria-label="Search">
 					<button class="btn btn-outline-success" type="submit">Tìm</button>
@@ -101,3 +142,5 @@
 			</div>
 		</div>
 	</nav>
+
+	

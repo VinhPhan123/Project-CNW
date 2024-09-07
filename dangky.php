@@ -44,7 +44,7 @@
 		// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
 
 		
-		$s = "SELECT taiKhoan FROM students WHERE username='$taiKhoan'";
+		$s = "SELECT username FROM students WHERE username='$taiKhoan'";
 		$query = mysqli_query($connect, $s);
 		if(mysqli_num_rows($query) > 0){
 			$error_taiKhoan = 'Tài khoản đã tồn tại';

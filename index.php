@@ -1,8 +1,17 @@
 <?php 
-    include './layouts/header.php';
+		include './layouts/header.php';
 ?>
 
+<div style="display: flex">
 
+<?php 
+    if(isset($_SESSION['role'])) {
+		include './layouts/menu.php';
+	}
+?>
+
+<div style="display: block;">
+	
 	<!-- Page content -->
 	<div class="container mt-4">
 		<div class="row">
@@ -129,6 +138,8 @@
 	</div>
 	<!-- End Page content -->
 
-<?php 
-    include './layouts/footer.php';
-?>
+	<?php 
+		include './layouts/footer.php';
+	?>
+</div>
+</div>
