@@ -1,9 +1,8 @@
 <?php 
 		include './layouts/header.php';
 ?>
-<<<<<<< HEAD
 
-<div style="display: flex">
+<div style="display: flex; justify-content: center;">
 
 <?php 
     if(isset($_SESSION['role'])) {
@@ -11,10 +10,9 @@
 	}
 ?>
 
+<link rel="stylesheet" href="./assets/css/index.css">
 <div style="display: block;">
 	
-=======
->>>>>>> c34b452f7ed5239030184d72a55bb8c19f6e3b76
 	<!-- Page content -->
 	<div class="container mt-4">
 		<div class="row">
@@ -34,13 +32,13 @@
 					</div>
 					<div class="carousel-inner">
 						<div class="carousel-item active">
-							<img src="./assets/img/meme.jpg" class="d-block w-50 h-50" alt="...">
+							<img height="400px" src="./assets/img/meme1.gif" class="d-block" alt="...">
 						</div>
 						<div class="carousel-item">
-							<img src="./assets/img/meme.jpg" class="d-block w-50 h-50" alt="...">
+							<img height="400px" src="./assets/img/meme2.gif" class="d-block" alt="...">
 						</div>
 						<div class="carousel-item">
-							<img src="./assets/img/meme.jpg" class="d-block w-50 h-50" alt="...">
+							<img height="400px" src="./assets/img/meme3.gif" class="d-block" alt="...">
 						</div>
 					</div>
 					<button class="carousel-control-prev" type="button"
@@ -95,6 +93,25 @@
 						</div>
 					</div>
 
+
+					<div class="col-lg-4 col-md-6 mb-4">
+						<div class="card h-100">
+							<a href="#"><img class="card-img-top" src="./assets/img/meme.jpg"
+								alt="" ></a>
+							<div class="card-body">
+								<h4 class="card-title">
+									<a href="#">Áo thun Pro-S1</a>
+								</h4>
+								<h5>50.000</h5>
+								<p class="card-text">Sản phẩm thoáng mát, có độ bền tốt, giữ
+									màu sắc tốt.</p>
+							</div>
+							<div class="card-footer">
+								<small class="text-muted">&#9733; &#9733; &#9733;
+									&#9733; &#9734;</small>
+							</div>
+						</div>
+					</div>
 
 					<div class="col-lg-4 col-md-6 mb-4">
 						<div class="card h-100">

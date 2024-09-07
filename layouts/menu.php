@@ -12,7 +12,7 @@
         <div class="menu-tag">ĐIỀU HƯỚNG</div>
         <div class="button-close" id="button-close">X</div>
         <ul class="dropdown">
-            <li class="dropdown-item"><a href="index.php">Trang chủ</a></li>
+            <li class="dropdown-item"><a href="index.php?#">Trang chủ</a></li>
             <li class="dropdown-item"><a href="">test</a></li>
             <li class="dropdown-item"><a href="">test</a></li>
         </ul>
@@ -24,6 +24,12 @@
                     echo('<li class="dropdown-item"><a href="">Tạo Hồ sơ</a></li>');
                     echo('<li class="dropdown-item"><a href="">Danh sách ngành</a></li>');
                     echo('<li class="dropdown-item"><a href="">Phân ngành GV</a></li>');
+                } elseif($_SESSION['role'] == 'teacher') {
+                    echo("<p>GIÀNH CHO TEACHER</p>");
+                } else {
+                    echo("<p>GIÀNH CHO STUDENT</p>");
+                    echo('<li class="dropdown-item"><a href="">Học bạ</a></li>');
+                    echo('<li class="dropdown-item"><a href="">Hồ sơ</a></li>');
                 }
             ?>
         </ul>
