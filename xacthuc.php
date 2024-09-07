@@ -45,6 +45,11 @@
     $soDienThoai = $_SESSION['soDienThoai'];
     $email = $_SESSION['email'];
 
+    echo $email;
+    echo $taiKhoan;
+    echo $matKhau;
+
+
     // 0-huy, 1-chua duyet, 2-duyet
     $s1 = "INSERT INTO guest(teacher_email, status) VALUES ('$email', 1);";
     try {
@@ -53,12 +58,14 @@
         echo $e;
     }
 
+    echo mysqli_affected_rows($connect);
+
     // lấy ra các code còn hạn trong bảng gen_code
     $array_codes = array();
     $s2 = "SELECT code FROM gen_code WHERE NOW() <= expiry_time;";
     $query_code = mysqli_query($connect, $s2);
     while($row = mysqli_fetch_array($query_code)) {
-        echo $row['code'];
+        // echo $row['code'];
         array_push($array_codes, $row['code']);
     }
 

@@ -5,6 +5,12 @@
 ?>
 
 <?php
+	try {
+		echo $_SESSION['taiKhoan'];
+	} catch (Exception $e){
+
+	}
+
 	$uri = $_SERVER['REQUEST_URI'];
 	// if(!strpos($uri, "/xacthuc.php")) {
 	if(!strpos($current_page, "xacthuc.php")) {
@@ -12,10 +18,12 @@
 			$taiKhoan = $_SESSION['taiKhoan'];
 			$matKhau = $_SESSION['matKhau'];
 			$email = $_SESSION['email'];
+			$ngaySinh = $_SESSION['ngaySinh'];
 
-			$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' and password='$password' and email='$email'";
-			$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$password' and email='$email'";
-			$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$password' and email='$email'";
+			// and để tránh trường hợp tài khoản teacher, admin và student có các trường thông tin giống nhau
+			$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' and password='$matKhau'";
+			$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
+			$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
 	
 			$query_admins = mysqli_query($connect, $sql_admins);
 			$query_teachers = mysqli_query($connect, $sql_teachers);
@@ -41,17 +49,16 @@
 				$check = false;
 			}
 			// echo $check;
-			var_dump($result_admins == 1);
-			var_dump($result_teachers == 1);
-			var_dump($result_students == 1);
+			// var_dump($result_admins == 1);
+			// var_dump($result_teachers == 1);
+			// var_dump($result_students == 1);
 			if($check == false) {
 				$email = $_SESSION['email'];
-				$sql = "DELETE FROM guest WHERE teacher_email = '$email'";
-				mysqli_query($connect, $sql);
-				// session_destroy();
+				// $sql = "DELETE FROM guest WHERE teacher_email = '$email'";
+				// mysqli_query($connect, $sql);
 				header("location: logout.php");
+				echo "false check";
 			}
-			echo $check;
 		}
 	}
 

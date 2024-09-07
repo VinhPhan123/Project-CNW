@@ -48,6 +48,7 @@
                 $_SESSION['soDienThoai'] = $arr['phone_number'];
                 $_SESSION['email'] = $arr['email'];
     
+                echo $check;
                 header("location: index.php");
             } else {
                 echo("<script>alert('Tài khoản hoặc mật khẩu chưa đúng!')</script>");
