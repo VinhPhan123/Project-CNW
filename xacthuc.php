@@ -9,6 +9,15 @@
 ?>
 
 <?php
+    if(!isset($_SESSION['taiKhoan'])){
+        ?>
+        <script>
+            alert("Bạn không được phép điều hướng tới trang này khi chưa đăng ký!")
+            window.location.href="index.php";
+        </script>
+        <?php
+    }
+
     // echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
     $email = $_SESSION['email'];
     $sql = "SELECT * FROM teachers WHERE email='$email';";
@@ -81,8 +90,8 @@
             </script>
             <?php
             // header("location: dangky.php");
-            echo "error"
-;        }
+            echo "error";
+        }
     }
 
     ?>

@@ -47,6 +47,27 @@
 
 		}
 	}
+
+	if(strpos($current_page, 'index.php')){
+		if (isset($_SESSION['taiKhoan'])) {
+			$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan'";
+			$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan'";
+			$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan'";
+	
+			$query_admins = mysqli_query($connect, $sql_admins);
+			$query_teachers = mysqli_query($connect, $sql_teachers);
+			$query_students = mysqli_query($connect, $sql_students);
+	
+			$result_admins = mysqli_fetch_assoc($query_admins);
+			$result_teachers = mysqli_fetch_assoc($query_teachers);
+			$result_students = mysqli_fetch_assoc($query_students);
+
+			// print_r($result_students['username']);
+			echo "123";
+			// echo $_SESSION['taiKhoan'];
+		}
+	}
+	echo "123";
 ?>
 
 <!DOCTYPE html>

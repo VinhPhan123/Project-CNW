@@ -4,6 +4,89 @@
 	$current_page = $_SERVER['PHP_SELF'];
 ?>
 
+<?php
+	$uri = $_SERVER['REQUEST_URI'];
+	// if(!strpos($uri, "/xacthuc.php")) {
+	if(!strpos($current_page, "xacthuc.php")) {
+		if (isset($_SESSION['taiKhoan'])) {
+			$taiKhoan = $_SESSION['taiKhoan'];
+			$matKhau = $_SESSION['matKhau'];
+			$email = $_SESSION['email'];
+
+			$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' and password='$password' and email='$email'";
+			$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$password' and email='$email'";
+			$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$password' and email='$email'";
+	
+			$query_admins = mysqli_query($connect, $sql_admins);
+			$query_teachers = mysqli_query($connect, $sql_teachers);
+			$query_students = mysqli_query($connect, $sql_students);
+	
+			$result_admins = mysqli_num_rows($query_admins);
+			$result_teachers = mysqli_num_rows($query_teachers);
+			$result_students = mysqli_num_rows($query_students);
+	
+			// echo $result_teachers;
+			
+			$check = true;
+			if($result_admins == 1) {
+				$_SESSION['role'] = "admin";
+				$arr = mysqli_fetch_array($query_admins);
+			} else if($result_teachers == 1) {
+				$_SESSION['role'] = "teacher";
+				$arr = mysqli_fetch_array($query_teachers);
+			} else if($result_students == 1) {
+				$_SESSION['role'] = "student";
+				$arr = mysqli_fetch_array($query_students);
+			} else if($result_teachers == 0 && $result_students==0) {
+				$check = false;
+			}
+			// echo $check;
+			var_dump($result_admins == 1);
+			var_dump($result_teachers == 1);
+			var_dump($result_students == 1);
+			if($check == false) {
+				$email = $_SESSION['email'];
+				$sql = "DELETE FROM guest WHERE teacher_email = '$email'";
+				mysqli_query($connect, $sql);
+				// session_destroy();
+				header("location: logout.php");
+			}
+			echo $check;
+		}
+	}
+
+	// if(strpos($current_page, 'index.php')){
+	// 	if (isset($_SESSION['taiKhoan'])) {
+	// 		$taiKhoan = $_SESSION['taiKhoan'];
+
+	// 		$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan'";
+	// 		$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan'";
+	// 		$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan'";
+	
+	// 		$query_admins = mysqli_query($connect, $sql_admins);
+	// 		$query_teachers = mysqli_query($connect, $sql_teachers);
+	// 		$query_students = mysqli_query($connect, $sql_students);
+	
+	// 		// chuyển dữ liệu select được thành array
+	// 		$result_admins = mysqli_fetch_array($query_admins);
+	// 		$result_teachers = mysqli_fetch_array($query_teachers);
+	// 		$result_students = mysqli_fetch_array($query_students);
+
+	// 		// trả về số lượng hàng select được
+	// 		// $counts_admin = mysqli_num_rows($query_admins);
+	// 		// $counts_teacher = mysqli_num_rows($query_teachers);
+	// 		// $counts_student = mysqli_num_rows($query_students);
+
+	// 		// $admin_username = $result_admins['username'];
+	// 		// $teacher_username = $result_teachers['username'];
+	// 		// $user_username = $result_students['username'];
+
+	// 	}
+	// }
+	// echo "123";
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
