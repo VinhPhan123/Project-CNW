@@ -9,13 +9,6 @@
 ?>
 
 <?php 
-	
-?>
-
-
-<?php ?>
-
-<?php 
 	$error_taiKhoan = "";
 	$error_mail = "";
 	$token = md5(uniqid());
@@ -30,7 +23,7 @@
         $hoVaTen = $_POST['hoVaTen'];
         $taiKhoan = $_POST['taiKhoan'];
         $matKhau_unhash = $_POST['matKhau'];
-		$matKhau = md5($matKhau_a);
+		$matKhau = md5($matKhau_unhash);
         $gioiTinh = $_POST['gioiTinh'];
         $ngaySinh = $_POST['ngaySinh'];
         $diaChi = $_POST['diaChi'];
@@ -83,7 +76,7 @@
         $hoVaTen = $_POST['hoVaTen'];
         $taiKhoan = $_POST['taiKhoan'];
         $matKhau_unhash = $_POST['matKhau'];
-		$matKhau = md5($matKhau_a);
+		$matKhau = md5($matKhau_unhash);
         $gioiTinh = $_POST['gioiTinh'];
         $ngaySinh = $_POST['ngaySinh'];
         $diaChi = $_POST['diaChi'];

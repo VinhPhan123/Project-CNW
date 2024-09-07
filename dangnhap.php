@@ -24,16 +24,18 @@
             $result_teachers = mysqli_num_rows($query_teachers);
             $result_students = mysqli_num_rows($query_students);
 
-            $check = false;
+            $check = true;
             if($result_admins == 1) {
+                $_SESSION['role'] = "admin";
                 $arr = mysqli_fetch_array($query_admins);
-                $check = true;
             } elseif($result_teachers == 1) {
+                $_SESSION['role'] = "teacher";
                 $arr = mysqli_fetch_array($query_teachers);
-                $check = true;
             } elseif($result_students == 1) {
+                $_SESSION['role'] = "student";
                 $arr = mysqli_fetch_array($query_students);
-                $check = true;
+            } else {
+                $check = false;
             }
             
             if($check) {
