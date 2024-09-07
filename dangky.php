@@ -39,6 +39,7 @@
 		$_SESSION['diaChi'] = $diaChi;
 		$_SESSION['soDienThoai'] = $soDienThoai;
 		$_SESSION['email'] = $email;
+		$_SESSION['menu-status'] = "close";
 
 		// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
 
@@ -92,6 +93,7 @@
 		$_SESSION['diaChi'] = $diaChi;
 		$_SESSION['soDienThoai'] = $soDienThoai;
 		$_SESSION['email'] = $email;
+		$_SESSION['menu-status'] = "close";
 
 		header("location: xacthuc.php");
     }

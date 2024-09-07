@@ -1,14 +1,13 @@
 <link rel="stylesheet" href="./assets/css/menu.css">
-
-<button class="button-open" id="button-open">
+<div class="button-open" id="button-open">
     <div class="button-block">
         <div class="button-line"></div>
         <div class="button-line"></div>
         <div class="button-line"></div>
     </div>
-</button>
+</div>
 <menu id="menu">
-    <div class="menu">
+    <div class="menu" id="menu_item">
         <div class="menu-tag">ĐIỀU HƯỚNG</div>
         <div class="button-close" id="button-close">X</div>
         <ul class="dropdown">
@@ -26,29 +25,61 @@
                     echo('<li class="dropdown-item"><a href="">Phân ngành GV</a></li>');
                 } elseif($_SESSION['role'] == 'teacher') {
                     echo("<p>GIÀNH CHO TEACHER</p>");
+                    echo('<li class="dropdown-item"><a href="">Duyệt hồ sơ</a></li>');
                 } else {
                     echo("<p>GIÀNH CHO STUDENT</p>");
                     echo('<li class="dropdown-item"><a href="">Học bạ</a></li>');
-                    echo('<li class="dropdown-item"><a href="">Hồ sơ</a></li>');
+                    echo('<li class="dropdown-item"><a href="">Các ngành xét tuyển</a></li>');
                 }
             ?>
         </ul>
     </div>
 </menu>
+
 <script>
     const btnOpen = document.getElementById("button-open");
     const btnClose = document.getElementById("button-close");
     const menu = document.getElementById("menu");
+    const menu_item = document.getElementById("menu_item");
+    console.log(btnOpen.style)
     btnOpen.onclick = function() {
-        btnOpen.classList.remove("open");
-        btnOpen.classList.add("close");
-        menu.classList.remove("close");
-        menu.classList.add("open");
+        if(btnOpen.classList.contains("open")) {
+            btnOpen.classList.remove("open");
+        }
+        if(!btnOpen.classList.contains("close")) {
+            btnOpen.classList.add("close");
+        }
+        if(menu.classList.contains("close")) {
+            menu.classList.remove("close");
+        }
+        if(!menu.classList.contains("open")) {
+            menu.classList.add("open");
+        }
+        if(menu_item.classList.contains("close")) {
+            menu_item.classList.remove("close");
+        }
+        if(!menu_item.classList.contains("open")) {
+            menu_item.classList.add("open");
+        }
     }
     btnClose.onclick = function() {
-        menu.classList.remove("open");
-        menu.classList.add("close");
-        btnOpen.classList.remove("close");
-        btnOpen.classList.add("open");
+        if(menu.classList.contains("open")) {
+            menu.classList.remove("open");
+        }
+        if(!menu.classList.contains("close")) {
+            menu.classList.add("close");
+        }
+        if(menu_item.classList.contains("open")) {
+            menu_item.classList.remove("open");
+        }
+        if(!menu_item.classList.contains("close")) {
+            menu_item.classList.add("close");
+        }
+        if(btnOpen.classList.contains("close")) {
+            btnOpen.classList.remove("close");
+        }
+        if(!btnOpen.classList.contains("open")) {
+            btnOpen.classList.add("open");
+        }
     }
 </script>

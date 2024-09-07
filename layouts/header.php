@@ -63,7 +63,7 @@
 
 <nav class="container navbar navbar-expand-lg bg-light">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="index.php"> <img
+			<a class="navbar-brand" href="index.php#?"> <img
 				src="./assets/img/logo_blue.svg"
 				alt="Bootstrap">
 			</a>

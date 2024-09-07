@@ -1,14 +1,6 @@
-menu {
-    position: relative;
-    left: 0px;
-    display: none;
-    width: 300px;
-    border-right: 1px solid rgb(178, 178, 178);
-}
-
 .button-open {
     display: block;
-    z-index: 2;
+    z-index: 3;
     position: fixed;
     top: 115px;
     left: 10px;
@@ -18,6 +10,22 @@ menu {
     border-radius: 5px;
     border: 1px solid rgb(211, 212, 213);
     cursor: pointer;
+}
+.button-open.open {
+    animation: move-button-close 1s;
+    left: 10px;
+}
+@keyframes move-button-close {
+    from {left: -50px;}
+    to {left: 10px;}
+}
+.button-open.close {
+    animation: move-button-open 1s;
+    left: -50px;
+}
+@keyframes move-button-open {
+    from {left: 10px;}
+    to {left: -50px;}
 }
 .button-open .button-block {
     margin-left: auto;
@@ -35,15 +43,59 @@ menu {
     border-radius: 2px;
 }
 
+menu {
+    position: relative;
+    width: -0px;
+    left: -50px;
+    display: block;
+    border-right: 1px solid rgb(178, 178, 178);
+}
+menu.open {
+    animation: menu-base-open 1s;
+    width: 300px;
+    left: 0px;
+}
+@keyframes menu-base-open {
+    0% {width: 0px;left: -50px;}
+    100% {width: 300px;left: 0px;}
+}
+menu.close {
+    animation: menu-base-close 1s;
+    width: -0px;
+    left: -50px;
+}
+@keyframes menu-base-close {
+    0% {width: 300px;left: 0px;}
+    100% {width: -0px;left: -50px;}
+}
+
 .menu {
+    z-index: 2;
     position: fixed;
     top: 111px;
-    left: 0px;
+    left: -300px;
     display: block;
     height: 100%;
     width: 300px;
 }
+.menu.open {
+    animation: menu-item-open 1s;
+    left: 0px;
+}
+@keyframes menu-item-open {
+    0% {left: -300px;}
+    100% {left: 0px;}
+}
+.menu.close {
+    animation: menu-item-close 1s;
+    left: -300px;
+}
+@keyframes menu-item-close {
+    0% {left: 0px;}
+    100% {left: -300px;}
+}
 .menu .menu-tag {
+    z-index: 2;
     background-color: rgb(245, 245, 245);
     height: 50px;
     width: 282px;
@@ -88,11 +140,4 @@ menu {
     background-color: rgb(245, 245, 245);
     font-weight: 900;
     font-size: 20px;
-}
-
-.open {
-    display: block;
-}
-.close {
-    display: none;
 }
