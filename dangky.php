@@ -30,7 +30,6 @@
         $soDienThoai = $_POST['soDienThoai'];
         $email = $_POST['email'];
 
-
 		$_SESSION['hoVaTen'] = $hoVaTen;
 		$_SESSION['taiKhoan'] = $taiKhoan;
 		$_SESSION['matKhau'] = $matKhau;
@@ -50,7 +49,7 @@
 			$error_taiKhoan = 'Tài khoản đã tồn tại';
 		} else {
 			$sql = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
-			('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$eanail');";
+			('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$email');";
 	
 		   $result = mysqli_query($connect, $sql);
 	

@@ -21,7 +21,7 @@
 			$result_admins = mysqli_num_rows($query_admins);
 			$result_teachers = mysqli_num_rows($query_teachers);
 			$result_students = mysqli_num_rows($query_students);
-		
+
 			$check = true;
 			if($result_admins == 1) {
 				$_SESSION['role'] = "admin";

@@ -1,6 +1,7 @@
 <?php 
 		include './layouts/header.php';
 ?>
+<<<<<<< HEAD
 
 <div style="display: flex">
 
@@ -12,6 +13,8 @@
 
 <div style="display: block;">
 	
+=======
+>>>>>>> c34b452f7ed5239030184d72a55bb8c19f6e3b76
 	<!-- Page content -->
 	<div class="container mt-4">
 		<div class="row">
