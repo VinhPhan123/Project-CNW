@@ -2,6 +2,8 @@
     include './layouts/header.php';
 ?>
 
+<?php echo $_SESSION['taiKhoan'] ?>
+<?php echo $_SESSION['hoVaTen'] ?>
 
 	<!-- Page content -->
 	<div class="container mt-4">

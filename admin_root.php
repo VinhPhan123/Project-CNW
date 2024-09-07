@@ -8,41 +8,22 @@
     require 'vendor/PHPMailer/src/SMTP.php';
 ?>
 
-<?php 
-    // hàm random ra 1 chuỗi 15 kí tự
-    function generateRandomString() {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
-        $maxIndex = strlen($characters) - 1;
-
-        for ($i = 0; $i < 15; $i++) {
-            $randomString .= $characters[random_int(0, $maxIndex)];
-        }
-
-        return $randomString;
-    }
-?>
-
 <?php
     $j = 0;
 
     // lấy ra email admin
-    $s1 = "SELECT * FROM admins LIMIT 1;";
+    $s1 = "SELECT email FROM admins LIMIT 1;";
     $query = mysqli_query($connect, $s1);
-    $query_table_admin = mysqli_fetch_assoc($query);
-    $email_admin = $query_table_admin['email'];
-    $id_admin = $query_table_admin['id_admin'];
-
-    echo $id_admin;
-
+    $query_email_admin = mysqli_fetch_assoc($query);
+    $email_admin = $query_email_admin['email'];
 
     // lấy ra các code còn thời hạn
-    // $codes = array();
-    // $s2 = "SELECT code FROM gen_code WHERE (expiry_time-gen_time)>0;";
-    // $query_code = mysqli_query($connect, $s2);
-    // while($r = mysqli_fetch_array($query_code)) {
-    //     array_push($codes, $r['code']);
-    // }
+    $codes = array();
+    $s2 = "SELECT code FROM gen_code WHERE (expiry_time-gen_time)>0;";
+    $query_code = mysqli_query($connect, $s2);
+    while($r = mysqli_fetch_array($query_code)) {
+        array_push($codes, $r['code']);
+    }
 
     // 
     $i = 0;
@@ -57,21 +38,16 @@
         $getEmails[$i] = $row['teacher_email'];
         $i += 1;
 
-        // if($row['status'] == 1){
-        //     array_push($statuses, "chưa duyệt");
-        // } else if($row['status'] == 0){
-        //     array_push($statuses, "hủy");
-        // } else if($row['status'] == 2){
-        //     array_push($statuses, "xác nhận");
-        // }
+        if($row['status'] == 1){
+            array_push($statuses, "chưa duyệt");
+        } else if($row['status'] == 0){
+            array_push($statuses, "hủy");
+        } else if($row['status'] == 2){
+            array_push($statuses, "xác nhận");
+        }
     }
 
-    
     if(isset($_POST['submitAccess'])){
-        // randomCode luu vao bang gen_code
-        $randomCode = generateRandomString();
-        $a1 = "INSERT INTO gen_code(id_admin, code, gen_time, expiry_time) VALUES ('$id_admin', '$randomCode', NOW(), DATE_ADD(NOW(), INTERVAL 1 MINUTE));";
-        mysqli_query($connect, $a1);
         
         $row_id = $_POST['row_id'];
 
@@ -98,6 +74,8 @@
             $mail->Body    = '<b>This is your passcode</b>';
 
             // lấy code bất kì còn hạn
+            $randomIndex = array_rand($codes);
+            $randomCode = $codes[$randomIndex];
             $mail->Body    = '<b>' . $randomCode . '</b>';
     
             $mail->send();
@@ -120,16 +98,18 @@
     <table>
         <th>STT</th>
         <th>Email</th>
+        <th>Status</th>
         <th>Access</th>
         <th>Deny</th>
 
         <form action="" method="post">
         <?php
         foreach($emails as $index => $email){
-            // $status = $statuses[$index];
+            $status = $statuses[$index];
             echo '<tr id="id_' . $j . '">';
                 echo '<td>' . $j . '</td>';
                 echo '<td>' . $email .'</td>';
+                echo '<td>' . $status .'</td>';
                 echo '<td>
                         <form action="" method="post">
                             <input type="hidden" name="row_id" value="' . $j . '">

@@ -18,9 +18,13 @@
        ?>
         <script>
             alert("Email đã được đăng ký, hãy chọn email khác");
-            window.location.href="dangky.php";
+            // setTimeout(function() {
+                window.location.href="dangky.php";
+            // }, 3000);
         </script>
        <?php
+    } else if(mysqli_num_rows($result) == 0) {
+        // header("location: xacthuc.php");
     }
 ?>
 
@@ -44,46 +48,6 @@
         echo $e;
     }
 
-    // lấy ra các code còn hạn trong bảng gen_code
-    $array_codes = array();
-    $s2 = "SELECT code FROM gen_code WHERE NOW() <= expiry_time;";
-    $query_code = mysqli_query($connect, $s2);
-    while($row = mysqli_fetch_array($query_code)) {
-        echo $row['code'];
-        array_push($array_codes, $row['code']);
-    }
-
-    
-
-    if(isset($_POST['submit'])){
-        $verify_code = $_POST['verifyCode'];
-        if(in_array($verify_code, $array_codes)){
-            $b = "UPDATE guest SET status = 2 WHERE teacher_email = '$email';";
-            mysqli_query($connect, $b);
-
-            $insert_teacher = "INSERT INTO teachers(username, password, fullname, ngaysinh, phone_number, gender, address, email)
-            VALUES ('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh', '$diaChi', '$email');"; 
-            mysqli_query($connect, $insert_teacher);
-
-            ?>
-            <script>
-                alert("Xác minh thành công");
-                window.location.href="index.php";
-            </script>
-            <?php
-            // echo "success";
-            // header("location: index.php");
-        } else {
-            ?>
-            <script>
-                alert("Passcode không chính xác hoạt đã quá thời hạn, mời bạn quay lại trang đăng ký !");
-                window.location.href="dangky.php";
-            </script>
-            <?php
-            // header("location: dangky.php");
-            echo "error"
-;        }
-    }
 
     ?>
     <h1 style="text-align: center;"> Tài khoản của bạn đang chờ được duyệt </h1>
@@ -91,7 +55,7 @@
 ?>
 
 <div class="container">
-    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="post">
+    <form action="<?php echo $_SERVER['PHP_SELF']?>" method="get">
         <div>Nhập mã xác thực đã gửi tới Gmail</div>
         <input type="text" name="verifyCode">
         <input type="submit" value="Xác thực" name="submit">

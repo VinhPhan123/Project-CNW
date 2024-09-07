@@ -11,9 +11,21 @@
 </body>
 </html>
 
-<?php 
-    $arr = [1, 2, 3];
-    $_SESSION['a'] = $arr;
+<?php echo md5(12345);?>
 
-    print_r($_SESSION['a']);
+<?php
+    function generateRandomString() {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        $maxIndex = strlen($characters) - 1;
+
+        for ($i = 0; $i < 25; $i++) {
+            $randomString .= $characters[random_int(0, $maxIndex)];
+        }
+
+        return $randomString;
+    }
+
+    $randomString = generateRandomString(); // Tạo chuỗi ngẫu nhiên gồm 25 kí tự
+    // echo $randomString;
 ?>

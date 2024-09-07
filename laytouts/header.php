@@ -6,7 +6,8 @@
 
 <?php
 	$uri = $_SERVER['REQUEST_URI'];
-	if(!strpos($uri, "/xacthuc.php")) {
+	// if(!strpos($uri, "/xacthuc.php")) {
+	if(!strpos($current_page, "xacthuc.php")) {
 		if (isset($_SESSION['taiKhoan'])) {
 			$taiKhoan = $_SESSION['taiKhoan'];
 
@@ -41,8 +42,9 @@
 				$sql = "DELETE FROM guest WHERE teacher_email = '$email'";
 				mysqli_query($connect, $sql);
 
-				header("location: ./logout.php");
+				header("location: logout.php");
 			}
+
 		}
 	}
 ?>
