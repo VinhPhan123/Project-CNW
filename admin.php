@@ -9,6 +9,7 @@
 ?>
 
 <?php 
+    $token = md5(uniqid());
     // hàm random ra 1 chuỗi 15 kí tự
     function generateRandomString() {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -33,7 +34,7 @@
     $email_admin = $query_table_admin['email'];
     $id_admin = $query_table_admin['id_admin'];
 
-    echo $id_admin;
+    // echo $id_admin;
 
 
     // lấy ra các code còn thời hạn
@@ -66,7 +67,7 @@
         // }
     }
 
-    
+
     if(isset($_POST['submitAccess'])){
         // randomCode luu vao bang gen_code
         $randomCode = generateRandomString();
@@ -112,6 +113,11 @@
 
     if(isset($_POST['submitDeny'])){
         $row_id = $_POST['row_id'];
+        $email_guest = $getEmails[$row_id];
+        $b = "UPDATE guest SET status = 0 WHERE teacher_email = '$email_guest';";
+        mysqli_query($connect, $b);
+
+        header("location: admin.php");
         // echo "Deny clicked for row " . $row_id;
     }
 ?>
@@ -144,6 +150,8 @@
                       </td>';
                 $j += 1;
             echo '</tr>';
+            ?>
+            <?php
         }
         ?>
         </form>

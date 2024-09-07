@@ -56,8 +56,13 @@
 				$email = $_SESSION['email'];
 				// $sql = "DELETE FROM guest WHERE teacher_email = '$email'";
 				// mysqli_query($connect, $sql);
-				header("location: logout.php");
-				echo "false check";
+				// header("location: logout.php");
+				// echo "false check";
+
+				// khi teacher nhập emai đã được sử dụng, cho phép giữ lại session và quay trở lại trang dangky
+				if(!strpos($current_page, 'dangky.php')){
+					header("location: logout.php");
+				}
 			}
 		}
 	}

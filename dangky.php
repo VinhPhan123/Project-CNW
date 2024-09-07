@@ -6,15 +6,15 @@
 	require 'vendor/PHPMailer/src/Exception.php';
 	require 'vendor/PHPMailer/src/PHPMailer.php';
 	require 'vendor/PHPMailer/src/SMTP.php';
-?>
+?>	
 
 <?php 
 	$error_taiKhoan = "";
 	$error_mail = "";
 	$token = md5(uniqid());
 	
-	// echo $_POST['_token'] . '<br>'; // biến $_POST['_token'] không thay đổi vì nó không thực hiện submit
-	// echo $_SESSION['token'];
+	echo $_POST['_token'] . '<br>'; // biến $_POST['_token'] không thay đổi vì nó không thực hiện submit
+	echo $_SESSION['token'];
 
     if(isset($_POST['submit1']) && $_SESSION['token'] == $_POST['_token']) {
 
