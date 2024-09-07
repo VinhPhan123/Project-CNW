@@ -47,7 +47,7 @@
                 $_SESSION['diaChi'] = $arr['address'];
                 $_SESSION['soDienThoai'] = $arr['phone_number'];
                 $_SESSION['email'] = $arr['email'];
-                $_SESSION['menu-status'] = "close";
+                $_SESSION['menu_status'] = "close";
     
                 header("location: index.php?#");
             } else {

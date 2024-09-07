@@ -12,8 +12,8 @@
         <div class="button-close" id="button-close">X</div>
         <ul class="dropdown">
             <li class="dropdown-item"><a href="index.php?#">Trang chủ</a></li>
-            <li class="dropdown-item"><a href="">test</a></li>
-            <li class="dropdown-item"><a href="">test</a></li>
+            <li class="dropdown-item"><a href="#">test</a></li>
+            <li class="dropdown-item"><a href="#">test</a></li>
         </ul>
         <ul class="dropdown">
             <?php
@@ -23,6 +23,7 @@
                     echo('<li class="dropdown-item"><a href="">Tạo Hồ sơ</a></li>');
                     echo('<li class="dropdown-item"><a href="">Danh sách ngành</a></li>');
                     echo('<li class="dropdown-item"><a href="">Phân ngành GV</a></li>');
+                    echo('<li class="dropdown-item"><a href="admin.php?#">Duyệt GV đăng ký</a></li>');
                 } elseif($_SESSION['role'] == 'teacher') {
                     echo("<p>GIÀNH CHO TEACHER</p>");
                     echo('<li class="dropdown-item"><a href="">Duyệt hồ sơ</a></li>');
@@ -31,55 +32,65 @@
                     echo('<li class="dropdown-item"><a href="">Học bạ</a></li>');
                     echo('<li class="dropdown-item"><a href="">Các ngành xét tuyển</a></li>');
                 }
+                
+                if(isset($_SESSION['menu_status'])) {
+                    if($_SESSION['menu_status'] == "open") {
+                        echo('
+                        <script>
+                            var btnOpen = document.getElementById("button-open");
+                            var menu = document.getElementById("menu");
+                            var menu_item = document.getElementById("menu_item");
+                            btnOpen.style.left = "-50px";
+                            menu.style.width = "300px";
+                            menu.style.left = "0px";
+                            menu_item.style.left = "0px";
+                            sessionStorage.setItem("menu_status", "open");
+                        </script>');
+                    } elseif($_SESSION['menu_status'] == 'close') {
+                        echo('
+                        <script>
+                            var btnOpen = document.getElementById("button-open");
+                            var menu = document.getElementById("menu");
+                            var menu_item = document.getElementById("menu_item");
+                            menu.style.width = "0px";
+                            menu.style.left = "-50px";
+                            menu_item.style.left = "-300px";
+                            btnOpen.style.left = "10px";
+                            sessionStorage.setItem("menu_status", "close");
+                        </script>');
+                    }
+                }
             ?>
         </ul>
     </div>
 </menu>
 
 <script>
-    const btnOpen = document.getElementById("button-open");
-    const btnClose = document.getElementById("button-close");
-    const menu = document.getElementById("menu");
-    const menu_item = document.getElementById("menu_item");
-    console.log(btnOpen.style)
+    console.log(sessionStorage.getItem("menu_status"));
+    var btnOpen = document.getElementById("button-open");
+    var btnClose = document.getElementById("button-close");
+    var menu = document.getElementById("menu");
+    var menu_item = document.getElementById("menu_item");
     btnOpen.onclick = function() {
-        if(btnOpen.classList.contains("open")) {
-            btnOpen.classList.remove("open");
-        }
-        if(!btnOpen.classList.contains("close")) {
-            btnOpen.classList.add("close");
-        }
-        if(menu.classList.contains("close")) {
-            menu.classList.remove("close");
-        }
-        if(!menu.classList.contains("open")) {
-            menu.classList.add("open");
-        }
-        if(menu_item.classList.contains("close")) {
-            menu_item.classList.remove("close");
-        }
-        if(!menu_item.classList.contains("open")) {
-            menu_item.classList.add("open");
-        }
-    }
+        btnOpen.style.animation = "move-button-close 1s";
+        btnOpen.style.left = "-50px";
+        menu.style.animation = "menu-base-open 1s";
+        menu.style.width = "300px";
+        menu.style.left = "0px";
+        menu_item.style.animation = "menu-item-open 1s";
+        menu_item.style.left = "0px";
+        sessionStorage.setItem("menu_status", "open");
+        console.log(sessionStorage.getItem("menu_status"));
+    };
     btnClose.onclick = function() {
-        if(menu.classList.contains("open")) {
-            menu.classList.remove("open");
-        }
-        if(!menu.classList.contains("close")) {
-            menu.classList.add("close");
-        }
-        if(menu_item.classList.contains("open")) {
-            menu_item.classList.remove("open");
-        }
-        if(!menu_item.classList.contains("close")) {
-            menu_item.classList.add("close");
-        }
-        if(btnOpen.classList.contains("close")) {
-            btnOpen.classList.remove("close");
-        }
-        if(!btnOpen.classList.contains("open")) {
-            btnOpen.classList.add("open");
-        }
-    }
+        menu.style.animation = "menu-base-close 1s";
+        menu.style.width = "0px";
+        menu.style.left = "-50px";
+        menu_item.style.animation = "menu-item-close 1s";
+        menu_item.style.left = "-300px";
+        btnOpen.style.animation = "move-button-open 1s";
+        btnOpen.style.left = "10px";
+        sessionStorage.setItem("menu_status", "close");
+        console.log(sessionStorage.getItem("menu_status"));
+    };
 </script>

@@ -3,29 +3,12 @@
     z-index: 3;
     position: fixed;
     top: 115px;
-    left: 10px;
     align-content: center;
     height: 40px;
     width: 50px;
     border-radius: 5px;
     border: 1px solid rgb(211, 212, 213);
     cursor: pointer;
-}
-.button-open.open {
-    animation: move-button-close 1s;
-    left: 10px;
-}
-@keyframes move-button-close {
-    from {left: -50px;}
-    to {left: 10px;}
-}
-.button-open.close {
-    animation: move-button-open 1s;
-    left: -50px;
-}
-@keyframes move-button-open {
-    from {left: 10px;}
-    to {left: -50px;}
 }
 .button-open .button-block {
     margin-left: auto;
@@ -42,53 +25,45 @@
     width: 25px;
     border-radius: 2px;
 }
+@keyframes move-button-open {
+    from {left: -50px;}
+    to {left: 10px;}
+}
+@keyframes move-button-close {
+    from {left: 10px;}
+    to {left: -50px;}
+}
 
 menu {
     position: relative;
-    width: -0px;
-    left: -50px;
     display: block;
     border-right: 1px solid rgb(178, 178, 178);
-}
-menu.open {
-    animation: menu-base-open 1s;
-    width: 300px;
-    left: 0px;
 }
 @keyframes menu-base-open {
     0% {width: 0px;left: -50px;}
     100% {width: 300px;left: 0px;}
 }
-menu.close {
-    animation: menu-base-close 1s;
-    width: -0px;
-    left: -50px;
-}
 @keyframes menu-base-close {
     0% {width: 300px;left: 0px;}
-    100% {width: -0px;left: -50px;}
+    100% {width: 0px;left: -50px;}
 }
-
+#menu {
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    left: 0px;
+}
 .menu {
     z-index: 2;
     position: fixed;
     top: 111px;
-    left: -300px;
     display: block;
     height: 100%;
     width: 300px;
 }
-.menu.open {
-    animation: menu-item-open 1s;
-    left: 0px;
-}
 @keyframes menu-item-open {
     0% {left: -300px;}
     100% {left: 0px;}
-}
-.menu.close {
-    animation: menu-item-close 1s;
-    left: -300px;
 }
 @keyframes menu-item-close {
     0% {left: 0px;}
@@ -98,7 +73,7 @@ menu.close {
     z-index: 2;
     background-color: rgb(245, 245, 245);
     height: 50px;
-    width: 282px;
+    width: 249px;
     padding-left: 20px;
     font-weight: 500;
     font-size: 20px;
@@ -111,7 +86,7 @@ menu.close {
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 20px;
-    width: 282px;
+    width: 249px;
     border-bottom: 1px solid rgb(215, 215, 215);
 }
 .menu .dropdown p {
@@ -135,7 +110,7 @@ menu.close {
     cursor: pointer;
     position: absolute;
     top: 8px;
-    left: 240px;
+    left: 220px;
     border: 0px;
     background-color: rgb(245, 245, 245);
     font-weight: 900;
