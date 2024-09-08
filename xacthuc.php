@@ -26,7 +26,7 @@
     $result1 = mysqli_query($connect, $sql1);
     $result2 = mysqli_query($connect, $sql2);
 
-    if(mysqli_num_rows($result1) > 0 || mysqli_num_rows($result2)){
+    if(mysqli_num_rows($result1) > 0 || mysqli_num_rows($result2) > 0){
        ?>
         <script>
             alert("Email đã được đăng ký, hãy chọn email khác");

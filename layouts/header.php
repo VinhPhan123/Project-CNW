@@ -5,98 +5,67 @@
 ?>
 
 <?php
-	try {
-		echo $_SESSION['taiKhoan'];
-	} catch (Exception $e){
+	echo $_SESSION['taiKhoan'] . '----';
 
-	}
 
 	$uri = $_SERVER['REQUEST_URI'];
 	// kiểm tra nếu ko phải trang xác thực, tài khoản chưa được lưu trên csdl thì sẽ xóa session
 	// if(!strpos($uri, "/xacthuc.php")) {
 	if(!strpos($current_page, "xacthuc.php")) {
-		if (isset($_SESSION['taiKhoan'])) {
-			$taiKhoan = $_SESSION['taiKhoan'];
-			$matKhau = $_SESSION['matKhau'];
-			$email = $_SESSION['email'];
-			$ngaySinh = $_SESSION['ngaySinh'];
-
-			// AND để tránh trường hợp tài khoản teacher, admin và student có các trường thông tin giống nhau
-			$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' and password='$matKhau'";
-			$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
-			$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
-	
-			$query_admins = mysqli_query($connect, $sql_admins);
-			$query_teachers = mysqli_query($connect, $sql_teachers);
-			$query_students = mysqli_query($connect, $sql_students);
-	
-			$result_admins = mysqli_num_rows($query_admins);
-			$result_teachers = mysqli_num_rows($query_teachers);
-			$result_students = mysqli_num_rows($query_students);
-	
-			// echo $result_teachers;
-			
-			$check = true;
-			if($result_admins == 1) {
-				$_SESSION['role'] = "admin";
-				$arr = mysqli_fetch_array($query_admins);
-			} else if($result_teachers == 1) {
-				$_SESSION['role'] = "teacher";
-				$arr = mysqli_fetch_array($query_teachers);
-			} else if($result_students == 1) {
-				$_SESSION['role'] = "student";
-				$arr = mysqli_fetch_array($query_students);
-			} else if($result_teachers == 0 && $result_students==0) {
-				$check = false;
-			}
-			// echo $check;
-			// var_dump($result_admins == 1);
-			// var_dump($result_teachers == 1);
-			// var_dump($result_students == 1);
-			if($check == false) {
+		if(!strpos($current_page, "student.php")){
+			if (isset($_SESSION['taiKhoan'])) {
+				$taiKhoan = $_SESSION['taiKhoan'];
+				$matKhau = $_SESSION['matKhau'];
 				$email = $_SESSION['email'];
-				// $sql = "DELETE FROM guest WHERE teacher_email = '$email'";
-				// mysqli_query($connect, $sql);
-				// header("location: logout.php");
-				// echo "false check";
+				$ngaySinh = $_SESSION['ngaySinh'];
 
-				// khi teacher nhập emai đã được sử dụng, cho phép giữ lại session và quay trở lại trang dangky
-				if(!strpos($current_page, 'dangky.php')){
-					header("location: logout.php");
+				// AND để tránh trường hợp tài khoản teacher, admin và student có các trường thông tin giống nhau
+				$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' and password='$matKhau'";
+				$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
+				$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
+		
+				$query_admins = mysqli_query($connect, $sql_admins);
+				$query_teachers = mysqli_query($connect, $sql_teachers);
+				$query_students = mysqli_query($connect, $sql_students);
+		
+				$result_admins = mysqli_num_rows($query_admins);
+				$result_teachers = mysqli_num_rows($query_teachers);
+				$result_students = mysqli_num_rows($query_students);
+		
+				// echo $result_teachers;
+				
+				$check = true;
+				if($result_admins == 1) {
+					$_SESSION['role'] = "admin";
+					$arr = mysqli_fetch_array($query_admins);
+				} else if($result_teachers == 1) {
+					$_SESSION['role'] = "teacher";
+					$arr = mysqli_fetch_array($query_teachers);
+				} else if($result_students == 1) {
+					$_SESSION['role'] = "student";
+					$arr = mysqli_fetch_array($query_students);
+				} else if($result_teachers == 0 && $result_students==0) {
+					$check = false;
+				}
+				// echo $check;
+				// var_dump($result_admins == 1);
+				// var_dump($result_teachers == 1);
+				// var_dump($result_students == 1);
+				if($check == false) {
+					$email = $_SESSION['email'];
+					// $sql = "DELETE FROM guest WHERE teacher_email = '$email'";
+					// mysqli_query($connect, $sql);
+					// header("location: logout.php");
+					// echo "false check";
+
+					// khi teacher nhập emai đã được sử dụng, cho phép giữ lại session và quay trở lại trang dangky
+					if(!strpos($current_page, 'dangky.php')){
+						header("location: logout.php");
+					}
 				}
 			}
 		}
 	}
-
-	// if(strpos($current_page, 'index.php')){
-	// 	if (isset($_SESSION['taiKhoan'])) {
-	// 		$taiKhoan = $_SESSION['taiKhoan'];
-
-	// 		$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan'";
-	// 		$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan'";
-	// 		$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan'";
-	
-	// 		$query_admins = mysqli_query($connect, $sql_admins);
-	// 		$query_teachers = mysqli_query($connect, $sql_teachers);
-	// 		$query_students = mysqli_query($connect, $sql_students);
-	
-	// 		// chuyển dữ liệu select được thành array
-	// 		$result_admins = mysqli_fetch_array($query_admins);
-	// 		$result_teachers = mysqli_fetch_array($query_teachers);
-	// 		$result_students = mysqli_fetch_array($query_students);
-
-	// 		// trả về số lượng hàng select được
-	// 		// $counts_admin = mysqli_num_rows($query_admins);
-	// 		// $counts_teacher = mysqli_num_rows($query_teachers);
-	// 		// $counts_student = mysqli_num_rows($query_students);
-
-	// 		// $admin_username = $result_admins['username'];
-	// 		// $teacher_username = $result_teachers['username'];
-	// 		// $user_username = $result_students['username'];
-
-	// 	}
-	// }
-	// echo "123";
 ?>
 
 
