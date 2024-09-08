@@ -9,6 +9,17 @@
 ?>
 
 <?php 
+    // nếu chưa đăng nhập thì out
+    $sql = "SELECT * FROM admins;";
+    $res = mysqli_query($connect, $sql);
+    $query_username = mysqli_fetch_array($res);
+    $username_admin = $query_username['username'];
+    if($_SESSION['taiKhoan'] != $username_admin){
+        header("location: logout.php");
+    }
+?>
+
+<?php 
     $token = md5(uniqid());
     // hàm random ra 1 chuỗi 15 kí tự
     function generateRandomString() {

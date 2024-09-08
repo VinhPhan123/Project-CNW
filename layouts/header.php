@@ -12,6 +12,7 @@
 	}
 
 	$uri = $_SERVER['REQUEST_URI'];
+	// kiểm tra nếu ko phải trang xác thực, tài khoản chưa được lưu trên csdl thì sẽ xóa session
 	// if(!strpos($uri, "/xacthuc.php")) {
 	if(!strpos($current_page, "xacthuc.php")) {
 		if (isset($_SESSION['taiKhoan'])) {
@@ -20,7 +21,7 @@
 			$email = $_SESSION['email'];
 			$ngaySinh = $_SESSION['ngaySinh'];
 
-			// and để tránh trường hợp tài khoản teacher, admin và student có các trường thông tin giống nhau
+			// AND để tránh trường hợp tài khoản teacher, admin và student có các trường thông tin giống nhau
 			$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' and password='$matKhau'";
 			$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
 			$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";

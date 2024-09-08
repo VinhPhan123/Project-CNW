@@ -20,10 +20,13 @@
 
     // echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
     $email = $_SESSION['email'];
-    $sql = "SELECT * FROM teachers WHERE email='$email';";
+    $sql1 = "SELECT * FROM teachers WHERE email='$email';";
+    $sql2 = "SELECT * FROM students WHERE email='$email';";
 
-    $result = mysqli_query($connect, $sql);
-    if(mysqli_num_rows($result) > 0){
+    $result1 = mysqli_query($connect, $sql1);
+    $result2 = mysqli_query($connect, $sql2);
+
+    if(mysqli_num_rows($result1) > 0 || mysqli_num_rows($result2)){
        ?>
         <script>
             alert("Email đã được đăng ký, hãy chọn email khác");

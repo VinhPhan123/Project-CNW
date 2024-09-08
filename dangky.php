@@ -44,28 +44,13 @@
 		// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
 
 		
+		
 		$s = "SELECT username FROM students WHERE username='$taiKhoan'";
 		$query = mysqli_query($connect, $s);
 		if(mysqli_num_rows($query) > 0){
 			$error_taiKhoan = 'Tài khoản đã tồn tại';
 		} else {
-			$sql = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
-			('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$eanail');";
-	
-		   $result = mysqli_query($connect, $sql);
-	
-			if($result){
-				$affected_row = mysqli_affected_rows($connect);
-				if($affected_row > 0){
-					$_SESSION['taiKhoan'] = $taiKhoan;
-					?>
-					<script>
-						alert("Xin chào <?php $hoVaTen?>");
-						window.location.href="index.php";
-					</script>
-				<?php 
-				}
-			}
+			header("location: student.php");
 		}
     }
 
