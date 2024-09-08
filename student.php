@@ -21,6 +21,7 @@
         $soDienThoai = $_SESSION['soDienThoai'];
         $email = $_SESSION['email'];
         
+        // kiểm tra nếu tài email đã được đăng kí thì yêu cầu nhập lại
         $sql1 = "SELECT * FROM teachers WHERE email='$email';";
         $sql2 = "SELECT * FROM students WHERE email='$email';";
     
@@ -34,28 +35,29 @@
                 window.location.href="dangky.php";
             </script>
             <?php
+        } else {
+            $sql3 = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
+                    ('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$email');";
+            
+            $result3 = mysqli_query($connect, $sql3);
+        
+            if($result3){
+                $affected_row = mysqli_affected_rows($connect);
+                if($affected_row > 0){
+                    $_SESSION['taiKhoan'] = $taiKhoan;
+                    ?>
+                    <script>
+                        alert("Đăng ký tài khoản thành công !");    
+                        window.location.href="index.php";
+                    </script>
+                <?php 
+                }
+            }
         }
     
         echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
     
     
-        $sql3 = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
-                ('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$email');";
-        
-        $result3 = mysqli_query($connect, $sql3);
-    
-        if($result3){
-            $affected_row = mysqli_affected_rows($connect);
-            if($affected_row > 0){
-                $_SESSION['taiKhoan'] = $taiKhoan;
-                ?>
-                <script>
-                    alert("Đăng ký tài khoản thành công !");    
-                    window.location.href="index.php";
-                </script>
-            <?php 
-            }
-        }
     }
 
 ?>

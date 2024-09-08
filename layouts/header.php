@@ -13,7 +13,7 @@
 	// if(!strpos($uri, "/xacthuc.php")) {
 	if(!strpos($current_page, "xacthuc.php")) {
 		if(!strpos($current_page, "student.php")){
-			if (isset($_SESSION['taiKhoan'])) {
+			if(isset($_SESSION['taiKhoan'])) {
 				$taiKhoan = $_SESSION['taiKhoan'];
 				$matKhau = $_SESSION['matKhau'];
 				$email = $_SESSION['email'];

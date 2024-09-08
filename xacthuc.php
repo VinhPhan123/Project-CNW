@@ -12,7 +12,7 @@
     if(!isset($_SESSION['taiKhoan'])){
         ?>
         <script>
-            alert("Bạn không được phép điều hướng tới trang này khi chưa đăng ký!")
+            alert("Bạn không được phép điều hướng tới trang này khi chưa đăng ký!");
             window.location.href="index.php";
         </script>
         <?php
@@ -20,6 +20,7 @@
 
     // echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
     $email = $_SESSION['email'];
+    // kiểm tra nếu tài email đã được đăng kí thì yêu cầu nhập lại
     $sql1 = "SELECT * FROM teachers WHERE email='$email';";
     $sql2 = "SELECT * FROM students WHERE email='$email';";
 
@@ -33,42 +34,39 @@
             window.location.href="dangky.php";
         </script>
        <?php
-    }
-?>
-
-<?php 
-
-    $hoVaTen = $_SESSION['hoVaTen'];
-    $taiKhoan = $_SESSION['taiKhoan'];
-    $matKhau = $_SESSION['matKhau'];
-    $gioiTinh = $_SESSION['gioiTinh'];
-    $ngaySinh = $_SESSION['ngaySinh'];
-    $diaChi = $_SESSION['diaChi'];
-    $soDienThoai = $_SESSION['soDienThoai'];
-    $email = $_SESSION['email'];
-
-    // echo $email;
-    // echo $taiKhoan;
-    // echo $matKhau;
-
-
-    // 0-huy, 1-chua duyet, 2-duyet
-    $s1 = "INSERT INTO guest(teacher_email, status) VALUES ('$email', 1);";
-    try {
-        $result = mysqli_query($connect, $s1);
-    } catch(Exception $e) {
-        echo $e;
-    }
-
-    // echo mysqli_affected_rows($connect);
-
-    // lấy ra các code còn hạn trong bảng gen_code
-    $array_codes = array();
-    $s2 = "SELECT code FROM gen_code WHERE NOW() <= expiry_time;";
-    $query_code = mysqli_query($connect, $s2);
-    while($row = mysqli_fetch_array($query_code)) {
-        echo $row['code'];
-        array_push($array_codes, $row['code']);
+    } else {
+        $hoVaTen = $_SESSION['hoVaTen'];
+        $taiKhoan = $_SESSION['taiKhoan'];
+        $matKhau = $_SESSION['matKhau'];
+        $gioiTinh = $_SESSION['gioiTinh'];
+        $ngaySinh = $_SESSION['ngaySinh'];
+        $diaChi = $_SESSION['diaChi'];
+        $soDienThoai = $_SESSION['soDienThoai'];
+        $email = $_SESSION['email'];
+    
+        // echo $email;
+        // echo $taiKhoan;
+        // echo $matKhau;
+    
+    
+        // 0-huy, 1-chua duyet, 2-duyet
+        $s1 = "INSERT INTO guest(teacher_email, status) VALUES ('$email', 1);";
+        try {
+            $result = mysqli_query($connect, $s1);
+        } catch(Exception $e) {
+            echo $e;
+        }
+    
+        // echo mysqli_affected_rows($connect);
+    
+        // lấy ra các code còn hạn trong bảng gen_code
+        $array_codes = array();
+        $s2 = "SELECT code FROM gen_code WHERE NOW() <= expiry_time;";
+        $query_code = mysqli_query($connect, $s2);
+        while($row = mysqli_fetch_array($query_code)) {
+            echo $row['code'];
+            array_push($array_codes, $row['code']);
+        }
     }
 
     
