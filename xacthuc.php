@@ -8,6 +8,13 @@
     require 'vendor/PHPMailer/src/SMTP.php';
 ?>
 
+<script>
+    // sau 60s (thời hạn mã code là 60s) reload lại trang để kiểm tra email được admin deny hay không
+    setTimeout(function() {
+        window.location.href="xacthuc.php";
+    }, 600000);
+</script>
+
 <?php
     if(!isset($_SESSION['taiKhoan'])){
         ?>
@@ -111,6 +118,9 @@
     $status_mail = $kq['status'];
 
     if($status_mail == 0){
+        // xóa email đã gửi yêu cầu đăng ký giáo viên trong bảng guest vì có thể đăng ký lại với email đó và được admin phê duyệt
+        $m = "DELETE FROM guest WHERE teacher_email='$email';";
+        mysqli_query($connect, $m)
         ?>
         <script>
             alert("Yêu cầu đăng ký tài khoản giáo viên của bạn không được chấp nhận !");
