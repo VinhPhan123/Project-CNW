@@ -48,15 +48,8 @@
     // echo $id_admin;
 
 
-    // lấy ra các code còn thời hạn
-    // $codes = array();
-    // $s2 = "SELECT code FROM gen_code WHERE (expiry_time-gen_time)>0;";
-    // $query_code = mysqli_query($connect, $s2);
-    // while($r = mysqli_fetch_array($query_code)) {
-    //     array_push($codes, $r['code']);
-    // }
 
-    // 
+    // lấy ra những emails chưa được duyệt(status=1) trong bảng guest và gán giá trị vào mảng getEmails tương ứng với index $ii
     $i = 0;
     $getEmails = array(); // [key-value]
     $emails = [];
@@ -68,15 +61,10 @@
 
         $getEmails[$i] = $row['teacher_email'];
         $i += 1;
-
-        // if($row['status'] == 1){
-        //     array_push($statuses, "chưa duyệt");
-        // } else if($row['status'] == 0){
-        //     array_push($statuses, "hủy");
-        // } else if($row['status'] == 2){
-        //     array_push($statuses, "xác nhận");
-        // }
     }
+
+    // lấy ra số lượng email chưa được duyệt (status=1)
+    $countEmails = mysqli_num_rows($result);
 
 
     if(isset($_POST['submitAccess'])){
@@ -133,43 +121,44 @@
     }
 ?>
 
-<form action="" method="post">
-    <table>
-        <th>STT</th>
-        <th>Email</th>
-        <th>Access</th>
-        <th>Deny</th>
+<?php 
+    if($countEmails != 0){
+        echo '<form action="" method="post">
+                <table>
+                    <th>STT</th>
+                    <th>Email</th>
+                    <th>Access</th>
+                    <th>Deny</th>
 
-        <form action="" method="post">
-        <?php
-        foreach($emails as $index => $email){
-            // $status = $statuses[$index];
-            echo '<tr id="id_' . $j . '">';
-                echo '<td>' . $j . '</td>';
-                echo '<td>' . $email .'</td>';
-                echo '<td>
-                        <form action="" method="post">
-                            <input type="hidden" name="row_id" value="' . $j . '">
-                            <button type="submit" class="btn btn-primary" name="submitAccess">Click</button>
-                        </form>
-                      </td>';
-                echo '<td>
-                        <form action="" method="post">
-                            <input type="hidden" name="row_id" value="' . $j . '">
-                            <button type="submit" class="btn btn-danger" name="submitDeny">Click</button>
-                        </form>
-                      </td>';
-                $j += 1;
-            echo '</tr>';
-            ?>
-            <?php
-        }
-        ?>
-        </form>
-    </table>
-</form>
-
-
+                    <form action="" method="post">'?>
+                    <?php
+                    foreach($emails as $index => $email){
+                        echo '<tr id="id_' . $j . '">';
+                            echo '<td>' . $j . '</td>';
+                            echo '<td>' . $email .'</td>';
+                            echo '<td>
+                                    <form action="" method="post">
+                                        <input type="hidden" name="row_id" value="' . $j . '">
+                                        <button type="submit" class="btn btn-primary" name="submitAccess">Click</button>
+                                    </form>
+                                </td>';
+                            echo '<td>
+                                    <form action="" method="post">
+                                        <input type="hidden" name="row_id" value="' . $j . '">
+                                        <button type="submit" class="btn btn-danger" name="submitDeny">Click</button>
+                                    </form>
+                                </td>';
+                            $j += 1;
+                        echo '</tr>';
+                    }
+                    ?>
+                        <?php
+                    echo'
+                    </form>
+                </table>
+            </form>'
+                ?>
+    <?php }?>
 
 <script>
     console.log(document.getElementById("id_1"));

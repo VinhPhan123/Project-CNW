@@ -5,7 +5,7 @@
 ?>
 
 <?php
-	echo $_SESSION['taiKhoan'] . '----';
+	// echo $_SESSION['taiKhoan'] . '----';
 
 
 	$uri = $_SERVER['REQUEST_URI'];

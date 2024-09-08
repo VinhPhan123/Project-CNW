@@ -2,6 +2,16 @@
     include './layouts/header.php';
 ?>
 
+<?php 
+	$current_page = $_SERVER['PHP_SELF'];
+	if(isset($_SESSION['taiKhoan'])){
+		if($_SESSION['taiKhoan'] == 'admin'){
+			echo '<br><a class="btn btn-primary" style="white-space: nowrap;" href="'?><?php echo 'admin.php">'?> ADMIN <?php echo '</a>'?><?php
+		}
+	}
+?>
+
+
 
 	<!-- Page content -->
 	<div class="container mt-4">

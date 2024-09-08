@@ -9,10 +9,10 @@
 ?>
 
 <script>
-    // sau 60s (thời hạn mã code là 60s) reload lại trang để kiểm tra email được admin deny hay không
+    // sau 60s (thời hạn mã code là 60s) reload lại trang để kiểm tra email bị admin deny hay không
     setTimeout(function() {
         window.location.href="xacthuc.php";
-    }, 600000);
+    }, 60000);
 </script>
 
 <?php

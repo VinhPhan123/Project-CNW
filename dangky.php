@@ -50,7 +50,6 @@
 		$query = mysqli_query($connect, $s);
 		if(mysqli_num_rows($query) > 0){
 			$error_taiKhoan = 'Tài khoản đã tồn tại';
-			return;
 		} else {
 			// header("location: student.php");
 			?>
