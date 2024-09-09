@@ -29,7 +29,7 @@
                     echo('<li class="dropdown-item"><a href="">Duyệt hồ sơ</a></li>');
                 } else {
                     echo("<p>GIÀNH CHO STUDENT</p>");
-                    echo('<li class="dropdown-item"><a href="">Học bạ</a></li>');
+                    echo('<li class="dropdown-item"><a href="student_knowled_record.php">Học bạ</a></li>');
                     echo('<li class="dropdown-item"><a href="">Các ngành xét tuyển</a></li>');
                 }
                 
