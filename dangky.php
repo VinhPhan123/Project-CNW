@@ -16,8 +16,8 @@
 	// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email . '  27 <br>';
 
 	
-	echo $_POST['_token'] . '<br>'; // biến $_POST['_token'] không thay đổi vì nó không thực hiện submit
-	echo $_SESSION['token'] . '<br>';
+	// echo $_POST['_token'] . '<br>'; // biến $_POST['_token'] không thay đổi vì nó không thực hiện submit
+	// echo $_SESSION['token'] . '<br>';
 
     if(isset($_POST['submit1']) && $_SESSION['token'] == $_POST['_token']) {
 
