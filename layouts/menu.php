@@ -20,7 +20,7 @@
                 if($_SESSION['role'] == "admin") {
                     echo("<p>GIÀNH CHO ADMIN</p>");
                     echo('<li class="dropdown-item"><a href="">Nộp hồ sơ</a></li>');
-                    echo('<li class="dropdown-item"><a href="">Tạo Hồ sơ</a></li>');
+                    echo('<li class="dropdown-item"><a href="admin_tao_ho_so.php">Tạo Hồ sơ</a></li>');
                     echo('<li class="dropdown-item"><a href="">Danh sách ngành</a></li>');
                     echo('<li class="dropdown-item"><a href="">Phân ngành GV</a></li>');
                     echo('<li class="dropdown-item"><a href="duyetTK.php?#">Duyệt GV đăng ký</a></li>');

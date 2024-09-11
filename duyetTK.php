@@ -8,10 +8,6 @@
     require 'vendor/PHPMailer/src/SMTP.php';
 ?>
 
-<?php
-    $token = md5(uniqid());
-?>
-
 <?php 
     // nếu chưa đăng nhập thì out
     $sql = "SELECT * FROM admins;";
@@ -40,6 +36,10 @@
 ?>
 
 <?php
+
+?>
+
+<?php
     $j = 0;
 
     // lấy ra email admin
@@ -49,11 +49,7 @@
     $email_admin = $query_table_admin['email'];
     $id_admin = $query_table_admin['id_admin'];
 
-    // echo $id_admin;
-
-
-
-    // lấy ra những emails chưa được duyệt(status=1) trong bảng guest và gán giá trị vào mảng getEmails tương ứng với index $ii
+    // lấy ra những emails chưa được duyệt(status=1) trong bảng guest và gán giá trị vào mảng getEmails tương ứng với index $i
     $i = 0;
     $getEmails = array(); // [key-value]
     $emails = [];
@@ -70,6 +66,7 @@
     // lấy ra số lượng email chưa được duyệt (status=1)
     $countEmails = mysqli_num_rows($result);
     // echo ($_POST['submitAccess']);
+
     // token ngăn gửi email nhiều lần nếu teachers chưa xác thực mà admin reload lại trang
     if(isset($_POST['submitAccess']) && $_SESSION['token'] == $_POST['_token']){
         // randomCode luu vao bang gen_code
@@ -105,12 +102,16 @@
             $mail->Body    = '<b>' . $randomCode . '</b>';
     
             $mail->send();
-            echo 'Message has been sent';
+            // echo 'Message has been sent';
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
+        
+        // thay đổi status của email hiện tại thành 2 (đã duyệt)
+        $b = "UPDATE guest SET status = 2 WHERE teacher_email = '$emailTeacher';";
+        mysqli_query($connect, $b);
+        header("location: duyetTK.php");
 
-        // echo "Access clicked for row " . $row_id;
     }
 
     if(isset($_POST['submitDeny'])){
@@ -119,8 +120,7 @@
         $b = "UPDATE guest SET status = 0 WHERE teacher_email = '$email_guest';";
         mysqli_query($connect, $b);
 
-        header("location: admin.php");
-        // echo "Deny clicked for row " . $row_id;
+        header("location: duyetTK.php");
     }
 ?>
 
@@ -133,7 +133,7 @@
 ?>
 
 <link rel="stylesheet" href="./assets/css/index.css">
-<div style="display: block; width: 100%;">
+<div style="display: block; width: 100%;  margin-left: 200px">
 	
 <?php 
     if($countEmails != 0){

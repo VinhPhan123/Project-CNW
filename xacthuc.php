@@ -51,10 +51,6 @@
         $soDienThoai = $_SESSION['soDienThoai'];
         $email = $_SESSION['email'];
     
-        // echo $email;
-        // echo $taiKhoan;
-        // echo $matKhau;
-    
     
         // 0-huy, 1-chua duyet, 2-duyet
         $s1 = "INSERT INTO guest(teacher_email, status) VALUES ('$email', 1);";
@@ -81,8 +77,8 @@
     if(isset($_POST['submit'])){
         $verify_code = $_POST['verifyCode'];
         if(in_array($verify_code, $array_codes)){
-            $b = "UPDATE guest SET status = 2 WHERE teacher_email = '$email';";
-            mysqli_query($connect, $b);
+            // $b = "UPDATE guest SET status = 2 WHERE teacher_email = '$email';";
+            // mysqli_query($connect, $b);
 
             $insert_teacher = "INSERT INTO teachers(username, password, fullname, ngaysinh, phone_number, gender, address, email)
             VALUES ('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh', '$diaChi', '$email');"; 
@@ -94,8 +90,6 @@
                 window.location.href="index.php";
             </script>
             <?php
-            // echo "success";
-            // header("location: index.php");
         } else {
             ?>
             <script>
@@ -103,14 +97,15 @@
                 window.location.href="dangky.php";
             </script>
             <?php
-            // header("location: dangky.php");
             echo "error";
         }
     }
 
 ?>
 
-<?php 
+
+<?php
+    // kiểm tra nếu email không được chấp nhận 
     $c = "SELECT * FROM guest WHERE teacher_email='$email';";
     $query_mail = mysqli_query($connect, $c);
 
