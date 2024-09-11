@@ -5,46 +5,69 @@
 ?>
 
 <?php
+	// echo $_SESSION['taiKhoan'] . '----';
+
+
 	$uri = $_SERVER['REQUEST_URI'];
-	if(!strpos($uri, "/xacthuc.php")) {
-		if (isset($_SESSION['taiKhoan'])) {
-			$taiKhoan = $_SESSION['taiKhoan'];
-
-			$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan'";
-			$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan'";
-			$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan'";
-	
-			$query_admins = mysqli_query($connect, $sql_admins);
-			$query_teachers = mysqli_query($connect, $sql_teachers);
-			$query_students = mysqli_query($connect, $sql_students);
-	
-			$result_admins = mysqli_num_rows($query_admins);
-			$result_teachers = mysqli_num_rows($query_teachers);
-			$result_students = mysqli_num_rows($query_students);
-
-			$check = true;
-			if($result_admins == 1) {
-				$_SESSION['role'] = "admin";
-				$arr = mysqli_fetch_array($query_admins);
-			} elseif($result_teachers == 1) {
-				$_SESSION['role'] = "teacher";
-				$arr = mysqli_fetch_array($query_teachers);
-			} elseif($result_students == 1) {
-				$_SESSION['role'] = "student";
-				$arr = mysqli_fetch_array($query_students);
-			} else {
-				$check = false;
-			}
-			if($check == false) {
+	// kiểm tra nếu ko phải trang xác thực, tài khoản chưa được lưu trên csdl thì sẽ xóa session
+	// if(!strpos($uri, "/xacthuc.php")) {
+	if(!strpos($current_page, "xacthuc.php")) {
+		if(!strpos($current_page, "student.php")){
+			if(isset($_SESSION['taiKhoan'])) {
+				$taiKhoan = $_SESSION['taiKhoan'];
+				$matKhau = $_SESSION['matKhau'];
 				$email = $_SESSION['email'];
-				$sql = "DELETE FROM guest WHERE teacher_email = '$email'";
-				mysqli_query($connect, $sql);
+				$ngaySinh = $_SESSION['ngaySinh'];
 
-				header("location: ./logout.php");
+				// AND để tránh trường hợp tài khoản teacher, admin và student có các trường thông tin giống nhau
+				$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' and password='$matKhau'";
+				$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$matKhau'";
+				$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$matKhau'";
+				// $sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
+				// $sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
+				// echo $sql_admins;
+				$query_admins = mysqli_query($connect, $sql_admins);
+				$query_teachers = mysqli_query($connect, $sql_teachers);
+				$query_students = mysqli_query($connect, $sql_students);
+		
+				$result_admins = mysqli_num_rows($query_admins);
+				$result_teachers = mysqli_num_rows($query_teachers);
+				$result_students = mysqli_num_rows($query_students);
+		
+				$check = true;
+				if($result_admins == 1) {
+					$_SESSION['role'] = "admin";
+					$arr = mysqli_fetch_array($query_admins);
+				} else if($result_teachers == 1) {
+					$_SESSION['role'] = "teacher";
+					$arr = mysqli_fetch_array($query_teachers);
+				} else if($result_students == 1) {
+					$_SESSION['role'] = "student";
+					$arr = mysqli_fetch_array($query_students);
+				} else if($result_teachers == 0 && $result_students==0) {
+					$check = false;
+				}
+				// echo $check;
+				// var_dump($result_admins == 1);
+				// var_dump($result_teachers == 1);
+				// var_dump($result_students == 1);
+				if($check == false) {
+					$email = $_SESSION['email'];
+					// $sql = "DELETE FROM guest WHERE teacher_email = '$email'";
+					// mysqli_query($connect, $sql);
+					// header("location: logout.php");
+					// echo "false check";
+
+					// khi teacher nhập emai đã được sử dụng, cho phép giữ lại session và quay trở lại trang dangky
+					if(!strpos($current_page, 'dangky.php')){
+						header("location: logout.php");
+					}
+				}
 			}
 		}
 	}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -91,7 +114,7 @@
 					</li>
 				</ul>
 				
-				<form class="d-flex" role="search" style="position: relative;display: block;float: right;">
+				<form class="d-flex" role="search" style="position: relative;display: block;float: right;" method="post">
 					<input class="form-control me-2" type="search"
 						placeholder="Nội dung tìm kiếm" aria-label="Search">
 					<button class="btn btn-outline-success" type="submit">Tìm</button>

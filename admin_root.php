@@ -94,50 +94,44 @@
     }
 ?>
 
-<div style="display: flex; justify-content: center;">
+<form action="" method="post">
+    <table>
+        <th>STT</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Access</th>
+        <th>Deny</th>
 
-<?php 
-    if(isset($_SESSION['role'])) {
-		include './layouts/menu.php';
-	}
-?>
+        <form action="" method="post">
+        <?php
+        foreach($emails as $index => $email){
+            $status = $statuses[$index];
+            echo '<tr id="id_' . $j . '">';
+                echo '<td>' . $j . '</td>';
+                echo '<td>' . $email .'</td>';
+                echo '<td>' . $status .'</td>';
+                echo '<td>
+                        <form action="" method="post">
+                            <input type="hidden" name="row_id" value="' . $j . '">
+                            <button type="submit" class="btn btn-primary" name="submitAccess">Click</button>
+                        </form>
+                      </td>';
+                echo '<td>
+                        <form action="" method="post">
+                            <input type="hidden" name="row_id" value="' . $j . '">
+                            <button type="submit" class="btn btn-danger" name="submitDeny">Click</button>
+                        </form>
+                      </td>';
+                $j += 1;
+            echo '</tr>';
+        }
+        ?>
+        </form>
+    </table>
+</form>
 
-<div style="display: block; width: 100%;">
-    <form action="" method="post">
-        <table>
-            <th>STT</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th>Access</th>
-            <th>Deny</th>
 
-            <form action="" method="post">
-            <?php
-            foreach($emails as $index => $email){
-                $status = $statuses[$index];
-                echo '<tr id="id_' . $j . '">';
-                    echo '<td>' . $j . '</td>';
-                    echo '<td>' . $email .'</td>';
-                    echo '<td>' . $status .'</td>';
-                    echo '<td>
-                            <form action="" method="post">
-                                <input type="hidden" name="row_id" value="' . $j . '">
-                                <button type="submit" class="btn btn-primary" name="submitAccess">Click</button>
-                            </form>
-                        </td>';
-                    echo '<td>
-                            <form action="" method="post">
-                                <input type="hidden" name="row_id" value="' . $j . '">
-                                <button type="submit" class="btn btn-danger" name="submitDeny">Click</button>
-                            </form>
-                        </td>';
-                    $j += 1;
-                echo '</tr>';
-            }
-            ?>
-            </form>
-        </table>
-    </form>
+
 <script>
     console.log(document.getElementById("id_1"));
 </script>
@@ -147,4 +141,3 @@
 <?php 
     include './layouts/footer.php';
 ?>
-</div>

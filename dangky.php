@@ -6,15 +6,18 @@
 	require 'vendor/PHPMailer/src/Exception.php';
 	require 'vendor/PHPMailer/src/PHPMailer.php';
 	require 'vendor/PHPMailer/src/SMTP.php';
-?>
+?>	
 
 <?php 
 	$error_taiKhoan = "";
 	$error_mail = "";
 	$token = md5(uniqid());
+
+	// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email . '  27 <br>';
+
 	
 	// echo $_POST['_token'] . '<br>'; // biến $_POST['_token'] không thay đổi vì nó không thực hiện submit
-	// echo $_SESSION['token'];
+	// echo $_SESSION['token'] . '<br>';
 
     if(isset($_POST['submit1']) && $_SESSION['token'] == $_POST['_token']) {
 
@@ -41,31 +44,19 @@
 		$_SESSION['email'] = $email;
 		$_SESSION['menu_status'] = "close";
 
-		// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
-
+		echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email . '  63<br>';
 		
 		$s = "SELECT username FROM students WHERE username='$taiKhoan'";
 		$query = mysqli_query($connect, $s);
 		if(mysqli_num_rows($query) > 0){
 			$error_taiKhoan = 'Tài khoản đã tồn tại';
 		} else {
-			$sql = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
-			('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$email');";
-	
-		   $result = mysqli_query($connect, $sql);
-	
-			if($result){
-				$affected_row = mysqli_affected_rows($connect);
-				if($affected_row > 0){
-					$_SESSION['taiKhoan'] = $taiKhoan;
-					?>
-					<script>
-						alert("Xin chào <?php $hoVaTen?>");
-						window.location.href="index.php";
-					</script>
-				<?php 
-				}
-			}
+			// header("location: student.php");
+			?>
+			<script>
+				window.location.href="student.php";
+			</script>
+			<?php
 		}
     }
 
@@ -95,22 +86,25 @@
 		$_SESSION['email'] = $email;
 		$_SESSION['menu_status'] = "close";
 
-		header("location: xacthuc.php");
+		// header("location: xacthuc.php"); 
+		?>
+		<script>
+			window.location.href = "xacthuc.php";
+		</script>
+		<?php
     }
 ?>
 
 
 	<div class="container" style="width: 70%; padding-top: 20px;">
 		<h3 style="text-align: center; color: highlight; font-size: 40px;">Đăng ký tài khoản</h3><br>
-		<div class="red" id="baoLoi">
-			<?php $error_taiKhoan ?>
-		</div>
+		
 		<form action="<?php echo $_SERVER['PHP_SELF']?>" id="form1" method="post">
 			<div class="row">
 				<div class="col-md-6">
 					<h3>Tài khoản</h3>
 				  	<div class="mb-3">
-					    <label for="taiKhoan" class="form-label">Tên đăng nhập</label><span class="red">*</span>
+					    <label for="taiKhoan" class="form-label">Tên đăng nhập</label><span class="red">*</span><span style="margin-left: 8px;" class="red" id="baoLoi"><?php echo $error_taiKhoan ?></span>
 					    <input type="text" class="form-control" id="taiKhoan" name="taiKhoan" required="required" 
 						value="<?php echo isset($_SESSION['taiKhoan']) ? $_SESSION['taiKhoan'] : "" ?>">
 				  	</div>
@@ -156,7 +150,7 @@
 				  	</div>
 				  	<div class="mb-3">
 					    <label for="email" class="form-label">Email</label>
-					    <input type="email" class="form-control" id="email" name="email" value="">
+					    <input type="email" class="form-control" require="required" id="email" name="email" value="">
 				  	</div>
 				  	
 				  	<div class="mb-3">
