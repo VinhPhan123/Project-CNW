@@ -1,81 +1,6 @@
 <?php 
-		include './layouts/header.php';
+    include './layouts/header.php';
 ?>
-
-<style>
-    .container_head{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-around;
-        margin-top: 20px;
-    }
-
-    .container_body {
-        margin-top: 50px;
-    }
-
-    .menu-icon {
-        position: absolute;
-        border: 1px solid #000;
-        padding-top: 4.5px;
-        padding-bottom: 4.5px;
-        padding-right: 6px;
-        padding-left: 5px;
-        border-top-left-radius: 2px;
-        border-bottom-left-radius: 2px;
-        border-right-style: none;
-    }
-
-    #major_list {
-        position: relative;
-        left: 26px;
-        width: 250px;
-        height: 26.5px;
-        border: 1px solid #000;
-        border-top-right-radius: 2px;
-        border-bottom-right-radius: 2px;
-    }
-
-    #major_list::after {
-        content: "";
-        display: block;
-        width: 20px;
-        height: 20px;
-        background-color: #000;
-    }
-
-    #majors {
-        flex: 2;
-    }
-
-    #combine {
-        flex: 1;
-    }
-
-    #btn_submit {
-        flex: 1;
-        position: relative;
-    }
-
-    #btnAdd {
-        position: absolute;
-        /* height: 26.5px;
-        line-height: 10.5px; */
-        bottom: 0;
-        left: 50px;
-    }
-
-    table, th, tr, td {
-    border: 1px solid #000;
-    text-align: center;
-    }
-
-    td {
-        height: 50px;
-        width: 250px;
-    }
-</style>
-
 <?php
     $m=0;
     $n=0;
@@ -179,10 +104,21 @@
         $_SESSION['status_chuyennganh'][$chuyennganh_at_row] = 0;
 
         // reload lại trang
-        header('Location: admin_tao_ho_so.php'); // Đúng cách
-        exit(); // Kết thúc script sau khi chuyển hướng
+        header('Location: admin_tao_ho_so.php'); 
+        exit();
     }
+?>
 
+<?php
+    // kiểm tra xem có chuyên ngành nào chưa duyệt không
+    $count_status = 0;
+    $status_chuyennganh = $_SESSION['status_chuyennganh'];
+    foreach($status_chuyennganh as $chuyenNganh => $status){
+        if($status == 1){
+            $count_status += 1;
+        }
+    }
+    // echo $count_status;
 ?>
 
 
@@ -232,51 +168,59 @@
         </div>
     </form>
 
-    <div class="container_body">
-        <form action="" method="post">
-            <table>
-                <th>STT</th>
-                <th>Chuyên ngành xét tuyển</th>
-                <th>Tổ hợp xét tuyển</th>
-                <th>Access</th>
-                <th>Delete</th>
-                
-                <?php $chuyennganh_array = $_SESSION['chuyennganh_array']; ?>
-                <?php
-                    foreach($chuyennganh_array as $chuyenNganh => $toHop){
-                        if($status_chuyennganh[$chuyenNganh] == 1){
-                            echo  '<tr id="id_' . $j . '">';
-                                echo '<td>' . $j . '</td>';
-                                echo '<td>' . $chuyenNganh . '</td>';
-                                ?>
+<?php 
+    if($count_status >= 1){
+        echo '<div class="container_body">
+                <form action="" method="post">
+                    <table>
+                        <th>STT</th>
+                        <th>Chuyên ngành xét tuyển</th>
+                        <th>Tổ hợp xét tuyển</th>
+                        <th>Access</th>
+                        <th>Delete</th>'
+                        ?>
+                        <?php $chuyennganh_array = $_SESSION['chuyennganh_array']; ?>
+                        <?php
+                            foreach($chuyennganh_array as $chuyenNganh => $toHop){
+                                if($status_chuyennganh[$chuyenNganh] == 1){
+                                    echo  '<tr id="id_' . $j . '">';
+                                        echo '<td>' . $j . '</td>';
+                                        echo '<td>' . $chuyenNganh . '</td>';
+                                        ?>
 
-                                <?php 
-                                $k = implode(" - ", $toHop);
-                                echo '<td>' . $k . '</td>';
+                                        <?php 
+                                        $k = implode(" - ", $toHop);
+                                        echo '<td>' . $k . '</td>';
 
-                                echo '<td>
-                                        <form action="" method="post">
-                                            <input type="hidden" name="row_id" value="' . $chuyenNganh . '">
-                                            <button type="submit" class="btn btn-primary" name="access">Click</button>
-                                            <input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
-                                            <?php $_SESSION['token'] = $token; ?>
-                                        <?php echo '</form>
-                                    </td>';
-                                    echo '<td>
-                                            <form action="" method="post">
-                                                <input type="hidden" name="row_id" value="' . $chuyenNganh . '">
-                                                <button type="submit" class="btn btn-danger" name="delete">Click</button>
-                                            </form>
-                                        </td>';
-                                $j+=1;
-                            echo '</tr>';
-                        }
-                    }
-               ?>
-            </table>
-        </form>
-    </div>
-
+                                        echo '<td>
+                                                <form action="" method="post">
+                                                    <input type="hidden" name="row_id" value="' . $chuyenNganh . '">
+                                                    <button type="submit" class="btn btn-primary" name="access">Click</button>
+                                                    <input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
+                                                    <?php $_SESSION['token'] = $token; ?>
+                                                <?php echo '</form>
+                                            </td>';
+                                            echo '<td>
+                                                    <form action="" method="post">
+                                                        <input type="hidden" name="row_id" value="' . $chuyenNganh . '">
+                                                        <button type="submit" class="btn btn-danger" name="delete">Click</button>
+                                                    </form>
+                                                </td>';
+                                        $j+=1;
+                                    echo '</tr>';
+                                }
+                            }
+                    ?>
+                    </table>
+                </form>
+            </div>
+<?php 
+    } else {
+        ?>
+        <h2 style="text-align: center; margin-top: 30px;">Chưa có yêu cầu duyệt chuyên ngành !</h2>
+        <?php
+    }
+?>
 
 	<?php 
 		// include './layouts/footer.php';

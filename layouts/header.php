@@ -82,6 +82,7 @@
     <link rel="stylesheet" href="./assets/css/footer.css">
     <link rel="stylesheet" href="./assets/css/dangky.css">
 	<link rel="stylesheet" href="./assets/css/index.css">
+	<link rel="stylesheet" href="./assets/css/admin_tao_ho_so.css">
 </head>
 <body>
 
