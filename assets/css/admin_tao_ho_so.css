@@ -70,3 +70,8 @@ td {
     height: 50px;
     width: 250px;
 }
+
+.error {
+    position: fixed;
+    color: red;
+}
