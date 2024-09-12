@@ -2,6 +2,11 @@
 		include './layouts/header.php';
 ?>
 
+<?php 
+    
+?>
+
+
 <div style="display: flex; justify-content: center;">
 
 <?php 

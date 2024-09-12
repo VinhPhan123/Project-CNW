@@ -75,3 +75,14 @@ td {
     position: fixed;
     color: red;
 }
+
+
+.form_modify {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.select_modify {
+    width: 100px;
+}

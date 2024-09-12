@@ -36,10 +36,6 @@
 ?>
 
 <?php
-
-?>
-
-<?php
     $j = 0;
 
     // lấy ra email admin

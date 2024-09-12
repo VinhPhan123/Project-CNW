@@ -117,12 +117,6 @@
     
 ?>
 
-<?php
-    $s0 = "SELECT * FROM majors WHERE major = 'Marketing';";
-    $result0 = mysqli_query($connect, $s0);
-    echo mysqli_num_rows($result0);     
-
-?>
 
 <?php
     // xử lí phần access, delete
@@ -339,22 +333,22 @@
                                                     </form>
                                                 </td>';
 
-                                        echo '<td sytle="display: flex;">
-                                            <form action="" method="post">
-                                            <input type="hidden" name="row_id" value="' . $chuyenNganh . '">
-                                            <select name="sua_tohop">
-                                                <option></option>'?>
+                                        echo '<td>
+                                            <form class="form_modify"  action="" method="post">
+                                                <input type="hidden" name="row_id" value="' . $chuyenNganh . '">
+                                                <select class="select_modify" name="sua_tohop">
+                                                    <option></option>'?>
+                                                    <?php
+                                                        $tohop_at_chuyennganh = $chuyennganh_array[$chuyenNganh];
+                                                    ?>
+                                                    <?php foreach($tohop_at_chuyennganh as $c) { ?>
+                                                        <?php echo '<option value="' . $c .'">' . $c . '</option>'?>
+                                                    <?php } ?>
                                                 <?php
-                                                    $tohop_at_chuyennganh = $chuyennganh_array[$chuyenNganh];
-                                                ?>
-                                                <?php foreach($tohop_at_chuyennganh as $c) { ?>
-                                                    <?php echo '<option value="' . $c .'">' . $c . '</option>'?>
-                                                <?php } ?>
-                                            <?php
-                                            echo '</select>';
-                                            echo '<button type="submit" class="btn btn-warning" name="modify">Delete</button>';
-                                            echo ' <input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
-                                            <?php $_SESSION['token'] = $token; 
+                                                echo '</select>';
+                                                echo '<button type="submit" class="btn_modify btn btn-warning" name="modify">Delete</button>';
+                                                echo ' <input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
+                                                <?php $_SESSION['token'] = $token; 
                                             echo '</form>';
                                         $j+=1;
                                     echo '</tr>';
