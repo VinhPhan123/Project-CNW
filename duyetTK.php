@@ -20,6 +20,7 @@
     $username_admin = $query_username['username'];
     if($_SESSION['taiKhoan'] != $username_admin){
         header("location: logout.php");
+        exit();
     }
 ?>
 
@@ -105,12 +106,12 @@
             $mail->Body    = '<b>' . $randomCode . '</b>';
     
             $mail->send();
-            echo 'Message has been sent';
+
+            header("location: duyetTK.php");
+            exit();
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
-
-        // echo "Access clicked for row " . $row_id;
     }
 
     if(isset($_POST['submitDeny'])){
@@ -119,8 +120,8 @@
         $b = "UPDATE guest SET status = 0 WHERE teacher_email = '$email_guest';";
         mysqli_query($connect, $b);
 
-        header("location: admin.php");
-        // echo "Deny clicked for row " . $row_id;
+        header("location: duyetTK.php");
+        exit();
     }
 ?>
 

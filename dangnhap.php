@@ -50,6 +50,7 @@
                 $_SESSION['menu_status'] = "close";
     
                 header("location: index.php");
+                exit();
             } else {
                 echo("<script>alert('Tài khoản hoặc mật khẩu chưa đúng!')</script>");
             }
