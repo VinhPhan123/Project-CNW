@@ -1,11 +1,13 @@
 <?php 
     include './layouts/header.php';
 ?>
+
 <?php
     $m=0;
     $n=0;
     $token = md5(uniqid());
 ?>
+
 
 <?php 
     // nếu chưa đăng nhập thì out
@@ -20,6 +22,7 @@
 
 
 <?php 
+    // lấy ra tất cả các tổ hợp 
     $s1 = "SELECT * FROM subject_combination;";
     $query_combine = mysqli_query($connect, $s1);
 
@@ -32,6 +35,7 @@
 ?>
 
 <?php 
+    // lấy ra tất cả chuyên ngành
     $s2 = "SELECT * FROM chuyennganh;";
     $query_major = mysqli_query($connect, $s2);
 
@@ -42,6 +46,8 @@
         // echo $row['id_SB'] . '-' . $row['sub_1'] . '-' . $row['sub_2'] . '-' . $row['sub_3'] . '<br>';
     }
 ?>
+
+
 
 <?php
     // nếu chuyên ngành đã xóa hết tổ hợp thì xóa chuyên ngành đó khỏi chuyennganh_array
@@ -69,10 +75,6 @@
     $_SESSION['chuyennganh_array'] = $chuyennganh_array;
     $_SESSION['status_chuyennganh'] = $status_chuyennganh;
 
-
-    // in ra mảng sau khi xóa
-    // echo "Mảng sau khi xóa các tập rỗng:<br>";
-    // print_r($chuyennganh_array);
 ?>
 
 <?php
@@ -81,11 +83,15 @@
     // $tohop_array = isset($_SESSION['tohop_array']) ? $_SESSION['tohop_array'] : array();
     // tạo thêm 1 array để lưu status của chuyennganh
     $status_chuyennganh = isset($_SESSION['status_chuyennganh']) ? $_SESSION['status_chuyennganh'] : array();
-
+    print_r($chuyennganh_array);
+    echo "<br>";
+    
     // Xử lí phần thêm dữ liệu vào bảng khi bấm submit
     if (isset($_POST['them']) && $_SESSION['token'] == $_POST['_token']) {
         $chuyenNganh = $_POST['chuyennganh'];
         $toHop = $_POST['tohop'];
+        echo $chuyenNganh;
+        echo $toHop;
         if($chuyenNganh =='' || $toHop == ''){
            // 
         } else {
@@ -106,8 +112,8 @@
             $_SESSION['chuyennganh_array'] = $chuyennganh_array;
             $_SESSION['status_chuyennganh'] = $status_chuyennganh;
         }
-        header('Location: admin_tao_ho_so.php'); 
-        exit(); 
+        // header('Location: admin_tao_ho_so.php'); 
+        // exit(); 
     }
 
     // print_r($_SESSION['chuyennganh_array']);
@@ -211,11 +217,6 @@
     
 ?>
 
-<?php
-    $s3 = "SELECT * FROM majors WHERE major = 'Marketing';";
-    $result2 = mysqli_query($connect, $s3);
-    echo mysqli_fetch_array($result2)['subject_combination_id_list'];
-?>
 
 <div style="display: flex; justify-content: center;">
 

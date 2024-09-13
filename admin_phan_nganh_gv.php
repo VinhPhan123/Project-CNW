@@ -25,15 +25,15 @@
 
 
 <?php 
-    $s2 = "SELECT * FROM chuyennganh;";
+	// lấy ra các chuyên ngành đã được xét tổ hợp xét tuyển
+    $s2 = "SELECT * FROM majors;";
     $query_major = mysqli_query($connect, $s2);
 
 	// tạo array lưu tất cả các chuyên ngành
     $majors = array();
 
     while($row=mysqli_fetch_array($query_major)){
-        array_push($majors, $row['ten_chuyen_nganh']);
-        // echo $row['id_SB'] . '-' . $row['sub_1'] . '-' . $row['sub_2'] . '-' . $row['sub_3'] . '<br>';
+        array_push($majors, $row['major']);
     }
 ?>
 
@@ -51,119 +51,178 @@
 	$count_teacher = mysqli_num_rows($query_0);
 	// echo $count_teacher;
 
-	// print_r($teachers);
-
-	// mặc định gán cho các giáo viên tập phân ngành rỗng
-	$giaovien_phannganh_array = array();
-	foreach($teachers as $teacher => $email){
-		$giaovien_phannganh_array[$teacher] = array();
-	}
-	// $_SESSION['giaovien_phannganh_array'] = $giaovien_phannganh_array;
-	// var_dump($giaovien_phannganh_array['huyen']);
-?>
-
-<?
 ?>
 
 
 <?php 
+	// tạo 1 array lưu id_teacher và tập hợp các id_major trong bảng phannganh_giaovien
+	$idTeacher_listIdMajor_array = array();
+	$s5 = "SELECT * FROM teachers;";
+	$query5 = mysqli_query($connect, $s5);
+	while($row1 = mysqli_fetch_array($query5)){
+		$id_teacher = $row1['id_teacher'];
+		$s6 = "SELECT * FROM phannganh_giaovien WHERE id_teacher = '$id_teacher';";
+		$query6 = mysqli_query($connect, $s6);
+		$listMajor = array();
+		while($row2 = mysqli_fetch_array($query6)){
+			array_push($listMajor, $row2['id_major']);
+			$idTeacher_listIdMajor_array[$id_teacher] =  $listMajor;
+		}
+	}	
+
+	// tạo 1 array lưu id_major - major tương ứng trong bảng majors
+	$idMajor_major_array = array();
+	$s6 = "SELECT * FROM majors;";
+	$query6 = mysqli_query($connect, $s6);
+	while($row3 = mysqli_fetch_array($query6)){
+		$idMajor_major_array[$row3['id_major']] = $row3['major'];
+	}
+	// print_r($idMajor_major_array);
+
+	// tạo 1 array lưu id_teacher và username_teacher tương ứng trong bảng teachers
+	$idTeacher_username_array = array();
+	$s7 = "SELECT * FROM teachers;";
+	$query7 = mysqli_query($connect, $s7);
+	while($row4 = mysqli_fetch_array($query7)){
+		$idTeacher_username_array[$row4['id_teacher']] = $row4['username'];
+	}
+	// print_r($idTeacher_username_array);
+
+	// tạo 1 array lưu username và list major tương ứng
+	$username_listMajor_array = array();
+	foreach($idTeacher_listIdMajor_array as $id_teacher => $listIdMajor){
+		$listMajor = array();
+		foreach($listIdMajor as $id_major){
+			array_push($listMajor, $idMajor_major_array[$id_major]);
+		}
+		$username_listMajor_array[$idTeacher_username_array[$id_teacher]] = $listMajor;
+	}
+	// print_r($username_listMajor_array);
+?>
+
+
+<?php
 	// xử lí phần thêm chuyên ngành cho giáo viên
 	if(isset($_POST['add']) && $_SESSION['token'] == $_POST['_token']){
-		// associative array luu giao vien va nganh phu trach
-		// $giaovien_phannganh_array = isset($_SESSION['giaovien_phannganh_array']) ? $_SESSION['giaovien_phannganh_array'] : array();
-		$giaovien_phannganh_array = isset($_SESSION['giaovien_phannganh_array']) ? $_SESSION['giaovien_phannganh_array'] : $giaovien_phannganh_array;
-		$nganh_add_at_row = $_POST['tohop_add'];
-		if($nganh_add_at_row == ''){
-			echo "nganh_add_at_row empty";
-		} else {
+		if($_POST['tohop_add'] != '') {
 			$teacher_username = $_POST['teacher_username'];
-			$teacher_email = $_POST['teacher_email'];
-			$nganh_duoc_phan = isset($giaovien_phannganh_array[$teacher_username]) ? $giaovien_phannganh_array[$teacher_username] : array();
-			// echo $nganh_phu_trach . '-' . $teacher_username . '-' . $teacher_email;
+			$major_at_row = $_POST['tohop_add'];
+			// echo $teacher_username . '-' . $teacher_email . '-' . $major_at_row;
+	
+			// lấy ra id teacher tương ứng trong bảng teachers
+			$s1 = "SELECT * FROM teachers WHERE username='$teacher_username';";
+			$query1 = mysqli_query($connect, $s1);
+			$teacher_id = mysqli_fetch_array($query1)['id_teacher'];
+			// echo 'teacher id: ' . $teacher_id;
+			
+			// lấy ra id major tương ứng trong bảng majors
+			$s2 = "SELECT * FROM majors WHERE major='$major_at_row';";
+			$query2 = mysqli_query($connect, $s2);
+			$major_id = mysqli_fetch_array($query2)['id_major'];
+			// echo 'major id : ' . $major_id;
+	
+			// lưu teacher_id va và major_id vào bảng phannganh_gv
+			$s3 = "CALL insert_if_not_exist($major_id, $teacher_id);";
+			mysqli_query($connect, $s3);
 
-			// neu giao vien chua co nganh duoc phan thi tao moi
-			if (!isset($giaovien_phannganh_array[$teacher_username])) {
-                $giaovien_phannganh_array[$teacher_username] = array();
-            }
-    
-            // thêm chuyên ngành được phân vào array với giáo viên tương ứng, nếu chuyên ngành đó chưa có 
-            if(!in_array($nganh_add_at_row, $giaovien_phannganh_array[$teacher_username])){
-                array_push($giaovien_phannganh_array[$teacher_username], $nganh_add_at_row);
-            }
-            
-            // Cập nhật session
-            $_SESSION['giaovien_phannganh_array'] = $giaovien_phannganh_array;
+			header("location: admin_phan_nganh_gv.php");
 
-			print_r($giaovien_phannganh_array[$teacher_username]);
-			echo "<br>";
 		}
 	}
+?>	
 
-	// xử lí phần xóa chuyên ngành đã được phần của giáo viên tương ứng
+
+
+<?php
+	// xử lí phần xóa chuyên ngành
 	if(isset($_POST['delete']) && $_SESSION['token'] == $_POST['_token']){
-		// $giaovien_phannganh_array = isset($_SESSION['giaovien_phannganh_array']) ? $_SESSION['giaovien_phannganh_array'] : array();
-		$giaovien_phannganh_array = isset($_SESSION['giaovien_phannganh_array']) ? $_SESSION['giaovien_phannganh_array'] : $giaovien_phannganh_array;
-		$nganh_delete_at_row = $_POST['tohop_delete'];
-		if($nganh_delete_at_row == ''){
-			echo "nganh_delete_at_row empty";
-		} else {
+		if($_POST['tohop_delete'] != '') {
 			$teacher_username = $_POST['teacher_username'];
-			$teacher_email = $_POST['teacher_email'];
-			$nganh_duoc_phan = isset($giaovien_phannganh_array[$teacher_username]) ? $giaovien_phannganh_array[$teacher_username] : array();
+			$major_at_row = $_POST['tohop_delete'];
 
-			// index của ngành muốn xóa
-			$index = array_search($nganh_delete_at_row, $nganh_duoc_phan);
+			// xóa id_major tương ứng trong bảng phannganh_giaovien
+			$id_teacher = array_search($teacher_username, $idTeacher_username_array);
+			$id_major = array_search($major_at_row, $idMajor_major_array);
 
-			if ($index !== false) {
-				// xóa phần tử tại index (phần tử nganh_delete_at_row)
-				unset($nganh_duoc_phan[$index]);
-				
-				// đặt lại các chỉ số của mảng nganh_duoc_phan
-				$nganh_duoc_phan = array_values($nganh_duoc_phan);
-				
-				// cập nhật lại mảng chuyennganh_array
-				$giaovien_phannganh_array[$teacher_username] = $nganh_duoc_phan;
-				
-				// lưu vào session
-				$_SESSION['giaovien_phannganh_array'] = $giaovien_phannganh_array;
-			}
+			// echo $id_teacher . '-' . $id_major;
+			$s8 = "DELETE FROM phannganh_giaovien WHERE id_teacher = '$id_teacher' AND id_major = '$id_major';";
+			mysqli_query($connect, $s8);
 
-
-			// echo $nganh_delete_at_row . '-' . $teacher_username . '-' . $teacher_email;
-			print_r($giaovien_phannganh_array[$teacher_username]);
-			echo "<br>";
+			header("location: admin_phan_nganh_gv.php");
 		}
 	}
-
-	if(isset($_POST['save']) && $_SESSION['token'] == $_POST['_token']){
-		$giaovien_phannganh_array = isset($_SESSION['giaovien_phannganh_array']) ? $_SESSION['giaovien_phannganh_array'] : $giaovien_phannganh_array;
-		$teacher_username = $_POST['teacher_username'];
-		$teacher_email = $_POST['teacher_email'];
-		$nganh_duoc_phan = isset($giaovien_phannganh_array[$teacher_username]) ? $giaovien_phannganh_array[$teacher_username] : array();
-		$s3 = "SELECT * FROM teachers WHERE username = '$teacher_username';";
-		$query3 = mysqli_query($connect, $s3);
-		$id_teacher = mysqli_fetch_array($query3)['id_teacher'];
-
-		$id_nganh_array = array();
-		foreach($nganh_duoc_phan as $nganh){
-			$s4 = "SELECT * FROM ;";
-		}
-
-		// echo $id_teacher;
-	}
-?>
-
-<?php 
-	if(isset($_SESSION['giaovien_phannganh_array'])) {
-		$giaovien_phannganh_array = $_SESSION['giaovien_phannganh_array'];
-		// print_r($giaovien_phannganh_array);
-	}
-	// print_r($giaovien_phannganh_array['hong12']);
 ?>
 
 <?php
-	foreach($giaovien_phannganh_array as $giaovien => $nganh_duoc_phan_array){
-		// echo $giaovien . '<br>';
+	// xử lí phần lưu chuyên ngành
+	if(isset($_POST['save']) && $_SESSION['token'] == $_POST['_token']){
+		$teacher_username = $_POST['teacher_username'];
+
+		// Kiểm tra xem $teacher_username có tồn tại trong mảng không
+		if (isset($username_listMajor_array[$teacher_username])) {
+			// list major của username tương ứng
+			$listMajors = $username_listMajor_array[$teacher_username];
+			// $string_major_list = implode(" - ", $listMajors);
+			if (is_array($listMajors)) {
+				$idMajor_array = array();
+				foreach($listMajors as $major){
+					array_push($idMajor_array, array_search($major, $idMajor_major_array));
+				}
+				$id_major_list_array = implode(" - ", $idMajor_array);
+				
+				$s9 = "UPDATE teachers SET major_id_list = '$id_major_list_array' WHERE username = '$teacher_username';";
+				mysqli_query($connect, $s9);
+			}
+		} else {
+			$s10 = "UPDATE teachers SET major_id_list = null WHERE username = '$teacher_username';";
+			mysqli_query($connect, $s10);
+		}
+	}
+?>
+
+
+<?php
+	// $hideSaveButton = false;
+
+	// Nếu major_id_list trong bảng teachers khác với tập các major trong phân ngành thì hiển thị nút save -> Modify
+	foreach($teachers as $teacher => $email){
+		$s9 = "SELECT * FROM teachers WHERE username = '$teacher';";
+		$query9 = mysqli_query($connect, $s9);
+		$list_id_major_in_teachers_table_string = mysqli_fetch_array($query9)['major_id_list'];
+		if($list_id_major_in_teachers_table_string == ''){
+			$list_id_major_in_teachers_table_array = array();
+		} else {
+			$list_id_major_in_teachers_table_array = explode(" - ", $list_id_major_in_teachers_table_string);
+		}
+
+		// Tìm id_teacher dựa trên username, nếu teacher_id tồn tại trong bảng teachers vả tồn tại mảng
+		$teacher_id = array_search($teacher, $idTeacher_username_array);
+		if ($teacher_id !== false && isset($idTeacher_listIdMajor_array[$teacher_id])) {
+			$list_id_major_in_phannganh_gv_table = $idTeacher_listIdMajor_array[$teacher_id];
+		} else {
+			$list_id_major_in_phannganh_gv_table = [];
+		}
+
+		// Đảm bảo rằng các biến là mảng
+		if (!is_array($list_id_major_in_teachers_table_array)) {
+			$list_id_major_in_teachers_table_array = [];
+		}
+		if (!is_array($list_id_major_in_phannganh_gv_table)) {
+			$list_id_major_in_phannganh_gv_table = [];
+		}
+
+		sort($list_id_major_in_teachers_table_array);
+		sort($list_id_major_in_phannganh_gv_table);
+
+		print_r($list_id_major_in_teachers_table_array);
+		print_r($list_id_major_in_phannganh_gv_table);
+
+
+		var_dump($list_id_major_in_teachers_table_array == $list_id_major_in_phannganh_gv_table);
+		echo "<br>";
+		if ($list_id_major_in_teachers_table_array !== $list_id_major_in_phannganh_gv_table) {
+			
+		}
 	}
 ?>
 
@@ -200,17 +259,16 @@
 
 										?>
 										<?php
-										foreach($giaovien_phannganh_array as $giaovien => $nganh_duoc_phan_array){
-											if($teacher == $giaovien){
-												if(!empty($nganh_duoc_phan_array)){
-													$nganh_duoc_phan_string = implode(' - ', $nganh_duoc_phan_array);
-													echo '<td>' . $nganh_duoc_phan_string . '</td>';
-												} else {
-													echo '<td></td>';
+											foreach($username_listMajor_array as $username => $listMajor){
+												if($username == $teacher){
+													if(!empty($listMajor)){
+														$majors_string = implode(" - ", $listMajor);
+														echo '<td>' . $majors_string . '</td>';
+													} 
 												}
 											}
-										}
-
+											// nếu teacher không nằm trong bảng phannganh_giaovien thì hiển thị cặp thẻ td
+											echo in_array($teacher, array_keys($username_listMajor_array)) ? "" : '<td></td>';
 										?>
 
 										<?php
@@ -252,14 +310,13 @@
 
 
                                         echo '<td>
-												<form class="form_save"  action="" method="post">
+												<form class="form_save" method="post">
 													<input type="hidden" name="teacher_username" value="' . $teacher . '">
-													<input type="hidden" name="teacher_email" value="' . $email . '">
-													<button type="submit" class="btn btn-warning" name="save">Save</button>';
-                                                	echo ' <input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
-                                                	<?php $_SESSION['token'] = $token; 
-										echo '	</form>
-											</td>';
+													<button type="submit" id="btn_save" class="btn btn-warning" name="save">Save</button>
+													<input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
+													<?php $_SESSION['token'] = $token; 
+										echo '</form>';
+										echo '</td>';
                                         
                                         $j+=1;
                                     echo '</tr>';
