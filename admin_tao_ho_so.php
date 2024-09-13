@@ -40,15 +40,15 @@
 <link rel="stylesheet" href="./assets/css/index.css">
 <div style="display: block; width: 100%;">
 	
-	<div class="container mt-4">
+	<div class="container mt-4" style="width: max-content; margin-left: auto; margin-right: auto;">
 	<!-- Page content -->
-    <div>
-        <h4>Thêm chuyên ngành</h4>
+    <div style="display: block;">
+        <h4 style="display: block; width: fit-content;">Thêm chuyên ngành</h4>
         <form action="" method="post" style="position: relative;">
             <label for="major_name">Tên chuyên ngành</label><br>
             <input type="text" name="major_name" id="">
             <input type="hidden" name="_token" value="<?php echo $token; ?>">
-            <button type="submit" name="submit_major_name" style="position: absolute; left: 220px; top: 55px;" class="btn btn-primary">Thêm</button>
+            <button type="submit" name="submit_major_name" class="btn btn-primary">Thêm</button>
         </form>
         <?php
             // $token1 = $_SESSION['token'];
@@ -81,8 +81,6 @@
 
             }
         ?>
-     </div>
-    <div>
         <h4>Danh sách ngành</h4>
         <?php
             $sql_major = "SELECT * FROM majors";
