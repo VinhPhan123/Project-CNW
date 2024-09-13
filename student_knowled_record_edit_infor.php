@@ -15,16 +15,7 @@
 
 		<!-- Page content -->
 		<?php
-			$username = $_SESSION["taiKhoan"];
-			$sql = "SELECT
-					s.id_student
-				FROM students AS s
-				JOIN academic_records AS ar ON s.id_student = ar.id_student
-				WHERE s.username = '$username'";
-			$query = mysqli_query($connect, $sql);
-			$result = mysqli_num_rows($query);
-			$arr = mysqli_fetch_array($query);
-			$id_student = $arr[0];
+			$id_student = $_SESSION["id_student"];
 		?>
 
 	<form action="" method="post">

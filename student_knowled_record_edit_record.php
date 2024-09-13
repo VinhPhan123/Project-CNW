@@ -15,16 +15,7 @@
 
 		<!-- Page content -->
 		<?php
-			$username = $_SESSION["taiKhoan"];
-			$sql = "SELECT
-					s.id_student
-				FROM students AS s
-				JOIN academic_records AS ar ON s.id_student = ar.id_student
-				WHERE s.username = '$username'";
-			$query = mysqli_query($connect, $sql);
-			$result = mysqli_num_rows($query);
-			$arr = mysqli_fetch_array($query);
-			$id_student = $arr[0];
+			$id_student = $_SESSION['id_student'];
 		?>
 
 	<form action="" method="post">
@@ -42,35 +33,35 @@
 				<div>
 					<div class="infor">
 						<label>Toán</label>
-						<input name="Toan" class="score" type="number" value="<?php if(!isset($_POST['Toan'])) echo ""; else echo $_POST['Toan']; ?>"><br>
+						<input name="Toan" class="score" type="text" value="<?php if(!isset($_POST['Toan'])) echo ""; else echo $_POST['Toan']; ?>"><br>
 						<label>Ngữ văn</label>
-						<input name="NguVan" class="score" type="number" value="<?php if(!isset($_POST['NguVan'])) echo ""; else echo $_POST['NguVan']; ?>"><br>
+						<input name="NguVan" class="score" type="text" value="<?php if(!isset($_POST['NguVan'])) echo ""; else echo $_POST['NguVan']; ?>"><br>
 						<label>Tiếng Anh</label>
-						<input name="TiengAnh" class="score" type="number" value="<?php if(!isset($_POST['TiengAnh'])) echo ""; else echo $_POST['TiengAnh']; ?>"><br>
+						<input name="TiengAnh" class="score" type="text" value="<?php if(!isset($_POST['TiengAnh'])) echo ""; else echo $_POST['TiengAnh']; ?>"><br>
 					</div>
 					<div class="infor">
 						<label>Vật lý</label>
-						<input name="VatLy" class="score" type="number" value="<?php if(!isset($_POST['VatLy'])) echo ""; else echo $_POST['VatLy']; ?>"><br>
+						<input name="VatLy" class="score" type="text" value="<?php if(!isset($_POST['VatLy'])) echo ""; else echo $_POST['VatLy']; ?>"><br>
 						<label>Hóa học</label>
-						<input name="HoaHoc" class="score" type="number" value="<?php if(!isset($_POST['HoaHoc'])) echo ""; else echo $_POST['HoaHoc']; ?>"><br>
+						<input name="HoaHoc" class="score" type="text" value="<?php if(!isset($_POST['HoaHoc'])) echo ""; else echo $_POST['HoaHoc']; ?>"><br>
 						<label>Sinh học</label>
-						<input name="SinhHoc" class="score" type="number" value="<?php if(!isset($_POST['SinhHoc'])) echo ""; else echo $_POST['SinhHoc']; ?>"><br>
+						<input name="SinhHoc" class="score" type="text" value="<?php if(!isset($_POST['SinhHoc'])) echo ""; else echo $_POST['SinhHoc']; ?>"><br>
 					</div>
 					<div class="infor">
 						<label>Lịch sử</label>
-						<input name="LichSu" class="score" type="number" value="<?php if(!isset($_POST['LichSu'])) echo ""; else echo $_POST['LichSu']; ?>"><br>
+						<input name="LichSu" class="score" type="text" value="<?php if(!isset($_POST['LichSu'])) echo ""; else echo $_POST['LichSu']; ?>"><br>
 						<label>Địa lý</label>
-						<input name="DiaLy" class="score" type="number" value="<?php if(!isset($_POST['DiaLy'])) echo ""; else echo $_POST['DiaLy']; ?>"><br>
+						<input name="DiaLy" class="score" type="text" value="<?php if(!isset($_POST['DiaLy'])) echo ""; else echo $_POST['DiaLy']; ?>"><br>
 						<label>Tin học</label>
-						<input name="TinHoc" class="score" type="number" value="<?php if(!isset($_POST['TinHoc'])) echo ""; else echo $_POST['TinHoc']; ?>"><br>
+						<input name="TinHoc" class="score" type="text" value="<?php if(!isset($_POST['TinHoc'])) echo ""; else echo $_POST['TinHoc']; ?>"><br>
 					</div>
 					<div class="infor">
 						<label>Công nghệ</label>
-						<input name="CongNghe" class="score" type="number" value="<?php if(!isset($_POST['CongNghe'])) echo ""; else echo $_POST['CongNghe']; ?>"><br>
+						<input name="CongNghe" class="score" type="text" value="<?php if(!isset($_POST['CongNghe'])) echo ""; else echo $_POST['CongNghe']; ?>"><br>
 						<label>Giáo dục công dân</label>
-						<input name="GiaoDucCongDan" class="score" type="number" value="<?php if(!isset($_POST['GiaoDucCongDan'])) echo ""; else echo $_POST['GiaoDucCongDan']; ?>"><br>
+						<input name="GiaoDucCongDan" class="score" type="text" value="<?php if(!isset($_POST['GiaoDucCongDan'])) echo ""; else echo $_POST['GiaoDucCongDan']; ?>"><br>
 						<label>Giáo dục thể chất</label>
-						<input name="GiaoDucTheChat" class="score" type="number" value="<?php if(!isset($_POST['GiaoDucTheChat'])) echo ""; else echo $_POST['GiaoDucTheChat']; ?>"><br>
+						<input name="GiaoDucTheChat" class="score" type="text" value="<?php if(!isset($_POST['GiaoDucTheChat'])) echo ""; else echo $_POST['GiaoDucTheChat']; ?>"><br>
 					</div>
 				</div>
 			</div>
@@ -109,37 +100,91 @@
 					} else {
 						$school = $_POST['school'];
 						$school_address = $_POST['school_address'];
-						$Toan = $_POST['Toan'];
-						$NguVan = $_POST['NguVan'];
-						$TiengAnh = $_POST['TiengAnh'];
-						$VatLy = $_POST['VatLy'];
-						$HoaHoc = $_POST['HoaHoc'];
-						$SinhHoc = $_POST['SinhHoc'];
-						$LichSu = $_POST['LichSu'];
-						$DiaLy = $_POST['DiaLy'];
-						$TinHoc = $_POST['TinHoc'];
-						$CongNghe = $_POST['CongNghe'];
-						$GiaoDucCongDan = $_POST['GiaoDucCongDan'];
-						$GiaoDucTheChat = $_POST['GiaoDucTheChat'];
+						$Toan = (float)$_POST['Toan'];
+						$NguVan = (float)$_POST['NguVan'];
+						$TiengAnh = (float)$_POST['TiengAnh'];
+						$VatLy = (float)$_POST['VatLy'];
+						$HoaHoc = (float)$_POST['HoaHoc'];
+						$SinhHoc = (float)$_POST['SinhHoc'];
+						$LichSu = (float)$_POST['LichSu'];
+						$DiaLy = (float)$_POST['DiaLy'];
+						$TinHoc = (float)$_POST['TinHoc'];
+						$CongNghe = (float)$_POST['CongNghe'];
+						$GiaoDucCongDan = (float)$_POST['GiaoDucCongDan'];
+						$GiaoDucTheChat = (float)$_POST['GiaoDucTheChat'];
 
-						$sql_update_academic_records = "UPDATE academic_records
-														SET school = '$school',
-															address = '$school_address',
-															Toan = $Toan,
-															NguVan = $NguVan,
-															TiengAnh = $TiengAnh,
-															VatLy = $VatLy,
-															HoaHoc = $HoaHoc,
-															SinhHoc = $SinhHoc,
-															LichSu = $LichSu,
-															DiaLy = $DiaLy,
-															TinHoc = $TinHoc,
-															CongNghe = $CongNghe,
-															GiaoDucCongDan = $GiaoDucCongDan,
-															GiaoDucTheChat = $GiaoDucTheChat
-														WHERE id_student = $id_student;";
+						$sql = "SELECT
+									ar.school,
+									ar.address,
+									ar.Toan,
+									ar.NguVan,
+									ar.TiengAnh,
+									ar.VatLy,
+									ar.HoaHoc,
+									ar.SinhHoc,
+									ar.LichSu,
+									ar.DiaLy,
+									ar.TinHoc,
+									ar.CongNghe,
+									ar.GiaoDucCongDan,
+									ar.GiaoDucTheChat
+								FROM academic_records AS ar
+								WHERE ar.id_student = '$id_student';";
+						
+						$query = mysqli_query($connect, $sql);
+						$result = mysqli_num_rows($query);
+						if ($result > 0) {
+							$sql_update_academic_records = "UPDATE academic_records
+							SET school = '$school',
+								address = '$school_address',
+								Toan = $Toan,
+								NguVan = $NguVan,
+								TiengAnh = $TiengAnh,
+								VatLy = $VatLy,
+								HoaHoc = $HoaHoc,
+								SinhHoc = $SinhHoc,
+								LichSu = $LichSu,
+								DiaLy = $DiaLy,
+								TinHoc = $TinHoc,
+								CongNghe = $CongNghe,
+								GiaoDucCongDan = $GiaoDucCongDan,
+								GiaoDucTheChat = $GiaoDucTheChat
+							WHERE id_student = $id_student;";
 
-						mysqli_query($connect, $sql_update_academic_records);
+							mysqli_query($connect, $sql_update_academic_records);
+						} else {
+							$sql_insert_academic_records = "INSERT INTO academic_records(id_student, 
+																							school, 
+																							address, 
+																							Toan, 
+																							NguVan, 
+																							TiengAnh, 
+																							VatLy, 
+																							HoaHoc, 
+																							SinhHoc, 
+																							LichSu, 
+																							DiaLy, 
+																							TinHoc, 
+																							CongNghe, 
+																							GiaoDucCongDan, 
+																							GiaoDucTheChat)
+															VALUES($id_student,  
+																	'$school', 
+																	'$school_address', 
+																	$Toan, 
+																	$NguVan, 
+																	$TiengAnh, 
+																	$VatLy, 
+																	$HoaHoc, 
+																	$SinhHoc, 
+																	$LichSu, 
+																	$DiaLy, 
+																	$TinHoc, 
+																	$CongNghe, 
+																	$GiaoDucCongDan, 
+																	$GiaoDucTheChat);";
+							mysqli_query($connect, $sql_insert_academic_records);
+						}
 
 						echo '<script>alert("Bạn đã sửa thành công!")</script>';
 						echo '<script>window.location="student_knowled_record.php";</script>';

@@ -15,34 +15,40 @@
 
 		<!-- Page content -->
 		<?php
-			$username = $_SESSION["taiKhoan"];
-			$sql = "SELECT
+			$id_student = $_SESSION['id_student'];
+			$sql_infor = "SELECT
 					s.fullname,
 					s.ngaysinh,
 					s.gender,
 					s.phone_number,
 					s.address,
-					s.email,
-					ar.school,
-					ar.address,
-					ar.Toan,
-					ar.NguVan,
-					ar.TiengAnh,
-					ar.VatLy,
-					ar.HoaHoc,
-					ar.SinhHoc,
-					ar.LichSu,
-					ar.DiaLy,
-					ar.TinHoc,
-					ar.CongNghe,
-					ar.GiaoDucCongDan,
-					ar.GiaoDucTheChat
+					s.email
 				FROM students AS s
-				JOIN academic_records AS ar ON s.id_student = ar.id_student
-				WHERE s.username = '$username'";
-			$query = mysqli_query($connect, $sql);
-			$result = mysqli_num_rows($query);
-			$arr = mysqli_fetch_array($query);
+				WHERE s.id_student = '$id_student'";
+			$sql_record ="SELECT
+							ar.school,
+							ar.address,
+							ar.Toan,
+							ar.NguVan,
+							ar.TiengAnh,
+							ar.VatLy,
+							ar.HoaHoc,
+							ar.SinhHoc,
+							ar.LichSu,
+							ar.DiaLy,
+							ar.TinHoc,
+							ar.CongNghe,
+							ar.GiaoDucCongDan,
+							ar.GiaoDucTheChat
+						FROM students AS s
+						JOIN academic_records AS ar ON s.id_student = ar.id_student
+						WHERE s.id_student = '$id_student'";
+			$query_infor = mysqli_query($connect, $sql_infor);
+			$query_record = mysqli_query($connect, $sql_record);
+			$result_infor = mysqli_num_rows($query_infor);
+			$result_record = mysqli_num_rows($query_record);
+			$arr_infor = mysqli_fetch_array($query_infor);
+			$arr_record = mysqli_fetch_array($query_record);
 		?>
 
 	<div class="container" style="padding-left: 100px;;">
@@ -53,19 +59,19 @@
 		<div class="content">
 			<div class="infor" style="margin-right: 100px;">
 				<label>Họ và tên:</label>
-				<input disabled type="text" value="<?php echo $arr[0]; ?>"><br>
+				<input disabled type="text" value="<?php echo $arr_infor[0]; ?>"><br>
 				<label>Ngày sinh:</label>
-				<input disabled type="date" value="<?php echo $arr[1]; ?>"><br>
+				<input disabled type="date" value="<?php echo $arr_infor[1]; ?>"><br>
 				<label>Giới tính:</label>
-				<input disabled type="text" value="<?php echo $arr[2]; ?>">
+				<input disabled type="text" value="<?php echo $arr_infor[2]; ?>">
 			</div>
 			<div class="infor">
 				<label>Số điện thoại:</label>
-				<input disabled type="tel" value="<?php echo $arr[3]; ?>"><br>
+				<input disabled type="tel" value="<?php echo $arr_infor[3]; ?>"><br>
 				<label>Địa chỉ thường trú:</label>
-				<input disabled type="text" value="<?php echo $arr[4]; ?>"><br>
+				<input disabled type="text" value="<?php echo $arr_infor[4]; ?>"><br>
 				<label>Địa chỉ email:</label>
-				<input style="width: 300px;" disabled type="email" value="<?php echo $arr[5]; ?>">
+				<input style="width: 300px;" disabled type="email" value="<?php echo $arr_infor[5]; ?>">
 			</div>
 		</div>
 		<div style="position: relative;">
@@ -74,43 +80,62 @@
 		</div>
 		<div class="content">
 			<div class="infor">
+				<?php
+					if($arr_record == []) {
+						echo '
+						<div style="visibility: visible;" class="alert">
+							<div class="alert-container"></div>
+							<div class="alert-content">
+								<h5>Thông Báo</h5>
+								<hr>
+								<div style="width: 100%; text-align: center;">Học bạ của bạn chưa có thông tin!</div>
+								<div style="width: 100%; text-align: center;">Chuyển tiếp đến trang nhập học bạ</div>
+								<div style="text-align: center; margin-top: 30px;">
+									<dev style="margin-left: auto; margin-right: auto; width: 100px; display: inline-block; margin-left: auto; margin-right: auto; " class="btn btn-primary">
+										<a style="color: white; text-decoration: none;" href="student_knowled_record_edit_record.php">Đồng ý</a>
+									</dev>
+								</div>
+							</div>
+						</div>';
+					}
+				?>
 				<label>Trường:</label>
-				<input style="width: 400px;" disabled type="text" value="<?php echo $arr[6]; ?>"><br>
+				<input style="width: 400px;" disabled type="text" value="<?php echo $arr_record[0]; ?>"><br>
 				<label>Địa chỉ trường:</label>
-				<input style="width: 400px;" disabled type="text" value="<?php echo $arr[7]; ?>"><br>
+				<input style="width: 400px;" disabled type="text" value="<?php echo $arr_record[1]; ?>"><br>
 			</div>
 			<div>
 				<div class="infor">
 					<label>Toán</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[8]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[2]; ?>"><br>
 					<label>Ngữ văn</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[9]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[3]; ?>"><br>
 					<label>Tiếng Anh</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[10]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[4]; ?>"><br>
 				</div>
 				<div class="infor">
 					<label>Vật lý</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[11]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[5]; ?>"><br>
 					<label>Hóa học</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[12]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[6]; ?>"><br>
 					<label>Sinh học</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[13]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[7]; ?>"><br>
 				</div>
 				<div class="infor">
 					<label>Lịch sử</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[14]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[8]; ?>"><br>
 					<label>Địa lý</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[15]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[9]; ?>"><br>
 					<label>Tin học</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[16]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[10]; ?>"><br>
 				</div>
 				<div class="infor">
 					<label>Công nghệ</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[17]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[11]; ?>"><br>
 					<label>Giáo dục công dân</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[18]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[12]; ?>"><br>
 					<label>Giáo dục thể chất</label>
-					<input class="score" disabled type="number" value="<?php echo $arr[19]; ?>"><br>
+					<input class="score" disabled type="number" value="<?php echo $arr_record[13]; ?>"><br>
 				</div>
 			</div>
 		</div>

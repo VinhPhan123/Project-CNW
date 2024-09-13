@@ -7,6 +7,15 @@
 <?php 
     if(isset($_SESSION['role'])) {
 		include './layouts/menu.php';
+		
+		$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan'";
+		$query_students = mysqli_query($connect, $sql_students);
+		$result_students = mysqli_num_rows($query_students);
+
+		if($_SESSION['role'] = "student") {
+			$arr = mysqli_fetch_array($query_students);
+			$_SESSION['id_student'] = $arr['id_student'];
+		}
 	}
 ?>
 
@@ -52,6 +61,7 @@
 					</button>
 				</div>
 				<!-- End Slider -->
+				 <hr>
 				<!-- Products -->
 				<div class="row">
 					<div class="col-lg-4 col-md-6 mb-4">
@@ -151,6 +161,7 @@
 					</div>
 				</div>
 				<!-- End Products -->
+				 <hr>
 			</div>
 			<!-- End Slider and Products -->
 		</div>
@@ -158,6 +169,11 @@
 	<!-- End Page content -->
 
 	<?php 
+		// if($_SESSION['id_student'] == '') {
+		// 	echo 'false';
+		// } else {
+		// 	echo $_SESSION['id_student']; 
+		// }
 		include './layouts/footer.php';
 	?>
 </div>
