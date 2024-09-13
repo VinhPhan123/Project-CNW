@@ -177,7 +177,7 @@
 
 <?php
     // Xử lý phần modify, xóa tổ hợp được chọn trong chuyên ngành tương ứng
-    if (isset($_POST['modify']) && isset($_SESSION['token']) && $_SESSION['token'] == $_POST['_token']) {
+    if (isset($_POST['modify']) && $_SESSION['token'] == $_POST['_token']) {
         $chuyennganh_array = isset($_SESSION['chuyennganh_array']) ? $_SESSION['chuyennganh_array'] : array();
         
         $chuyennganh_at_row_id = $_POST['row_id'];
@@ -209,13 +209,12 @@
         exit();
     }
     
-    // echo "<br>";
-    // echo "Chuyên ngành : " . '<br>';
-    // foreach($chuyennganh_array as $chuyenNganh => $toHop){
-    //     echo $chuyenNganh . '<br>';
-    //     print_r($toHop);
-    //     echo "<br>";
-    // }
+?>
+
+<?php
+    $s3 = "SELECT * FROM majors WHERE major = 'Marketing';";
+    $result2 = mysqli_query($connect, $s3);
+    echo mysqli_fetch_array($result2)['subject_combination_id_list'];
 ?>
 
 <div style="display: flex; justify-content: center;">
@@ -334,7 +333,7 @@
                                                 </td>';
 
                                         echo '<td>
-                                            <form class="form_modify"  action="" method="post">
+                                            <form class="form_modify" action="" method="post">
                                                 <input type="hidden" name="row_id" value="' . $chuyenNganh . '">
                                                 <select class="select_modify" name="sua_tohop">
                                                     <option></option>'?>

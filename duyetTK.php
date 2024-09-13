@@ -61,6 +61,7 @@
 
     // lấy ra số lượng email chưa được duyệt (status=1)
     $countEmails = mysqli_num_rows($result);
+    // echo $countEmails;
     // echo ($_POST['submitAccess']);
 
     // token ngăn gửi email nhiều lần nếu teachers chưa xác thực mà admin reload lại trang
