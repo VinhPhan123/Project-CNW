@@ -37,7 +37,7 @@
     // echo "</pre>";
 ?>
 
-<link rel="stylesheet" href="./assets/css/index.css">
+<link rel="stylesheet" href="./assets/css/admin_tao_ho_so.css">
 <div style="display: block; width: 100%;">
 	
 	<div class="container mt-4" style="width: max-content; margin-left: auto; margin-right: auto;">
@@ -96,17 +96,17 @@
                 echo "
                 <table>
                     <tr>
-                        <th>STT</th>
-                        <th>Tên ngành</th>
-                        <th>Tổ hợp môn</th>
-                        <th>Insert</th>
-                        <th>Delete</th>
+                        <th id='stt'>STT</th>
+                        <th id='major_name'>Tên ngành</th>
+                        <th id='sub'>Tổ hợp môn</th>
+                        <th id='insert_button'>Insert</th>
+                        <th id='delete_button'>Delete</th>
                     </tr>";
                 for($i=0; $i<$result_major; $i++) {    
                     echo "<tr>";
-                    echo "<td>" . $arr_major[$i][0] . "</td>";
-                    echo "<td>" . $arr_major[$i][1] . "</td>";
-                    echo "<td>";
+                    echo "<td id='stt'>" . $arr_major[$i][0] . "</td>";
+                    echo "<td id='major_name'>" . $arr_major[$i][1] . "</td>";
+                    echo "<td id='sub'>";
                         $sql_select_chuyennganh = "SELECT * FROM chuyennganh WHERE id_major = $i+1 ORDER BY id_SB;";
                         $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
                         $result_select_chuyennganh = mysqli_num_rows($query_select_chuyennganh);
@@ -114,36 +114,63 @@
                             echo "Chưa có tổ hợp môn";
                         } else {
                             $arr_select_chuyennganh = mysqli_fetch_all($query_select_chuyennganh);
+                            $tmp_arr_select_chuyennganh = array();
                             for($j=0; $j<$result_select_chuyennganh; $j++) {
-                                echo $arr_select_chuyennganh[$j][1];
-                                if($j < $result_select_chuyennganh-1) echo ' - ';
+                                array_push($tmp_arr_select_chuyennganh, $arr_select_chuyennganh[$j][1]);
+                            }
+                            
+                            for($j=0; $j<$result_select_chuyennganh; $j++) {
+                                echo "<p style='margin: 0px; text-align: left; margin-left: 10px'>";
+                                echo $tmp_arr_select_chuyennganh[$j] . " - " . $arr_select_subject_combination[$j][1] . " - " . $arr_select_subject_combination[$j][2] . " - " . $arr_select_subject_combination[$j][3];
+                                if($j < $result_select_chuyennganh-1) echo '<br>';
+                                echo "</p>";
                             }
                         }
                     echo "</td>";
                     $tmp = $i+1;
-                    echo '<td sytle="display: flex;">
-                        <form action="" method="post">
-                        <input type="hidden" name="row_id" value="' . $tmp . '">
-                        <select name="insert_tohop">
-                            <option></option>';
-                                for($j=0; $j<$result_select_subject_combination; $j++) {
-                                    echo '<option value="' . $arr_select_subject_combination[$j][0] .'">' . $arr_select_subject_combination[$j][0] . '</option>';
-                                }
+                    if(empty($tmp_arr_select_chuyennganh)) {
+                        echo '<td id="insert_button" sytle="display: flex;">
+                            <form action="" method="post">
+                            <input type="hidden" name="row_id" value="' . $tmp . '">
+                            <select id="insert-tohop" name="insert_tohop">
+                                <option></option>';                                
+                                    for($j=0; $j<$result_select_subject_combination; $j++) {
+                                        echo '<option value="' . $arr_select_subject_combination[$j][0] .'">' . $arr_select_subject_combination[$j][0] . '</option>';
+                                    }
                         echo '</select>';
-                        echo '<button type="submit" class="btn btn-primary" name="insert">Insert</button>';
-                        echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';
+                        echo '<button id="insert-button" type="submit" class="btn btn-primary" name="insert">Insert</button>';
+                        echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';                        
+                    } else {
+                        if($result_select_subject_combination != count($tmp_arr_select_chuyennganh)) {
+                            echo '<td id="insert_button" sytle="display: flex;">
+                                <form action="" method="post">
+                                <input type="hidden" name="row_id" value="' . $tmp . '">
+                                <select id="insert-tohop" name="insert_tohop">
+                                    <option></option>';                                
+                                        for($j=0; $j<$result_select_subject_combination; $j++) {
+                                            if(!in_array($arr_select_subject_combination[$j][0], $tmp_arr_select_chuyennganh)) {
+                                                echo '<option value="' . $arr_select_subject_combination[$j][0] .'">' . $arr_select_subject_combination[$j][0] . '</option>';
+                                            }
+                                        }
+                                echo '</select>';
+                                echo '<button id="insert-button" type="submit" class="btn btn-primary" name="insert">Insert</button>';
+                                echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';                        
+                        } else {
+                            echo "<td>Đã hết tổ hợp môn có thể thêm vào ngành này!</td>";
+                        }
+                    }
                     echo "</td>";
                     if($result_select_chuyennganh > 0) {
-                        echo '<td sytle="display: flex;">
+                        echo '<td id="delete_button" sytle="display: flex;">
                         <form action="" method="post">
                         <input type="hidden" name="row_id" value="' . $tmp . '">
-                        <select name="delete_tohop">
+                        <select id="delete-tohop" name="delete_tohop">
                             <option></option>';
                                 for($j=0; $j<$result_select_chuyennganh; $j++) {
-                                    echo '<option value="' . $arr_select_chuyennganh[$j][1] .'">' . $arr_select_chuyennganh[$j][1] . '</option>';
+                                    echo '<option value="' . $tmp_arr_select_chuyennganh[$j] .'">' . $tmp_arr_select_chuyennganh[$j] . '</option>';
                                 }
                         echo '</select>';
-                        echo '<button type="submit" class="btn btn-danger" name="delete">Delete</button>';
+                        echo '<button id="delete-button" type="submit" class="btn btn-danger" name="delete">Delete</button>';
                         echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';
                         echo "</td>";
                     } else {

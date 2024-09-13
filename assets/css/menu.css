@@ -81,6 +81,7 @@ menu {
     border-bottom: 1px solid rgb(215, 215, 215);
 }
 .menu .dropdown {
+    background-color: #ffffff;
     margin: 0px;
     padding: 0px;
     padding-top: 10px;
