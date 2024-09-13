@@ -13,10 +13,13 @@
 <link rel="stylesheet" href="./assets/css/index.css">
 <div style="display: block; width: 100%;">
 	
+	<div class="container mt-4">
 	<!-- Page content -->
-
-
+     
+	<!-- End Page content -->
+	</div>
 	<?php 
 		include './layouts/footer.php';
 	?>
+</div>
 </div>

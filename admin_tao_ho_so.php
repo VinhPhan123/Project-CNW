@@ -1,5 +1,13 @@
 <?php 
-    include './layouts/header.php';
+		include './layouts/header.php';
+?>
+
+<div style="display: flex; justify-content: center;">
+
+<?php 
+    if(isset($_SESSION['role'])) {
+		include './layouts/menu.php';
+	}
 ?>
 
 <?php
@@ -29,9 +37,12 @@
     // echo "</pre>";
 ?>
 
-<div class="container" style="display: block; width: 100%;">
+<link rel="stylesheet" href="./assets/css/index.css">
+<div style="display: block; width: 100%;">
+	
+	<div class="container mt-4">
 	<!-- Page content -->
-     <div>
+    <div>
         <h4>Thêm chuyên ngành</h4>
         <form action="" method="post" style="position: relative;">
             <label for="major_name">Tên chuyên ngành</label><br>
@@ -195,9 +206,11 @@
                 }
             }
         ?>
-    </div>
+	<!-- End Page content -->
+	</div>
 	<?php 
         $_SESSION['token'] = $token;
 		include './layouts/footer.php';
 	?>
+</div>
 </div>
