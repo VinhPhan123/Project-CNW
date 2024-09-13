@@ -94,21 +94,12 @@
                         <th>Insert</th>
                         <th>Delete</th>
                     </tr>";
-                for($i=0; $i<$result_major; $i++) {
-                    $sql_select_sb_in_major = "SELECT * FROM chuyennganh WHERE id_major = $i+1;";
-                    $query_select_sb_in_major = mysqli_query($connect, $sql_select_sb_in_major);
-                    $result_select_sb_in_major = mysqli_num_rows($query_select_sb_in_major);
-                    $arr_select_sb_in_major = mysqli_fetch_all($query_select_sb_in_major);
-                    // echo $result_select_sb_in_major;
-                    // echo "<pre>";
-                    // echo print_r($arr_select_sb_in_major);
-                    // echo "</pre>";
-    
+                for($i=0; $i<$result_major; $i++) {    
                     echo "<tr>";
                     echo "<td>" . $arr_major[$i][0] . "</td>";
                     echo "<td>" . $arr_major[$i][1] . "</td>";
                     echo "<td>";
-                        $sql_select_chuyennganh = "SELECT * FROM chuyennganh WHERE id_major = $i+1;";
+                        $sql_select_chuyennganh = "SELECT * FROM chuyennganh WHERE id_major = $i+1 ORDER BY id_SB;";
                         $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
                         $result_select_chuyennganh = mysqli_num_rows($query_select_chuyennganh);
                         if($result_select_chuyennganh == 0) {
@@ -134,14 +125,14 @@
                         echo '<button type="submit" class="btn btn-primary" name="insert">Insert</button>';
                         echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';
                     echo "</td>";
-                    if($result_select_sb_in_major > 0) {
+                    if($result_select_chuyennganh > 0) {
                         echo '<td sytle="display: flex;">
                         <form action="" method="post">
                         <input type="hidden" name="row_id" value="' . $tmp . '">
                         <select name="delete_tohop">
                             <option></option>';
-                                for($j=0; $j<$result_select_sb_in_major; $j++) {
-                                    echo '<option value="' . $arr_select_sb_in_major[$j][1] .'">' . $arr_select_sb_in_major[$j][1] . '</option>';
+                                for($j=0; $j<$result_select_chuyennganh; $j++) {
+                                    echo '<option value="' . $arr_select_chuyennganh[$j][1] .'">' . $arr_select_chuyennganh[$j][1] . '</option>';
                                 }
                         echo '</select>';
                         echo '<button type="submit" class="btn btn-danger" name="delete">Delete</button>';
