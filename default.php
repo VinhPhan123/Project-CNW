@@ -22,4 +22,3 @@
 		include './layouts/footer.php';
 	?>
 </div>
-</div>

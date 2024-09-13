@@ -42,7 +42,6 @@
 	
 	<div class="container mt-4" style="width: max-content; margin-left: auto; margin-right: auto;">
 	<!-- Page content -->
-    <div style="display: block;">
         <h4 style="display: block; width: fit-content;">Thêm chuyên ngành</h4>
         <form action="" method="post" style="position: relative;">
             <label for="major_name">Tên chuyên ngành</label><br>
@@ -210,5 +209,4 @@
         $_SESSION['token'] = $token;
 		include './layouts/footer.php';
 	?>
-</div>
 </div>
