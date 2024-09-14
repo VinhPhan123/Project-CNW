@@ -23,6 +23,53 @@
 	$j=0;
 ?>
 
+<?php
+	// hàm insert vào bảng phannganh_giaovien nếu cặp dữ liệu (major_id, teacher_id) không bị trùng lặp
+	function insertIfNotExist($major_id, $teacher_id){
+
+        $connect = new mysqli('localhost', 'root', '', 'xettuyen');
+
+        // Câu lệnh SQL để tạo và gọi stored procedure
+        $sql = "
+            DROP PROCEDURE IF EXISTS insert_if_not_exist;
+            CREATE PROCEDURE insert_if_not_exist(
+                IN major_id_param INT,
+                IN teacher_id_param INT
+            )
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1
+                    FROM phannganh_giaovien
+                    WHERE id_major = major_id_param AND id_teacher = teacher_id_param
+                ) THEN
+                    INSERT INTO phannganh_giaovien (id_major, id_teacher)
+                    VALUES (major_id_param, teacher_id_param);
+                END IF;
+            END;
+        ";
+
+		if (mysqli_multi_query($connect, $sql)) {
+            // đảm bảo rằng tất cả các kết quả từ các câu lệnh SQL được xử lý và bộ nhớ được giải phóng đúng cách
+            do {
+                //  lưu trữ kết quả của câu lệnh SQL hiện tại và trả về một đối tượng mysqli_result
+                if ($result = $connect->store_result()) {
+					// giải phóng bộ nhớ được sử dụng bởi đối tượng mysqli_result
+                    $result->free();
+                }
+				//  $connect->more_results() : kiểm tra xem có còn kết quả khác từ các câu lệnh SQL chưa được xử lý không
+				// $connect->next_result(): di chuyển đến kết quả tiếp theo để xử lý nếu có nhiều câu lệnh SQL
+            } while ($connect->more_results() && $connect->next_result());
+
+            // gọi stored procedure
+            $insert_command = "CALL insert_if_not_exist($major_id, $teacher_id);";
+            mysqli_query($connect, $insert_command);
+            echo "insert success";
+        } else {
+            echo "insert failed";
+        }
+    }
+?>
+
 
 <?php 
 	// lấy ra các chuyên ngành đã được xét tổ hợp xét tuyển
@@ -122,8 +169,10 @@
 			// echo 'major id : ' . $major_id;
 	
 			// lưu teacher_id va và major_id vào bảng phannganh_gv
-			$s3 = "CALL insert_if_not_exist($major_id, $teacher_id);";
-			mysqli_query($connect, $s3);
+			// $s3 = "CALL insert_if_not_exist($major_id, $teacher_id);";
+			// mysqli_query($connect, $s3);
+
+			insertIfNotExist($major_id, $teacher_id);
 
 			header("location: admin_phan_nganh_gv.php");
 
