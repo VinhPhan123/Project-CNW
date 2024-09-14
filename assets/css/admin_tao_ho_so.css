@@ -75,14 +75,15 @@ td {
     position: fixed;
     color: red;
 }
-
-
-.form_modify {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
+th#stt, td#stt {
+    width: 60px;
 }
-
-.select_modify {
-    width: 100px;
+th#major_name, td#major_name {
+    width: 300px;
+}
+th#sub, td#sub {
+    width: 350px;
+}
+#insert-button, #delete-button {
+    margin-left: 10px;
 }

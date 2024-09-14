@@ -33,7 +33,7 @@
     $majors = array();
 
     while($row=mysqli_fetch_array($query_major)){
-        array_push($majors, $row['major']);
+        array_push($majors, $row['major_name']);
     }
 ?>
 
@@ -75,7 +75,7 @@
 	$s6 = "SELECT * FROM majors;";
 	$query6 = mysqli_query($connect, $s6);
 	while($row3 = mysqli_fetch_array($query6)){
-		$idMajor_major_array[$row3['id_major']] = $row3['major'];
+		$idMajor_major_array[$row3['id_major']] = $row3['major_name'];
 	}
 	// print_r($idMajor_major_array);
 
@@ -116,7 +116,7 @@
 			// echo 'teacher id: ' . $teacher_id;
 			
 			// lấy ra id major tương ứng trong bảng majors
-			$s2 = "SELECT * FROM majors WHERE major='$major_at_row';";
+			$s2 = "SELECT * FROM majors WHERE major_name='$major_at_row';";
 			$query2 = mysqli_query($connect, $s2);
 			$major_id = mysqli_fetch_array($query2)['id_major'];
 			// echo 'major id : ' . $major_id;
