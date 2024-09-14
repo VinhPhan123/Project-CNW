@@ -174,7 +174,7 @@
 				mysqli_query($connect, $s9);
 			}
 		} else {
-			$s10 = "UPDATE teachers SET major_id_list = null WHERE username = '$teacher_username';";
+			$s10 = "UPDATE teachers SET major_id_list = '' WHERE username = '$teacher_username';";
 			mysqli_query($connect, $s10);
 		}
 	}
@@ -214,12 +214,11 @@
 		sort($list_id_major_in_teachers_table_array);
 		sort($list_id_major_in_phannganh_gv_table);
 
-		print_r($list_id_major_in_teachers_table_array);
-		print_r($list_id_major_in_phannganh_gv_table);
+		// print_r($list_id_major_in_teachers_table_array);
+		// print_r($list_id_major_in_phannganh_gv_table);
 
-
-		var_dump($list_id_major_in_teachers_table_array == $list_id_major_in_phannganh_gv_table);
-		echo "<br>";
+		// var_dump($list_id_major_in_teachers_table_array == $list_id_major_in_phannganh_gv_table);
+		// echo "<br>";
 		if ($list_id_major_in_teachers_table_array !== $list_id_major_in_phannganh_gv_table) {
 			
 		}
@@ -309,14 +308,52 @@
 										
 
 
-                                        echo '<td>
-												<form class="form_save" method="post">
-													<input type="hidden" name="teacher_username" value="' . $teacher . '">
-													<button type="submit" id="btn_save" class="btn btn-warning" name="save">Save</button>
-													<input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
-													<?php $_SESSION['token'] = $token; 
-										echo '</form>';
-										echo '</td>';
+                                        
+
+										$s9 = "SELECT * FROM teachers WHERE username = '$teacher';";
+										$query9 = mysqli_query($connect, $s9);
+										$list_id_major_in_teachers_table_string = mysqli_fetch_array($query9)['major_id_list'];
+										// lấy ra major_id_list từ bảng teachers nếu rỗng thì sẽ thành Array([0]=> ) vì vậy cần chuyển thành array rỗng
+										if($list_id_major_in_teachers_table_string == ''){
+											$list_id_major_in_teachers_table_array = array();
+										} else {
+											$list_id_major_in_teachers_table_array = explode(" - ", $list_id_major_in_teachers_table_string);
+										}
+								
+										// Tìm id_teacher dựa trên username, nếu teacher_id tồn tại trong bảng teachers vả tồn tại mảng
+										$teacher_id = array_search($teacher, $idTeacher_username_array);
+										if ($teacher_id !== false && isset($idTeacher_listIdMajor_array[$teacher_id])) {
+											$list_id_major_in_phannganh_gv_table = $idTeacher_listIdMajor_array[$teacher_id];
+										} else {
+											$list_id_major_in_phannganh_gv_table = [];
+										}
+								
+										// Đảm bảo rằng các biến là mảng
+										if (!is_array($list_id_major_in_teachers_table_array)) {
+											$list_id_major_in_teachers_table_array = [];
+										}
+										if (!is_array($list_id_major_in_phannganh_gv_table)) {
+											$list_id_major_in_phannganh_gv_table = [];
+										}
+								
+										// sắp xếp trước khi so sánh
+										sort($list_id_major_in_teachers_table_array);
+										sort($list_id_major_in_phannganh_gv_table);
+
+										echo "<br>";
+										if ($list_id_major_in_teachers_table_array !== $list_id_major_in_phannganh_gv_table) {
+											echo '<td>
+											<form class="form_save" method="post">
+												<input type="hidden" name="teacher_username" value="' . $teacher . '">
+												<button type="submit" id="btn_save" class="btn btn-warning" name="save">Save</button>
+												<input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
+												<?php $_SESSION['token'] = $token; 
+											echo '</form>';
+											echo '</td>';
+										} else {
+											// echo '<td></td>';
+											echo '<td> <button type="submit" id="btn_save" class="btn btn-success" name="">Already save</button> </td>';
+										}
                                         
                                         $j+=1;
                                     echo '</tr>';
