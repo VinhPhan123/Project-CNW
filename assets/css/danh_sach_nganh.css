@@ -62,18 +62,16 @@
 }
 
 table, th, tr, td {
-    font-size: 14px;
-    border: 1px solid #000;
-    text-align: center;
+border: 1px solid #000;
+text-align: center;
 }
-th {
-    padding: 10px;
-}
+
 td {
     padding: 10px;
     /* height: 50px; */
     /* width: 250px; */
 }
+
 .error {
     position: fixed;
     color: red;

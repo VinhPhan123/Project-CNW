@@ -21,7 +21,7 @@
                     echo("<p>GIÀNH CHO ADMIN</p>");
                     echo('<li class="dropdown-item"><a href="">Nộp hồ sơ</a></li>');
                     echo('<li class="dropdown-item"><a href="admin_tao_ho_so.php">Tạo Hồ sơ</a></li>');
-                    echo('<li class="dropdown-item"><a href="">Danh sách ngành</a></li>');
+                    echo('<li class="dropdown-item"><a href="danh_sach_nganh.php">Danh sách ngành</a></li>');
                     echo('<li class="dropdown-item"><a href="">Phân ngành GV</a></li>');
                     echo('<li class="dropdown-item"><a href="duyetTK.php?#">Duyệt GV đăng ký</a></li>');
                 } elseif($_SESSION['role'] == 'teacher') {
@@ -30,7 +30,7 @@
                 } else {
                     echo("<p>GIÀNH CHO STUDENT</p>");
                     echo('<li class="dropdown-item"><a href="student_knowled_record.php">Học bạ</a></li>');
-                    echo('<li class="dropdown-item"><a href="">Các ngành xét tuyển</a></li>');
+                    echo('<li class="dropdown-item"><a href="danh_sach_nganh.php">Danh sách ngành</a></li>');
                 }
                 
                 if(isset($_SESSION['menu_status'])) {

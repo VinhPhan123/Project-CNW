@@ -14,101 +14,65 @@
     $m=0;
     $n=0;
     $token = md5(uniqid());
+
+    $date_now = date('Y-m-d');        #Thời gian hiện tại
 ?>
 
-<?php 
-    // nếu chưa đăng nhập thì out
-    $sql = "SELECT * FROM admins;";
-    $res = mysqli_query($connect, $sql);
-    $query_username = mysqli_fetch_array($res);
-    $username_admin = $query_username['username'];
-    if($_SESSION['taiKhoan'] != $username_admin){
-        header("location: logout.php");
-    }
-?>
 <?php
+    $sql_select_chuyennganh = "SELECT * FROM chuyennganh";
+    $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
+    $result_select_chuyennganh = mysqli_num_rows($query_select_chuyennganh);
+    $arr_select_chuyennganh = mysqli_fetch_all($query_select_chuyennganh);
+    
     $sql_select_subject_combination = "SELECT * FROM subject_combination";
     $query_select_subject_combination = mysqli_query($connect, $sql_select_subject_combination);
     $result_select_subject_combination = mysqli_num_rows($query_select_subject_combination);
     $arr_select_subject_combination = mysqli_fetch_all($query_select_subject_combination);
-    
+
     // echo "<pre>";
-    // echo print_r($arr_select_subject_combination);
+    // echo print_r($arr_select_chuyennganh);
     // echo "</pre>";
 ?>
 
+<?php
+    $sql_select_majors = "SELECT * FROM majors";
+    $query_select_majors = mysqli_query($connect, $sql_select_majors);
+    $result_select_majors = mysqli_num_rows($query_select_majors);
+
+    if($result_select_majors == 0) {
+        echo "Chưa có ngành nào";
+    } else {
+        $arr_select_majors = mysqli_fetch_all($query_select_majors);
+        // echo "<pre>";
+        // echo print_r($arr_select_majors);
+        // echo "</pre>";
+?>
 <link rel="stylesheet" href="./assets/css/admin_tao_ho_so.css">
 <div style="display: block; width: 100%;">
-	
 	<div class="container mt-4" style="width: max-content; margin-left: auto; margin-right: auto;">
-	<!-- Page content -->
-        <h4 style="display: block; width: fit-content;">Thêm chuyên ngành</h4>
-        <form action="" method="post" style="position: relative;">
-            <label for="major_name">Tên chuyên ngành</label><br>
-            <input type="text" name="major_name" id="">
-            <input type="hidden" name="_token" value="<?php echo $token; ?>">
-            <button type="submit" name="submit_major_name" class="btn btn-primary">Thêm</button>
-        </form>
+        <h4 style="color: #0c6efd;">Danh sách hồ sơ</h4>
+        <!-- <p style="color: #;"></p> -->
         <?php
-            // $token1 = $_SESSION['token'];
-            // $token2 = $_POST['_token'];
-            // echo $token1;
-            // echo "<br>";
-            // echo $token2;
-            // echo "<script>alert('$token2');</script>";
-            if(isset($_POST['submit_major_name']) && $_SESSION['token'] == $_POST['_token']) {
-                // echo "<script>alert('$token2');</script>";
-                $major_name = $_POST['major_name'];
-
-                $sql_select_major_name = "SELECT * FROM majors WHERE major_name = '$major_name'";
-                $query_select_major_name = mysqli_query($connect, $sql_select_major_name);
-                $result_select_major_name = mysqli_num_rows($query_select_major_name);
-
-                if($result_select_major_name > 0) {
-                    echo "<script>alert('Ngành này đã tồn tại');</script>";
-                } else {
-                    $tmp = mysqli_num_rows(mysqli_query($connect,"SELECT * FROM majors"));
-                    $sql_insert_major_name = "INSERT INTO majors VALUES ($tmp+1, '$major_name');";
-                    $query_insert_major_name = mysqli_query($connect, $sql_insert_major_name);
-
-                    if($query_insert_major_name) {
-                        echo "<script>alert('Đã thêm ngành thành công!');</script>";
-                    } else {
-                        echo "<script>alert('Thêm ngành thất bại!');</script>";
-                    }
-                }
-
-            }
-        ?>
-        <h4>Danh sách ngành</h4>
-        <?php
-            $sql_major = "SELECT * FROM majors";
-            $query_major = mysqli_query($connect, $sql_major);
-            $result_major = mysqli_num_rows($query_major);
-            if($result_major == 0) {
-                echo "Chưa có ngành nào";
-            } else {
-                $arr_major = mysqli_fetch_all($query_major);
-                // echo "<pre>";
-                // echo print_r($arr_major);
-                // echo "</pre>";
-
                 echo "
                 <table>
                     <tr>
                         <th id='stt'>STT</th>
                         <th id='major_name'>Tên ngành</th>
                         <th id='sub'>Tổ hợp môn</th>
-                        <th id='insert_button'>Insert</th>
-                        <th id='delete_button'>Delete</th>
+                        <th class='diem_san'>Điểm sàn</th>
+                        <th>Thời gian bắt đầu</th>
+                        <th>Thời gian Kết thúc</th>
+                        <th>Trạng thái</th>
+                        <th>Action</th>
                     </tr>";
-                for($i=0; $i<$result_major; $i++) {    
+                for($i=0; $i<$result_select_majors; $i++) {    
                     echo "<tr>";
-                    echo "<td id='stt'>" . $arr_major[$i][0] . "</td>";
-                    echo "<td id='major_name'>" . $arr_major[$i][1] . "</td>";
+                    $tmp = $i+1;
+                    echo "<td id='stt'>" . $tmp . "</td>";
+                    echo "<td id='major_name'>" . $arr_select_majors[$i][1] . "</td>";
                     echo "<td id='sub'>";
-                        $sql_select_chuyennganh = "SELECT * FROM chuyennganh WHERE id_major = $i+1 ORDER BY id_SB;";
-                        $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
+                    $sql_select_chuyennganh = "SELECT * FROM chuyennganh WHERE id_major = " . $arr_select_majors[$i][0] . " ORDER BY id_SB;";
+                    $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
                         $result_select_chuyennganh = mysqli_num_rows($query_select_chuyennganh);
                         if($result_select_chuyennganh == 0) {
                             echo "Chưa có tổ hợp môn";
@@ -128,110 +92,55 @@
                         }
                     echo "</td>";
                     $tmp = $i+1;
-                    if(empty($tmp_arr_select_chuyennganh)) {
-                        echo '<td id="insert_button" sytle="display: flex;">
-                            <form action="" method="post">
-                            <input type="hidden" name="row_id" value="' . $tmp . '">
-                            <select id="insert-tohop" name="insert_tohop">
-                                <option></option>';                                
-                                    for($j=0; $j<$result_select_subject_combination; $j++) {
-                                        echo '<option value="' . $arr_select_subject_combination[$j][0] .'">' . $arr_select_subject_combination[$j][0] . '</option>';
-                                    }
-                        echo '</select>';
-                        echo '<button id="insert-button" type="submit" class="btn btn-primary" name="insert">Insert</button>';
-                        echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';                        
-                    } else {
-                        if($result_select_subject_combination != count($tmp_arr_select_chuyennganh)) {
-                            echo '<td id="insert_button" sytle="display: flex;">
-                                <form action="" method="post">
-                                <input type="hidden" name="row_id" value="' . $tmp . '">
-                                <select id="insert-tohop" name="insert_tohop">
-                                    <option></option>';                                
-                                        for($j=0; $j<$result_select_subject_combination; $j++) {
-                                            if(!in_array($arr_select_subject_combination[$j][0], $tmp_arr_select_chuyennganh)) {
-                                                echo '<option value="' . $arr_select_subject_combination[$j][0] .'">' . $arr_select_subject_combination[$j][0] . '</option>';
-                                            }
-                                        }
-                                echo '</select>';
-                                echo '<button id="insert-button" type="submit" class="btn btn-primary" name="insert">Insert</button>';
-                                echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';                        
+                    echo "<td>" . $arr_select_majors[$i][4]  . "</td>";
+                    $time_start = '';
+                    if(isset($arr_select_majors[$i][2])) {
+                        $date=date_create($arr_select_majors[$i][2]);
+                        $time_start = date_format($date,"d/m/Y");
+                    }
+                    echo "<td>" . $time_start . "</td>";
+                    $time_end = '';
+                    if(isset($arr_select_majors[$i][3])) {
+                        $date=date_create($arr_select_majors[$i][3]);
+                        $time_end = date_format($date,"d/m/Y");
+                    }
+                    echo "<td>" . $time_end . "</td>";
+                    if(isset($arr_select_majors[$i][2])) {
+                        if(strtotime($date_now) < strtotime($arr_select_majors[$i][2])) {
+                            echo "<td>" . $arr_select_majors[$i][5] . "<p style='color:#1f96f6; font-style: italic;'>(Chưa mở)</p></td>";
                         } else {
-                            echo "<td>Đã hết tổ hợp môn có thể thêm vào ngành này!</td>";
-                        }
-                    }
-                    echo "</td>";
-                    if($result_select_chuyennganh > 0) {
-                        echo '<td id="delete_button" sytle="display: flex;">
-                        <form action="" method="post">
-                        <input type="hidden" name="row_id" value="' . $tmp . '">
-                        <select id="delete-tohop" name="delete_tohop">
-                            <option></option>';
-                                for($j=0; $j<$result_select_chuyennganh; $j++) {
-                                    echo '<option value="' . $tmp_arr_select_chuyennganh[$j] .'">' . $tmp_arr_select_chuyennganh[$j] . '</option>';
+                            if(isset($arr_select_majors[$i][3])) {
+                                if(strtotime($date_now) < strtotime($arr_select_majors[$i][3])) {
+                                    echo "<td>" . $arr_select_majors[$i][5] . "<p style='color:#79d28d; font-style: italic;'>(Còn hạn)</p></td>";
+                                } else {
+                                    echo "<td>" . $arr_select_majors[$i][5] . "<p style='color:#e13647; font-style: italic;'>(Hết hạn)</p></td>";
                                 }
-                        echo '</select>';
-                        echo '<button id="delete-button" type="submit" class="btn btn-danger" name="delete">Delete</button>';
-                        echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';
-                        echo "</td>";
+                            }
+                        }
                     } else {
-                        echo "<td>Chưa có tổ hợp môn</td>";
+                        echo "<td>". $arr_select_majors[$i][5] . "</td>";
                     }
+                    echo "<td>";
+                    echo "<form action='admin_sua_ho_so.php' method='post'>
+                        <input type='hidden' name='id_major' value='" . $arr_select_majors[$i][0] . "'>";
+                        echo "<input type='hidden' name='major_name' value='" . $arr_select_majors[$i][1] . "'>";
+                        echo "<input type='hidden' name='time_start' value='" . $arr_select_majors[$i][2]  . "'>";
+                        echo "<input type='hidden' name='time_end' value='" . $arr_select_majors[$i][3]  . "'>";
+                        echo "<input type='hidden' name='diem_san' value='" . $arr_select_majors[$i][4]  . "'>";
+                        echo "<input type='hidden' name='status' value='" . $arr_select_majors[$i][5]  . "'>";
+                        echo "<button type='submit' class='btn btn-primary'>Sửa</button></form>";
+                    echo "</td>";
                     echo "</tr>";
                 }
                 echo "</table>";
             }
         ?>
-        <?php
-            if(isset($_POST['insert']) && isset($_SESSION['token']) && $_SESSION['token'] == $_POST['_token']) {
-                $id_major = $_POST['row_id'];
-                $id_SB = $_POST['insert_tohop'];
-
-                if($id_SB == '') {
-                    echo "<script>alert('Bạn chưa chọn tổ hợp môn!');</script>";
-                } else {
-                    $sql_select_chuyennganh = "SELECT id_SB FROM chuyennganh WHERE id_major = $id_major;";
-                    $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
-                    $arr_select_chuyennganh = mysqli_fetch_all($query_select_chuyennganh);
-
-                    $tmp_arr = array();
-                    for($i= 0; $i<count($arr_select_chuyennganh); $i++) {
-                        array_push($tmp_arr, $arr_select_chuyennganh[$i][0]);
-                    }
-                    // echo "<pre>";
-                    // echo print_r($tmp_arr);
-                    // echo "</pre>";
-
-                    // echo "<script>alert('" . $id_major . " " . $id_SB . "');</script>";
-
-                    if(in_array($id_SB, $tmp_arr)) {
-                        echo "<script>alert('Tổ hợp môn này đã tồn tại trong mã ngành!');</script>";
-                    } else {
-                        $sql_insert_chuyennganh = "INSERT INTO chuyennganh VALUES($id_major, '$id_SB')";
-                        mysqli_query($connect, $sql_insert_chuyennganh);
-                        echo "<script>alert('Đã thêm tổ hợp môn thành công!');</script>";
-                        echo '<script>window.location="admin_tao_ho_so.php";</script>';
-                    }
-                }
-            }
-            
-            if(isset($_POST['delete']) && isset($_SESSION['token']) && $_SESSION['token'] == $_POST['_token']) {
-                $id_major = $_POST['row_id'];
-                $id_SB = $_POST['delete_tohop'];
-
-                // echo "<script>alert('" . $id_major . " " . $id_SB . "');</script>";
-
-                if($id_SB == '') {
-                    echo "<script>alert('Bạn chưa chọn tổ hợp môn!');</script>";
-                } else {
-                    $sql_delete_sb_in_major = "DELETE FROM chuyennganh WHERE id_major=$id_major AND id_SB='$id_SB';";
-                    mysqli_query($connect, $sql_delete_sb_in_major);
-                    echo "<script>alert('Đã xóa tổ hợp môn thành công!');</script>";
-                    echo '<script>window.location="admin_tao_ho_so.php";</script>';
-                }
-            }
-        ?>
 	<!-- End Page content -->
 	</div>
+    <?php
+        
+    ?>
+
 	<?php 
         $_SESSION['token'] = $token;
 		include './layouts/footer.php';
