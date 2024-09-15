@@ -59,8 +59,6 @@
 
 
 <div style="display: block; width: 100%;">
-	
-	<!-- Page content -->
 
 
 	<?php 

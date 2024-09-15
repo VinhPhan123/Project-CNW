@@ -16,6 +16,10 @@
 	tr td:nth-child(4){
 		width: 400px;
 	}
+
+	.select_tohop {
+		margin-right: 8px;
+	}
 </style>
 
 <?php 
@@ -321,7 +325,7 @@
 
 										<?php
                                         echo '<td>
-											<form method="post" class="form_add" method="post">
+											<form class="form_add" method="post">
 												<input type="hidden" name="teacher_username" value="' . $teacher . '">
 												<input type="hidden" name="teacher_email" value="' . $email . '">
 												<select name="tohop_add" class="select_tohop">
@@ -339,6 +343,7 @@
 
 
                                         echo '<td>
+											<div class="flex">
 											<form class="form_delete" method="post">
 												<input type="hidden" name="teacher_username" value="' . $teacher . '">
 												<input type="hidden" name="teacher_email" value="' . $email . '">
@@ -353,6 +358,7 @@
 												echo ' <input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
 												<?php $_SESSION['token'] = $token; 
 										echo '</form>';
+										echo '</div>';
 										echo '</td>';
 										
 
@@ -392,12 +398,14 @@
 										echo "<br>";
 										if ($list_id_major_in_teachers_table_array !== $list_id_major_in_phannganh_gv_table) {
 											echo '<td>
+											<div class="flex">
 											<form class="form_save" method="post">
 												<input type="hidden" name="teacher_username" value="' . $teacher . '">
 												<button type="submit" id="btn_save" class="btn btn-warning" name="save">Save</button>
 												<input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
 												<?php $_SESSION['token'] = $token; 
 											echo '</form>';
+											echo '</div>';
 											echo '</td>';
 										} else {
 											// echo '<td></td>';

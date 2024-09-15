@@ -162,9 +162,8 @@
                                 Đăng ký
                         </a>
                     <?php } ?>
-				</form>
                 <?php } ?>
-				
+				</form>
 			</div>
 		</div>
 	</nav>

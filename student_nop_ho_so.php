@@ -4,7 +4,7 @@
 
 <style>
     .infor_text {
-        color: red;
+        color: #b50206;
         font-weight: bold;
         height: 10px;
     }
@@ -53,23 +53,26 @@
 
     .infor_content {
         display: flex;
+        justify-content: space-around;
     }
 
-    .left_content {
+    /* .left_content {
         flex: 0.5;
     }
 
-    .right_content {
+    .mid_content {
         flex: 1;
-    }
+    } */
 
+    .mid_content div label,
     .right_content div label {
         min-width: 100px;
+        font-weight: 500;
     }
 
 
-    .right_content > div {
-        margin: 8px 0;
+    .mid_content > div, .right_content > div {
+        margin: 12px 0;
     }
 
     .achievements {
@@ -78,12 +81,28 @@
         justify-content: space-between;
     }
 
-    select {
+    /* select {
         min-width: 200px;
     }
 
     input {
         min-width: 220px;
+    } */
+
+    .thanh_tich, 
+    .diem_uu_tien, 
+    .nguyen_vong {
+        margin-top: 20px;
+        margin-bottom: 4px;
+    }
+
+    .mb_top_8px {
+        margin-top: 8px;
+    }
+
+    input, select {
+        width: 245px;
+        height: 28px;
     }
 </style>
 
@@ -97,7 +116,7 @@
 
 <div class="body_content" style="display: block; width: 100%;">
 	
-    <div class="container">
+    <div class="container" style="width: 1500px;">
         <div class="infor_text">
             THÔNG TIN CÁ NHÂN
         </div>
@@ -117,7 +136,7 @@
                 </span>
             </div>
             
-            <div class="right_content">
+            <div class="mid_content">
                 <div>
                     <label>Họ và tên</label>
                     <input type="text">
@@ -136,6 +155,10 @@
                     </select>
                 </div>
 
+
+            </div>
+
+            <div class="right_content">
                 <div>
                     <label>Email</label>
                     <input type="email">
@@ -154,12 +177,12 @@
         </div>
 
 
-        <div style="font-size: 18px; font-weight: bold; color: red;">1. Thành tích học tập</div>
+        <div class="thanh_tich" style="font-size: 18px; font-weight: bold; color: #b50206;">1. Thành tích học tập</div>
         <div class="academic_achivements">
-            <div style="font-weight: 600;">1.1. Minh chứng lớp chuyên (nếu có)</div>
+            <div class="mb_top_8px" style="font-weight: 600;">1.1. Minh chứng lớp chuyên (nếu có)</div>
             <div class="achievements">
                 <div>
-                    <div style="font-weight: 400; margin-bottom: 4px;">Trường chuyên</div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Trường chuyên</div>
                     <select name="truongchuyen" id="">
                         <option value=""></option>
                         <option value="">THPT Chuyên Nguyễn Huệ</option>
@@ -168,12 +191,13 @@
                 </div>
 
                 <div>
-                    <div style="font-weight: 600; margin-bottom: 4px;">Lớp chuyên</div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Lớp chuyên</div>
                     <input type="text" placeholder="Lớp chuyên(vd: chuyên hóa)">
                 </div>
 
-                <div style="position: relative; display: flex; flex-direction: column; justify-content: flex-end; width: 60px">
-                    <input type="file" id="fileInput_truongchuyen" style="visibility: hidden; position: absolute; top: 12px; font-size: 10px; left: 0px;">
+                <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Minh chứng</div>
+                    <input type="file" id="fileInput_truongchuyen" style="visibility: hidden; position: absolute; top: 31px; font-size: 10px; left: 0px;">
                     <span id="form_upload_minhchung_chuyen" style=" color: #000; height: 22px;">
                         <i class="ti-cloud-up"></i>
                         <span style="font-size: 12px;">Tải lên</span>
@@ -182,10 +206,10 @@
             </div>
 
 
-            <div style="font-weight: 600;">1.2. Giải học sinh giỏi (nếu có)</div>
+            <div class="mb_top_8px" style="font-weight: 600;">1.2. Giải học sinh giỏi (nếu có)</div>
             <div class="achievements">
                 <div>
-                    <div style="font-weight: 400; margin-bottom: 4px;">Môn thi</div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Môn thi</div>
                     <select name="monthi" id="">
                         <option value=""></option>
                         <option value="">Toán</option>
@@ -194,7 +218,7 @@
                 </div>
 
                 <div>
-                    <div style="font-weight: 600; margin-bottom: 4px;">Giải (nhất, nhì, ba, khuyến khích)</div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Giải (nhất, nhì, ba, khuyến khích)</div>
                     <select name="giai" id="">
                         <option value=""></option>
                         <option value="nhat">Nhất</option>
@@ -204,8 +228,9 @@
                     </select>
                 </div>
 
-                <div style="position: relative; display: flex; flex-direction: column; justify-content: flex-end; width: 60px">
-                <input type="file" id="fileInput_hsg" style="visibility: hidden; position: absolute; top: 12px; font-size: 10px; left: 0px;">
+                <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
+                <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Minh chứng</div>
+                <input type="file" id="fileInput_hsg" style="visibility: hidden; position: absolute; top: 31px; font-size: 10px; left: 0px;">
                 <span id="form_upload_minhchung_hsg" style=" color: #000; height: 22px;">
                         <i class="ti-cloud-up"></i>
                         <span style="font-size: 12px;">Tải lên</span>
@@ -214,15 +239,15 @@
             </div>
 
 
-            <div style="font-weight: 600;">1.3. Chứng chỉ ILETS (nếu có)</div>
+            <div class="mb_top_8px" style="font-weight: 600;">1.3. Chứng chỉ ILETS (nếu có)</div>
             <div class="achievements">
                 <div>
-                    <div style="font-weight: 400; margin-bottom: 4px;">Mã chứng nhận</div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mã chứng nhận</div>
                     <input type="text">
                 </div>
 
                 <div>
-                    <div style="font-weight: 600; margin-bottom: 4px;">Điểm</div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Điểm</div>
                     <select name="giai" id="">
                         <option value=""></option>
                         <option value="">4.5</option>
@@ -238,9 +263,10 @@
                     </select>
                 </div>
 
-                <div style="position: relative; display: flex; flex-direction: column; justify-content: flex-end; width: 60px">
-                <input type="file" id="fileInput_ilets" style="visibility: hidden; position: absolute; top: 12px; font-size: 10px; left: 0px;">
-                <span id="form_upload_minhchung_ilets" style=" color: #000; height: 22px;">
+                <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Minh chứng</div>
+                    <input type="file" id="fileInput_ilets" style="visibility: hidden; position: absolute; top: 31px; font-size: 10px; left: 0px;">
+                    <span id="form_upload_minhchung_ilets" style=" color: #000; height: 22px;">
                         <i class="ti-cloud-up"></i>
                         <span style="font-size: 12px;">Tải lên</span>
                     </span>
@@ -248,27 +274,28 @@
             </div>
 
 
-            <div style="font-weight: 600;">1.4. Các thành tích giải thưởng khác</div>
+            <div class="mb_top_8px" style="font-weight: 600;">1.4. Các thành tích giải thưởng khác</div>
             <div class="achievements">
                 <div>
-                    <div style="font-weight: 400; margin-bottom: 4px;">Mô tả</div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mô tả</div>
                     <input type="text">
                 </div>
 
-                <div style="position: relative; display: flex; flex-direction: column; justify-content: flex-end; width: 60px">
-                <input type="file" id="fileInput_otherAchieve" style="visibility: hidden; position: absolute; top: 12px; font-size: 10px; left: 0px;">
-                <span id="form_upload_minhchung_otherAchieve" style=" color: #000; height: 22px;">
-                        <i class="ti-cloud-up"></i>
-                        <span style="font-size: 12px;">Tải lên</span>
-                    </span>
+                <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Minh chứng</div>
+                    <input type="file" id="fileInput_otherAchieve" style="visibility: hidden; position: absolute; top: 31px; font-size: 10px; left: 0px;">
+                    <span id="form_upload_minhchung_otherAchieve" style=" color: #000; height: 22px;">
+                            <i class="ti-cloud-up"></i>
+                            <span style="font-size: 12px;">Tải lên</span>
+                        </span>
                 </div>
             </div>
         </div>
 
-        <div style="font-size: 18px; font-weight: bold; color: red;">2. Điểm ưu tiên</div>
+        <div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #b50206;">2. Điểm ưu tiên</div>
         <div class="priority_poin achievements">
             <div>
-                <div style="font-weight: 400; margin-bottom: 4px;">Khu vực</div>
+                <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Khu vực</div>
                 <select name="khuvuc" id="">
                     <option value=""></option>
                     <option value="">THPT Chuyên Nguyễn Huệ</option>
@@ -277,12 +304,13 @@
             </div>
 
             <div>
-                <div style="font-weight: 400; margin-bottom: 4px;">Đối tượng ưu tiên</div>
+                <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Đối tượng ưu tiên</div>
                 <input type="text">
             </div>
 
-            <div style="position: relative; display: flex; flex-direction: column; justify-content: flex-end; width: 60px">
-                <input type="file" id="fileInput_priority" style="visibility: hidden; position: absolute; top: 12px; font-size: 10px; left: 0px;">
+            <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
+                <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Minh chứng</div>
+                <input type="file" id="fileInput_priority" style="visibility: hidden; position: absolute; top: 31px; font-size: 10px; left: 0px;">
                 <span id="form_upload_minhchung_priority" style=" color: #000; height: 22px;">
                     <i class="ti-cloud-up"></i>
                     <span style="font-size: 12px;">Tải lên</span>
@@ -290,10 +318,10 @@
             </div>
         </div>
 
-        <div style="font-size: 18px; font-weight: bold; color: red;">3. Đăng ký nguyện vọng xết tuyển</div>
+        <div class="nguyen_vong" style="font-size: 18px; font-weight: bold; color: #b50206;">3. Đăng ký nguyện vọng xết tuyển</div>
         <div class="register achievements">
             <div style="flex: 1;">
-                <div style="font-weight: 400; margin-bottom: 4px;">Chọn ngành</div>
+                <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Chọn ngành</div>
                 <select name="khuvuc" id="">
                     <option value=""></option>
                     <option value="">THPT Chuyên Nguyễn Huệ</option>
@@ -301,20 +329,27 @@
                 </select>
             </div>
 
-            <div style="flex: 1">
-                <div style="font-weight: 400; margin-bottom: 4px;">Tổ hợp đăng ký</div>
+            <div style="flex: 1.2;">
+                <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Tổ hợp đăng ký</div>
                 <select name="khuvuc" id="">
                     <option value=""></option>
                     <option value="">THPT Chuyên Nguyễn Huệ</option>
                     <option value="">THPT Chuyên Đại Học Sư Phạm</option>
                 </select>
             </div>
+
         </div>
 
         <br>
-        <input type="submit" class="btn btn-primary" value="Đánh giá hồ sơ">
+        <input type="submit" class="btn btn-success" style="width: 136px; height: 40px;" value="Đánh giá hồ sơ">
+
+        <div class="danh_gia">
+            <div>- Điểm thành tích học tập: </div>
+            <div>- Điểm học bạ: </div>
+            <div>- Điểm ưu tiên: </div>
+        </div>
         <br><br>
-        <input type="submit" class="btn btn-warning " value="Nộp hồ sơ" name="submit1" style="text-align: center; width: 100%;"/>
+        <input type="submit" class="btn btn-primary" value="Nộp hồ sơ" name="submit1" style="text-align: center; width: 100%; height: 36px; color: #fff;"/>
     </div>
 
 
@@ -323,7 +358,6 @@
 		include './layouts/footer.php';
 	?>
 </div>
-fileInput_truongchuyen
 
 <script>
         const fileInput_potrait = document.getElementById('fileInput_potrait');
@@ -381,12 +415,13 @@ fileInput_truongchuyen
                 
                 if (file) {
                     inputTag.style.visibility = "visible";
-                } 
+                } else {
+                    inputTag.style.visibility = "hidden";; // Ẩn ảnh nếu không có tệp nào được chọn
+                }
             });
         }
 
         listenUploadImage(formUploadPotrait, fileInput_potrait, preview);
-
         listenUploadFile(formUploadChuyen, fileInput_truongchuyen);
         listenUploadFile(formUploadHsg, fileInput_hsg);
         listenUploadFile(formUploadOtherAchieve, fileInput_otherAchieve);
