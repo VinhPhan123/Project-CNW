@@ -71,9 +71,10 @@
                     echo "<td id='stt'>" . $tmp . "</td>";
                     echo "<td id='major_name'>" . $arr_select_majors[$i][1] . "</td>";
                     echo "<td id='sub'>";
-                    $sql_select_chuyennganh = "SELECT * FROM chuyennganh WHERE id_major = " . $arr_select_majors[$i][0] . " ORDER BY id_SB;";
-                    $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
+                        $sql_select_chuyennganh = "SELECT * FROM chuyennganh WHERE id_major = " . $arr_select_majors[$i][0] . " ORDER BY id_SB;";
+                        $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
                         $result_select_chuyennganh = mysqli_num_rows($query_select_chuyennganh);
+                        $string_sub_list = '';
                         if($result_select_chuyennganh == 0) {
                             echo "Chưa có tổ hợp môn";
                         } else {
@@ -88,6 +89,12 @@
                                 echo $tmp_arr_select_chuyennganh[$j] . " - " . $arr_select_subject_combination[$j][1] . " - " . $arr_select_subject_combination[$j][2] . " - " . $arr_select_subject_combination[$j][3];
                                 if($j < $result_select_chuyennganh-1) echo '<br>';
                                 echo "</p>";
+                            }
+                            for($j=0; $j<count($tmp_arr_select_chuyennganh); $j++) {
+                                $string_sub_list .= $tmp_arr_select_chuyennganh[$j];
+                                if($j < count($tmp_arr_select_chuyennganh)-1) {
+                                    $string_sub_list .= '|';
+                                }
                             }
                         }
                     echo "</td>";
@@ -128,6 +135,7 @@
                         echo "<input type='hidden' name='time_end' value='" . $arr_select_majors[$i][3]  . "'>";
                         echo "<input type='hidden' name='diem_san' value='" . $arr_select_majors[$i][4]  . "'>";
                         echo "<input type='hidden' name='status' value='" . $arr_select_majors[$i][5]  . "'>";
+                        echo "<input type='hidden' name='sub_list' value='" . $string_sub_list  . "'>";
                         echo "<button type='submit' class='btn btn-primary'>Sửa</button></form>";
                     echo "</td>";
                     echo "</tr>";

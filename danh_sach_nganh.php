@@ -137,9 +137,10 @@
                                             echo '<option value="' . $arr_select_subject_combination[$j][0] .'">' . $arr_select_subject_combination[$j][0] . '</option>';
                                         }
                             echo '</select>';
-                            echo '<button id="insert-button" type="submit" class="btn btn-primary" name="insert">Insert</button>';
+                            echo '<button id="insert-button" type="submit" class="btn btn-primary" name="insert">Thêm</button>';
                             echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';                        
                         } else {
+                            // print_r($arr_major);
                             if($result_select_subject_combination != count($tmp_arr_select_chuyennganh)) {
                                 echo '<td id="insert_button" sytle="display: flex;">
                                     <form action="" method="post">
@@ -162,7 +163,7 @@
                         if($result_select_chuyennganh > 0) {
                             echo '<td id="delete_button" sytle="display: flex;">
                             <form action="" method="post">
-                            <input type="hidden" name="row_id" value="' . $tmp . '">
+                            <input type="hidden" name="row_id" value="' . $arr_major[$i][0] . '">
                             <select id="delete-tohop" name="delete_tohop">
                                 <option></option>';
                                     for($j=0; $j<$result_select_chuyennganh; $j++) {
@@ -262,6 +263,7 @@
                 } else {
                     $sql_delete_sb_in_major = "DELETE FROM chuyennganh WHERE id_major=$id_major AND id_SB='$id_SB';";
                     mysqli_query($connect, $sql_delete_sb_in_major);
+                    // echo "<script>alert('" . $id_major . " " . $id_SB . "');</script>";
                     echo "<script>alert('Đã xóa tổ hợp môn thành công!');</script>";
                     echo '<script>window.location="danh_sach_nganh.php";</script>';
                 }
