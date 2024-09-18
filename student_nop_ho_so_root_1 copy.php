@@ -111,7 +111,7 @@
     }
 
 </style>
-
+    
 
 <?php
     // nếu chưa đăng nhập tài khoản student thì out
@@ -119,12 +119,8 @@
         $sql = "SELECT * FROM students;";
         $res = mysqli_query($connect, $sql);
         $query_username = mysqli_fetch_array($res);
-        // $username_student = $query_username['username'];
-        $array_username_student = array();
-        while($r = mysqli_fetch_array($res)){
-            array_push($array_username_student, $r['username']);
-        }
-        if(!in_array($_SESSION['taiKhoan'], $array_username_student)){
+        $username_student = $query_username['username'];
+        if($_SESSION['taiKhoan'] != $username_student){
             header("location: logout.php");
         }
     } else {
@@ -319,9 +315,7 @@
                     echo "File is too large";
                 }
             } else {
-                // echo "upload dung dinh dang file";
-                $m1 = "upload khong dung dinh dang";
-                $check = 0;
+                echo "upload dung dinh dang file";
             }
         }
 
@@ -403,7 +397,6 @@
                 }
             } else {
                 echo "upload dung dinh dang file";
-                $check = 0;
             }
         }
 
@@ -456,7 +449,6 @@
                 }
             } else {
                 echo "upload dung dinh dang file";
-                $check = 0;
             }
         }
 
@@ -543,7 +535,6 @@
                 }
             } else {
                 echo "upload dung dinh dang file";
-                $check = 0;
             }
         }
 
@@ -628,14 +619,13 @@
                 }
             } else {
                 echo "upload dung dinh dang file";
-                $check = 0;
             }
         }
     }
 ?>
 
 <?php
-    // echo $check;
+    echo $check;
 ?>
 
 <?php
@@ -652,20 +642,12 @@
             $sql = "INSERT INTO ledgers(id_student, id_major, id_SB) VALUES('$id_student', '$id_major', '$tohopdangky');";
             $res = mysqli_query($connect, $sql);
             if($res) {
-                // echo "Success";
-                ?>
-                <script>
-                    alert("Nop ho so thanh cong!");
-                </script>
-                <?php
+                echo "Success";
             }
         }
     }
 ?>
 
-<?php
-    // echo $_SESSION['truongchuyen'];
-?>
 
 <div style="display: flex; justify-content: center;">
 
@@ -756,13 +738,7 @@
                                     <?php 
                                         if ($array_truongchuyen[0] == $ten_truong) {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['truongchuyen'])){
-                                                if($_SESSION['truongchuyen'] == $ten_truong){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> 
                                     value="<?php echo htmlspecialchars($ten_truong); ?>">
                                     <?php echo htmlspecialchars($ten_truong); ?>
@@ -773,17 +749,8 @@
 
                 <div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Lớp chuyên</div>
-                    <span class="red" style="position: absolute; top: 8px; right: 330px;">
-                        <?php echo (isset($message_error_1)||isset($message_error_6)) ? "nhap lop chuyen" : "" ?>
-                    </span>
-                    <input name="lopchuyen" type="text" placeholder="Lớp chuyên(vd: chuyên hóa)" value=
-                        "<?php if(isset($array_truongchuyen[1])){
-                            echo $array_truongchuyen[1];
-                        } else {
-                            if(isset($_SESSION['lopchuyen'])){
-                                echo $_SESSION['lopchuyen'];
-                            }
-                        } ?>">
+                    <span class="red" style="position: absolute; top: 8px; right: 330px;"><?php echo (isset($message_error_1)||isset($message_error_6)) ? "nhap lop chuyen" : "" ?></span>
+                    <input name="lopchuyen" type="text" placeholder="Lớp chuyên(vd: chuyên hóa)" value="<?php echo isset($array_truongchuyen[1]) ?  $array_truongchuyen[1] : "" ; ?>">
                 </div>
 
                 <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
@@ -808,134 +775,62 @@
                         <option value="Toán" <?php 
                                         if ($array_giai_hs_gioi[0] == "Toán") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['truongchuyen'])){
-                                                if($_SESSION['truongchuyen'] == 'Toán'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Toán</option>
                         <option value="Ngữ văn" <?php 
                                         if ($array_giai_hs_gioi[0] == "Ngữ văn") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Ngữ văn'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Ngữ văn</option>
                         <option value="Tiếng Anh" <?php 
                                         if ($array_giai_hs_gioi[0] == "Tiếng Anh") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Tiếng Anh'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Tiếng Anh</option>
                         <option value="Vật lý" <?php 
                                         if ($array_giai_hs_gioi[0] == "Vật lý") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Vật lý'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Vật lý</option>
                         <option value="Hóa học" <?php 
                                         if ($array_giai_hs_gioi[0] == "Hóa học") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Hóa học'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Hóa học</option>
                         <option value="Sinh học" <?php 
                                         if ($array_giai_hs_gioi[0] == "Sinh học") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Sinh học'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Sinh học</option>
                         <option value="Lịch sử" <?php 
                                         if ($array_giai_hs_gioi[0] == "Lịch sử") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Lịch sử'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Lịch sử</option>
                         <option value="Địa lý" <?php 
                                         if ($array_giai_hs_gioi[0] == "Địa lý") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Địa lý'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Địa lý</option>
                         <option value="Tin học" <?php 
                                         if ($array_giai_hs_gioi[0] == "Tin học") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Tin học'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Tin học</option>
                         <option value="Công nghệ" <?php 
                                         if ($array_giai_hs_gioi[0] == "Công nghệ") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Công nghệ'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Công nghệ</option>
                         <option value="Giáo dục công dân" <?php 
                                         if ($array_giai_hs_gioi[0] == "Giáo dục công dân") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Giáo dục công dân'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Giáo dục công dân</option>
                         <option value="Giáo dục thể chất" <?php 
                                         if ($array_giai_hs_gioi[0] == "Giáo dục thể chất") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['monthi'])){
-                                                if($_SESSION['monthi'] == 'Giáo dục thể chất'){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Giáo dục thể chất</option>
                     </select>
                 </div>
@@ -948,45 +843,21 @@
                         <option value="Nhất" <?php 
                                         if (isset($array_giai_hs_gioi[1])) {
                                             echo $array_giai_hs_gioi[1]=="Nhất" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['giai'])){
-                                                if($_SESSION['giai'] == "Nhất"){
-                                                    echo "selected";
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Nhất</option>
                         <option value="Nhì" <?php 
                                         if (isset($array_giai_hs_gioi[1])) {
                                             echo $array_giai_hs_gioi[1]=="Nhì" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['giai'])){
-                                                if($_SESSION['giai'] == "Nhì"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >Nhì</option>
                         <option value="Ba" <?php 
                                         if (isset($array_giai_hs_gioi[1])) {
                                             echo $array_giai_hs_gioi[1]=="Ba" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['giai'])){
-                                                if($_SESSION['giai'] == "Ba"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >Ba</option>
                         <option value="Khuyến khích" <?php 
                                         if (isset($array_giai_hs_gioi[1])) {
                                             echo $array_giai_hs_gioi[1]=="Khuyến khích" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['giai'])){
-                                                if($_SESSION['giai'] == "Khuyến khích"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >Khuyến khích</option>
                     </select>
@@ -1009,14 +880,7 @@
                 <div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mã chứng nhận</div>
                     <span class="red" style="position: absolute; top: 8px; left: 120px;"><?php echo (isset($message_error_17)||isset($message_error_19)) ? "nhap ma chung nhan" : "" ?></span>
-                    <input type="text" name="machungnhan" value=
-                    "<?php if(isset($array_chung_chi_ilets[0]) && $array_chung_chi_ilets[0]!=""){
-                            echo $array_chung_chi_ilets[0];
-                        } else {
-                            if(isset($_SESSION['machungnhan'])){
-                                echo $_SESSION['machungnhan'];
-                            }
-                    }?>">
+                    <input type="text" name="machungnhan" value="<?php echo $array_chung_chi_ilets[0] ?>">
                 </div>
 
                 <div>
@@ -1027,111 +891,51 @@
                         <option value="4.5" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="4.5" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "4.5"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >4.5</option>
                         <option value="5" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="5" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "5"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >5</option>
                         <option value="5.5" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="5.5" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "5.5"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >5.5</option>
                         <option value="6" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="6" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "6"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >6</option>
                         <option value="6.5" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="6.5" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "6.5"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >6.5</option>
                         <option value="7" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="7" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "7"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >7</option>
                         <option value="7.5" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="7.5" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "7.5"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >7.5</option>
                         <option value="8" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="8" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "8"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >8</option>
                         <option value="8.5" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="8.5" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "8.5"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >8.5</option>
                         <option value="9" <?php 
                                         if (isset($array_chung_chi_ilets[1])) {
                                             echo $array_chung_chi_ilets[1]=="9" ? "selected" : "";
-                                        } else {
-                                            if(isset($_SESSION['diem'])){
-                                                if($_SESSION['diem'] == "9"){
-                                                    echo "selected";
-                                                }
-                                            }
                                         }
                                     ?> >9</option>
                     </select>
@@ -1154,19 +958,12 @@
                 <div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mô tả</div>
                     <span class="red" style="position: absolute; top: 8px; left: 60px;"><?php echo isset($message_error_14) ? "mo ta giai thuong" : "" ?></span>
-                    <input name="giaithuongkhac" type="text" value=
-                    "<?php if(isset($array_giai_thuong_khac[0]) && $array_giai_thuong_khac[0]!=""){
-                            echo $array_giai_thuong_khac[0];
-                        } else {
-                            if(isset($_SESSION['giaithuongkhac'])){
-                                echo $_SESSION['giaithuongkhac'];
-                            }
-                    }?>">
+                    <input name="giaithuongkhac" type="text" value="<?php echo $array_giai_thuong_khac[0] ?>">
                 </div>
 
                 <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Minh chứng</div>
-                    <span class="red" style="position: absolute; top: 8px; right: -72px;"><?php if(!isset($array_giai_thuong_khac[1])){echo isset($message_error_13) ? "upload file" : "";} ?></span>
+                    <span class="red" style="position: absolute; top: 8px; right: -72px;"><?php if(!isset($array_giai_thuong_khac[1])){isset($message_error_13) ? "upload file" : "";} ?></span>
                     <input type="file" id="fileInput_otherAchieve" name="fileInput_otherAchieve" style="visibility: hidden; position: absolute; top: 31px; font-size: 10px; left: 0px;">
                     <span id="form_upload_minhchung_otherAchieve" style=" color: #000; height: 22px;">
                             <i class="ti-cloud-up"></i>
@@ -1186,35 +983,17 @@
                     <option value="Khu vực 1" <?php 
                                         if ($array_diem_uu_tien[0] == "Khu vực 1") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['khuvuc'])){
-                                                if($_SESSION['khuvuc'] == "Khu vực 1"){
-                                                    echo 'selected';
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Khu vực 1</option>
                     <option value="Khu vực 2" <?php 
                                         if ($array_diem_uu_tien[0] == "Khu vực 2") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['khuvuc'])){
-                                                if($_SESSION['khuvuc'] == "Khu vực 2"){
-                                                    echo 'selected';
-                                                }
-                                            }
-                                        }
+                                        }  
                                     ?> >Khu vực 2</option>
                     <option value="Khu vực 3" <?php 
                                         if ($array_diem_uu_tien[0] == "Khu vực 3") {
                                             echo 'selected'; 
-                                        } else {
-                                            if(isset($_SESSION['khuvuc'])){
-                                                if($_SESSION['khuvuc'] == "Khu vực 3"){
-                                                    echo 'selected';
-                                                }
-                                            }
-                                        }
+                                        } 
                                     ?> >Khu vực 3</option>
                 </select>
             </div>
@@ -1222,14 +1001,7 @@
             <div>
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Đối tượng ưu tiên</div>
                 <span class="red" style="position: absolute; top: 8px; right: 250px;"><?php echo (isset($message_error_21)||isset($message_error_26)) ? "nhap doi tuong uu tien" : "" ?></span>
-                <input name="doituonguutien" type="text" value=
-                "<?php if(isset($array_diem_uu_tien[1]) && $array_diem_uu_tien[1]!=""){
-                            echo $array_diem_uu_tien[1];
-                        } else {
-                            if(isset($_SESSION['doituonguutien'])){
-                                echo $_SESSION['doituonguutien'];
-                            }
-                    }?>">
+                <input name="doituonguutien" type="text" value="<?php echo isset($array_diem_uu_tien[1]) ? $array_diem_uu_tien[1] : ""?>">
             </div>
 
             <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">

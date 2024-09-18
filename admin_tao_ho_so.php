@@ -32,9 +32,6 @@
     $result_select_subject_combination = mysqli_num_rows($query_select_subject_combination);
     $arr_select_subject_combination = mysqli_fetch_all($query_select_subject_combination);
     
-    // echo "<pre>";
-    // echo print_r($arr_select_subject_combination);
-    // echo "</pre>";
 ?>
 
 <link rel="stylesheet" href="./assets/css/admin_tao_ho_so.css">
@@ -50,12 +47,6 @@
             <button type="submit" name="submit_major_name" class="btn btn-primary">Thêm</button>
         </form>
         <?php
-            // $token1 = $_SESSION['token'];
-            // $token2 = $_POST['_token'];
-            // echo $token1;
-            // echo "<br>";
-            // echo $token2;
-            // echo "<script>alert('$token2');</script>";
             if(isset($_POST['submit_major_name']) && $_SESSION['token'] == $_POST['_token']) {
                 // echo "<script>alert('$token2');</script>";
                 $major_name = $_POST['major_name'];
@@ -68,7 +59,7 @@
                     echo "<script>alert('Ngành này đã tồn tại');</script>";
                 } else {
                     $tmp = mysqli_num_rows(mysqli_query($connect,"SELECT * FROM majors"));
-                    $sql_insert_major_name = "INSERT INTO majors VALUES ($tmp+1, '$major_name');";
+                    $sql_insert_major_name = "INSERT INTO majors(id_major, major_name) VALUES ($tmp+1, '$major_name');";
                     $query_insert_major_name = mysqli_query($connect, $sql_insert_major_name);
 
                     if($query_insert_major_name) {
