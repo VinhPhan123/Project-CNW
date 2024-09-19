@@ -77,6 +77,7 @@
                         $string_sub_list = '';
                         if($result_select_chuyennganh == 0) {
                             echo "Chưa có tổ hợp môn";
+                            $string_sub_list = "";
                         } else {
                             $arr_select_chuyennganh = mysqli_fetch_all($query_select_chuyennganh);
                             $tmp_arr_select_chuyennganh = array();
@@ -136,7 +137,8 @@
                         echo "<input type='hidden' name='diem_san' value='" . $arr_select_majors[$i][4]  . "'>";
                         echo "<input type='hidden' name='status' value='" . $arr_select_majors[$i][5]  . "'>";
                         echo "<input type='hidden' name='sub_list' value='" . $string_sub_list  . "'>";
-                        echo "<button type='submit' class='btn btn-primary'>Sửa</button></form>";
+                        echo '<input type="hidden" name="_token" value="'. $token .'"/>';
+                        echo "<button name='setting_major' type='submit' class='btn btn-primary'>Sửa</button></form>";
                     echo "</td>";
                     echo "</tr>";
                 }
@@ -146,7 +148,12 @@
 	<!-- End Page content -->
 	</div>
     <?php
-        
+        if(isset($_POST['setting_major']) && isset($_SESSION['token']) && $_SESSION['token'] == $_POST['_token']) {
+            $tmp_sub_list = $_POST['sub_list'];
+            $tmp_arr = explode('|', $tmp_sub_list);
+            $_SESSION['sub_list'] = $tmp_arr;
+            echo "<script>alert('OK!');</script>";
+        }
     ?>
 
 	<?php 
