@@ -10,7 +10,9 @@
 	}
 ?>
 
-<?php echo $_SESSION['taiKhoan'] ?>
+<?php #echo $_SESSION['taiKhoan'] ?>
+
+
 
 
 <link rel="stylesheet" href="./assets/css/index.css">
