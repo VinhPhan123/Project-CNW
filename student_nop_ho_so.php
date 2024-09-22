@@ -38,7 +38,7 @@
         cursor: pointer;
         font-weight: bold;
     }
-    #form_upload_minhchung_ilets:hover{
+    #form_upload_minhchung_ielts:hover{
         cursor: pointer;
         font-weight: bold;
     }
@@ -118,7 +118,6 @@
     if(isset($_SESSION['taiKhoan'])){
         $sql = "SELECT * FROM students;";
         $res = mysqli_query($connect, $sql);
-        $query_username = mysqli_fetch_array($res);
         // $username_student = $query_username['username'];
         $array_username_student = array();
         while($r = mysqli_fetch_array($res)){
@@ -156,37 +155,45 @@
 
 <?php
     // lấy ra thuộc tính trường chuyên của students
-    $a1 = "SELECT * FROM students WHERE id_student = '$id_student';";
-    $r1 = mysqli_query($connect, $a1);
+    $q1 = "SELECT * FROM students WHERE id_student = '$id_student';";
+    $r1 = mysqli_query($connect, $q1);
     $string_truongchuyen = mysqli_fetch_array($r1)['truong_chuyen'];
     $array_truongchuyen = explode(" | ", $string_truongchuyen);
  
 
     // lấy ra thuộc tính giai_hs_gioi của students
-    $a2 = "SELECT * FROM students WHERE id_student = '$id_student';";
-    $r2 = mysqli_query($connect, $a2);
+    $q2 = "SELECT * FROM students WHERE id_student = '$id_student';";
+    $r2 = mysqli_query($connect, $q2);
     $string_giai_hs_gioi = mysqli_fetch_array($r2)['giai_hs_gioi'];
     $array_giai_hs_gioi = explode(" | ", $string_giai_hs_gioi);
 
 
-    // lấy ra thuộc tính chung_chi_ilets
-    $a3 = "SELECT * FROM students WHERE id_student = '$id_student';";
-    $r3 = mysqli_query($connect, $a3);
-    $string_chung_chi_ilets = mysqli_fetch_array($r3)['chung_chi_ilets'];
-    $array_chung_chi_ilets = explode(" | ", $string_chung_chi_ilets);
+    // lấy ra thuộc tính chung_chi_ielts
+    $q3 = "SELECT * FROM students WHERE id_student = '$id_student';";
+    $r3 = mysqli_query($connect, $q3);
+    $string_chung_chi_ielts = mysqli_fetch_array($r3)['chung_chi_ielts'];
+    $array_chung_chi_ielts = explode(" | ", $string_chung_chi_ielts);
 
 
     // lấy ra thuộc tính giai_thuong_khac
-    $a4 = "SELECT * FROM students WHERE id_student = '$id_student';";
-    $r4 = mysqli_query($connect, $a4);
+    $q4 = "SELECT * FROM students WHERE id_student = '$id_student';";
+    $r4 = mysqli_query($connect, $q4);
     $string_giai_thuong_khac = mysqli_fetch_array($r4)['giai_thuong_khac'];
     $array_giai_thuong_khac = explode(" | ", $string_giai_thuong_khac);
 
-    // lấy ra thuộc tính diem_uu_tien
-    $a5 = "SELECT * FROM students WHERE id_student = '$id_student';";
-    $r5 = mysqli_query($connect, $a5);
-    $string_diem_uu_tien = mysqli_fetch_array($r5)['diem_uu_tien'];
-    $array_diem_uu_tien = explode(" | ", $string_diem_uu_tien);
+    // lấy ra thuộc tính doi_tuong_uu_tien
+    $q5 = "SELECT * FROM students WHERE id_student = '$id_student';";
+    $r5 = mysqli_query($connect, $q5);
+    $string_doi_tuong_uu_tien = mysqli_fetch_array($r5)['doi_tuong_uu_tien'];
+    $array_doi_tuong_uu_tien = explode(" | ", $string_doi_tuong_uu_tien);
+
+    // lấy ra thuộc tính khu_vuc_uu_tien
+    $q6 = "SELECT * FROM students WHERE id_student = '$id_student';";
+    $r6 = mysqli_query($connect, $q6);
+    $string_khu_vuc_uu_tien = mysqli_fetch_array($r6)['khu_vuc_uu_tien'];
+    $array_khu_vuc_uu_tien = explode(" | ", $string_khu_vuc_uu_tien);
+
+    
    
 ?>
 
@@ -413,58 +420,102 @@
         }
 
 
-        // lưu dữ liệu về điểm ưu tiên
-        if($_POST['khuvuc'] != '' && $_POST['doituonguutien'] == ''){
-            // echo "nhap doi tuong uu tien";
-            $message_error_21 = "nhap doi tuong uu tien";
+        // lưu dữ liệu chứng chỉ ielts
+        if($_POST['machungnhan'] != '' && $_POST['diem'] == ''){
+            // echo "nhap diem";
+            $message_error_15 = "nhap diem";
             $check = 0;
         } 
-        if($_POST['khuvuc'] != '' && $_FILES['fileInput_priority']['name'] == ''){
+        if($_POST['machungnhan'] != '' && $_FILES['fileInput_ielts']['name'] == ''){
             // echo "upload file";
-            $message_error_22 = "upload file";
-            if(!isset($array_diem_uu_tien[2])){
+            $message_error_16 = "upload file";
+            if(!isset($array_chung_chi_ielts[2])){
                 $check = 0;
             }
         }
-        if($_POST['doituonguutien'] != '' && $_POST['khuvuc'] == ''){
-            // echo "nhap khu vuc";
-            $message_error_23 = "nhap khu vuc";
+        if($_POST['diem'] != '' && $_POST['machungnhan'] == ''){
+            // echo "nhap ma chung nhan";
+            $message_error_17 = "nhap ma chung nhan";
             $check = 0;
         }
-        if($_POST['doituonguutien'] != '' && $_FILES['fileInput_truongchuyen']['name'] == ''){
+        if($_POST['diem'] != '' && $_FILES['fileInput_ielts']['name'] == ''){
             // echo "upload file";
-            $message_error_24 = "upload file";
-            if(!isset($array_diem_uu_tien[2])){
+            $message_error_18 = "upload file";
+            if(!isset($array_chung_chi_ielts[2])){
                 $check = 0;
             }
         }
-        if($_FILES['fileInput_priority']['name'] != '' && $_POST['khuvuc'] == '') {
-            // echo "nhap khu vuc";
-            $message_error_25 = "nhap khu vuc";
+        if($_FILES['fileInput_ielts']['name'] != '' && $_POST['machungnhan'] == '') {
+            // echo "nhap ma chung nhan";
+            $message_error_19 = "nhap ma chung nhan";
             $check = 0;
         }
-        if($_FILES['fileInput_priority']['name'] != '' && $_POST['doituonguutien'] == '') {
+        if($_FILES['fileInput_ielts']['name'] != '' && $_POST['diem'] == '') {
+            // echo "nhap diem";
+            $message_error_20 = "nhap diem";
+            $check = 0;
+        }
+
+        if($_FILES['fileInput_ielts']['name'] != '' || $_POST['machungnhan'] != '' || $_POST['diem'] != ''){
+            if(isset($_POST['machungnhan'])){
+                $_SESSION['machungnhan'] = $_POST['machungnhan'];
+            }
+            if(isset($_POST['diem'])){
+                $_SESSION['diem'] = $_POST['diem'];
+            }
+        }
+
+        if($_FILES['fileInput_ielts']['name'] == '' && $_POST['diem']== '' && $_POST['machungnhan'] == ''){
+            $sql = "UPDATE students SET chung_chi_ielts = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql);
+        }
+
+        if($_FILES['fileInput_ielts']['name'] != '' && $_POST['diem'] != '' && $_POST['machungnhan'] != ''){
+            $permitted_extensions = ['png', 'jpg', 'jpeg'];
+            $file_name = $_FILES['fileInput_ielts']['name'];
+            $file_extension = explode('.', $file_name);
+            $file_extension = strtolower(end($file_extension));
+            $fileInput_ielts = $_FILES['fileInput_ielts'];
+            $file_size = $fileInput_ielts['size'];
+            if(!in_array($file_extension, $permitted_extensions)){
+                $m5 = "invalid file type";
+                $check = 0;
+            }
+            if($file_size >= 1000000){
+                $a5 = "file is too large";
+                $check = 0;
+            }
+        }
+
+
+        // lưu dữ liệu về đối tượng ưu tiên
+        if($_POST['doituonguutien'] != '' && $_FILES['fileInput_priority']['name'] == ''){
             // echo "nhap doi tuong uu tien";
-            $message_error_26 = "nhap doi tuong uu tien";
-            $check = 0;
+            $message_error_21 = "upload file";
+            // vì khi reload trang vẫn lưu dữ liệu trong thẻ file=type
+            if(!isset($array_doi_tuong_uu_tien[1])){
+                $check = 0;
+            }
+        } 
+        if($_FILES['fileInput_priority']['name'] != '' && $_POST['doituonguutien'] == ''){
+            // echo "upload file";
+            $message_error_22 = "nhap doi tuong uu tien";
+            
         }
 
 
-        if($_FILES['fileInput_priority']['name'] != '' || $_POST['doituonguutien'] != '' || $_POST['khuvuc'] != ''){
-            if(isset($_POST['khuvuc'])){
-                $_SESSION['khuvuc'] = $_POST['khuvuc'];
-            }
+        if($_FILES['fileInput_priority']['name'] != '' || $_POST['doituonguutien'] != ''){
             if(isset($_POST['doituonguutien'])){
                 $_SESSION['doituonguutien'] = $_POST['doituonguutien'];
             }
         }
 
-        if($_FILES['fileInput_priority']['name'] == '' && $_POST['doituonguutien'] == '' && $_POST['khuvuc'] == ''){
-            $sql = "UPDATE students SET diem_uu_tien = '' WHERE id_student = '$id_student';";
+        if($_FILES['fileInput_priority']['name'] == '' && $_POST['doituonguutien'] == ''){
+            $sql = "UPDATE students SET doi_tuong_uu_tien = '' WHERE id_student = '$id_student';";
             mysqli_query($connect, $sql);
         }
 
-        if($_FILES['fileInput_priority']['name'] != '' && $_POST['doituonguutien'] != '' && $_POST['khuvuc'] != ''){
+        if($_FILES['fileInput_priority']['name'] != '' && $_POST['doituonguutien'] != ''){
             $permitted_extensions = ['png', 'jpg', 'jpeg'];
             $file_name = $_FILES['fileInput_priority']['name'];
             $file_extension = explode('.', $file_name);
@@ -481,74 +532,20 @@
             }
         }
 
-
-
-        // lưu dữ liệu chứng chỉ ilets
-        if($_POST['machungnhan'] != '' && $_POST['diem'] == ''){
-            // echo "nhap diem";
-            $message_error_15 = "nhap diem";
-            $check = 0;
-        } 
-        if($_POST['machungnhan'] != '' && $_FILES['fileInput_ilets']['name'] == ''){
-            // echo "upload file";
-            $message_error_16 = "upload file";
-            if(!isset($array_chung_chi_ilets[2])){
-                $check = 0;
+        
+        // lưu dữ liệu về khu vực ưu tiên
+        if($_POST['khuvuc'] != ''){
+            if(isset($_POST['khuvuc'])){
+                $_SESSION['khuvuc'] = $_POST['khuvuc'];
             }
         }
-        if($_POST['diem'] != '' && $_POST['machungnhan'] == ''){
-            // echo "nhap ma chung nhan";
-            $message_error_17 = "nhap ma chung nhan";
-            $check = 0;
-        }
-        if($_POST['diem'] != '' && $_FILES['fileInput_ilets']['name'] == ''){
-            // echo "upload file";
-            $message_error_18 = "upload file";
-            if(!isset($array_chung_chi_ilets[2])){
-                $check = 0;
-            }
-        }
-        if($_FILES['fileInput_ilets']['name'] != '' && $_POST['machungnhan'] == '') {
-            // echo "nhap ma chung nhan";
-            $message_error_19 = "nhap ma chung nhan";
-            $check = 0;
-        }
-        if($_FILES['fileInput_ilets']['name'] != '' && $_POST['diem'] == '') {
-            // echo "nhap diem";
-            $message_error_20 = "nhap diem";
-            $check = 0;
-        }
-
-        if($_FILES['fileInput_ilets']['name'] != '' || $_POST['machungnhan'] != '' || $_POST['diem'] != ''){
-            if(isset($_POST['machungnhan'])){
-                $_SESSION['machungnhan'] = $_POST['machungnhan'];
-            }
-            if(isset($_POST['diem'])){
-                $_SESSION['diem'] = $_POST['diem'];
-            }
-        }
-
-        if($_FILES['fileInput_ilets']['name'] == '' && $_POST['diem']== '' && $_POST['machungnhan'] == ''){
-            $sql = "UPDATE students SET chung_chi_ilets = '' WHERE id_student = '$id_student';";
+        if($_POST['khuvuc'] == ''){
+            $sql = "UPDATE students SET khu_vuc_uu_tien = '' WHERE id_student = '$id_student';";
             mysqli_query($connect, $sql);
         }
 
-        if($_FILES['fileInput_ilets']['name'] != '' && $_POST['diem'] != '' && $_POST['machungnhan'] != ''){
-            $permitted_extensions = ['png', 'jpg', 'jpeg'];
-            $file_name = $_FILES['fileInput_ilets']['name'];
-            $file_extension = explode('.', $file_name);
-            $file_extension = strtolower(end($file_extension));
-            $fileInput_ilets = $_FILES['fileInput_ilets'];
-            $file_size = $fileInput_ilets['size'];
-            if(!in_array($file_extension, $permitted_extensions)){
-                $m5 = "invalid file type";
-                $check = 0;
-            }
-            if($file_size >= 1000000){
-                $a5 = "file is too large";
-                $check = 0;
-            }
-        }
+
+
     }
 ?>
 
@@ -609,8 +606,24 @@
                 mysqli_query($connect, $sql4);
             }
 
-        // check=1, insert diem_uu_tien
-            $khuvuc = $_POST['khuvuc'];
+        // check=1, insert chung_chi_ielts
+            $ma_chung_nhan = $_POST['machungnhan'];
+            $diem = $_POST['diem'];
+            $file_name = $_FILES['fileInput_ielts']['name'];
+            $fileInput_ielts = $_FILES['fileInput_ielts'];
+            $file_name = $fileInput_ielts['name'];
+            $generated_file_name = time().'-'.$file_name;
+            $destination_path = $upload_dir . time() . '-' . $file_name;
+            $file_tmp_name = $fileInput_ielts['tmp_name'];
+            if($file_name != ""){
+                move_uploaded_file($file_tmp_name, $destination_path);
+                $chung_chi_ielts_insert = $ma_chung_nhan . " | " . $diem . " | " . $destination_path;
+                // echo $chung_chi_ielts_insert;
+                $sql6 = "UPDATE students SET chung_chi_ielts = '$chung_chi_ielts_insert' WHERE id_student = '$id_student';";
+                mysqli_query($connect, $sql6);
+            }
+
+        // check=1, insert doi_tuong_uu_tien
             $doi_tuong_uu_tien = $_POST['doituonguutien'];
             $file_name = $_FILES['fileInput_priority']['name'];
             $fileInput_priority = $_FILES['fileInput_priority'];
@@ -620,29 +633,18 @@
             $file_tmp_name = $fileInput_priority['tmp_name'];
             if($file_name != ""){
                 move_uploaded_file($file_tmp_name, $destination_path);
-                $doi_tuong_uu_tien_insert = $khuvuc . " | " . $doi_tuong_uu_tien . " | " . $destination_path;
+                $doi_tuong_uu_tien_insert = $doi_tuong_uu_tien . " | " . $destination_path;
                 // echo $doi_tuong_uu_tien_insert;
-                $sql5 = "UPDATE students SET diem_uu_tien = '$doi_tuong_uu_tien_insert' WHERE id_student = '$id_student';";
+                $sql5 = "UPDATE students SET doi_tuong_uu_tien = '$doi_tuong_uu_tien_insert' WHERE id_student = '$id_student';";
                 mysqli_query($connect, $sql5);
             }
 
-        // check=1, insert chung_chi_ielts
-            
-            $ma_chung_nhan = $_POST['machungnhan'];
-            $diem = $_POST['diem'];
-            $file_name = $_FILES['fileInput_ilets']['name'];
-            $fileInput_ilets = $_FILES['fileInput_ilets'];
-            $file_name = $fileInput_ilets['name'];
-            $generated_file_name = time().'-'.$file_name;
-            $destination_path = $upload_dir . time() . '-' . $file_name;
-            $file_tmp_name = $fileInput_ilets['tmp_name'];
-            if($file_name != ""){
-                move_uploaded_file($file_tmp_name, $destination_path);
-                $chung_chi_ilets_insert = $ma_chung_nhan . " | " . $diem . " | " . $destination_path;
-                // echo $chung_chi_ilets_insert;
-                $sql6 = "UPDATE students SET chung_chi_ilets = '$chung_chi_ilets_insert' WHERE id_student = '$id_student';";
-                mysqli_query($connect, $sql6);
-            }
+        // check=1, insert khu_vuc_uu_tien
+            $khu_vuc_uu_tien = $_POST['khuvuc'];
+            $sql6 = "UPDATE students SET khu_vuc_uu_tien = '$khu_vuc_uu_tien' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql6);
+
+        
 
             echo($file_name=="");
 
@@ -655,6 +657,8 @@
             unset($_SESSION['khuvuc']);
             unset($_SESSION['machungnhan']);
             unset($_SESSION['diem']);
+            unset($_SESSION['doituonguutien']);
+
         }
     }
 ?>
@@ -766,6 +770,8 @@
 
         <div class="thanh_tich" style="font-size: 18px; font-weight: bold; color: #b50206;">1. Thành tích học tập</div>
         <div class="academic_achivements">
+
+        <!-- trường chuyên -->
             <div class="mb_top_8px" style="font-weight: 600;">1.1. Minh chứng lớp chuyên (nếu có)</div>
             <div class="achievements">
                 <div>
@@ -830,6 +836,7 @@
             </div>
 
 
+            <!-- Giải hs giỏi -->
             <div class="mb_top_8px" style="font-weight: 600;">1.2. Giải học sinh giỏi (nếu có)</div>
             <div class="achievements">
                 <div>
@@ -1044,14 +1051,15 @@
             </div>
 
 
-            <div class="mb_top_8px" style="font-weight: 600;">1.3. Chứng chỉ ILETS (nếu có)</div>
+            <!-- Chứng chỉ ielts -->
+            <div class="mb_top_8px" style="font-weight: 600;">1.3. Chứng chỉ ielts (nếu có)</div>
             <div class="achievements">
                 <div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mã chứng nhận</div>
                     <span class="red" style="position: absolute; top: 8px; left: 120px;"><?php echo (isset($message_error_17)||isset($message_error_19)) ? "nhap ma chung nhan" : "" ?></span>
                     <input type="text" name="machungnhan" value=
-                    "<?php if(isset($array_chung_chi_ilets[0]) && $array_chung_chi_ilets[0]!=""){
-                            echo $array_chung_chi_ilets[0];
+                    "<?php if(isset($array_chung_chi_ielts[0]) && $array_chung_chi_ielts[0]!=""){
+                            echo $array_chung_chi_ielts[0];
                         } else {
                             if(isset($_SESSION['machungnhan'])){
                                 echo $_SESSION['machungnhan'];
@@ -1065,8 +1073,8 @@
                     <select name="diem" id="">
                         <option value=""></option>
                         <option value="4.5" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="4.5" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="4.5" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "4.5"){
@@ -1076,8 +1084,8 @@
                                         }
                                     ?> >4.5</option>
                         <option value="5" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="5" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="5" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "5"){
@@ -1087,8 +1095,8 @@
                                         }
                                     ?> >5</option>
                         <option value="5.5" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="5.5" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="5.5" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "5.5"){
@@ -1098,8 +1106,8 @@
                                         }
                                     ?> >5.5</option>
                         <option value="6" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="6" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="6" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "6"){
@@ -1109,8 +1117,8 @@
                                         }
                                     ?> >6</option>
                         <option value="6.5" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="6.5" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="6.5" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "6.5"){
@@ -1120,8 +1128,8 @@
                                         }
                                     ?> >6.5</option>
                         <option value="7" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="7" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="7" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "7"){
@@ -1131,8 +1139,8 @@
                                         }
                                     ?> >7</option>
                         <option value="7.5" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="7.5" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="7.5" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "7.5"){
@@ -1142,8 +1150,8 @@
                                         }
                                     ?> >7.5</option>
                         <option value="8" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="8" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="8" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "8"){
@@ -1153,8 +1161,8 @@
                                         }
                                     ?> >8</option>
                         <option value="8.5" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="8.5" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="8.5" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "8.5"){
@@ -1164,8 +1172,8 @@
                                         }
                                     ?> >8.5</option>
                         <option value="9" <?php 
-                                        if (isset($array_chung_chi_ilets[1])) {
-                                            echo $array_chung_chi_ilets[1]=="9" ? "selected" : "";
+                                        if (isset($array_chung_chi_ielts[1])) {
+                                            echo $array_chung_chi_ielts[1]=="9" ? "selected" : "";
                                         } else {
                                             if(isset($_SESSION['diem'])){
                                                 if($_SESSION['diem'] == "9"){
@@ -1180,16 +1188,16 @@
                 <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Minh chứng</div>
                     <span class="red" style="width: 108px; text-align: left; position: absolute; top: 8px; right: -99px;">
-                        <?php #if(!isset($array_chung_chi_ilets[2])){echo (isset($message_error_16) || isset($message_error_18)) ? "upload file" : "";} ?>
-                        <?php if(isset($m3)){
-                            echo $m3;
+                        <?php #if(!isset($array_chung_chi_ielts[2])){echo (isset($message_error_16) || isset($message_error_18)) ? "upload file" : "";} ?>
+                        <?php if(isset($m5)){
+                            echo $m5;
                         } else {
-                            if(!isset($array_chung_chi_ilets[2])){echo (isset($message_error_16) || isset($message_error_18)) ? "upload file" : "";}
+                            if(!isset($array_chung_chi_ielts[2])){echo (isset($message_error_16) || isset($message_error_18)) ? "upload file" : "";}
                         }
                         ?>
                     </span>
-                    <input type="file" id="fileInput_ilets" name="fileInput_ilets" style="visibility: hidden; position: absolute; top: 31px; font-size: 10px; left: 0px;">
-                    <span id="form_upload_minhchung_ilets" style=" color: #000; height: 22px;">
+                    <input type="file" id="fileInput_ielts" name="fileInput_ielts" style="visibility: hidden; position: absolute; top: 31px; font-size: 10px; left: 0px;">
+                    <span id="form_upload_minhchung_ielts" style=" color: #000; height: 22px;">
                         <i class="ti-cloud-up"></i>
                         <span style="font-size: 12px;">Tải lên</span>
                     </span>
@@ -1216,8 +1224,8 @@
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Minh chứng</div>
                     <span class="red" style="width: 108px; text-align: left; position: absolute; top: 8px; right: -99px;">
                         <?php #if(!isset($array_giai_thuong_khac[1])){echo isset($message_error_13) ? "upload file" : "";} ?>
-                        <?php if(isset($m4)){
-                            echo $m4;
+                        <?php if(isset($m3)){
+                            echo $m3;
                         } else {
                             if(!isset($array_giai_thuong_khac[1])){echo isset($message_error_13) ? "upload file" : "";}
                         }
@@ -1232,6 +1240,8 @@
             </div>
         </div>
 
+
+        <!-- Điểm ưu tiên -->
         <div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #b50206;">2. Điểm ưu tiên</div>
         <div class="priority_point achievements">
             <div>
@@ -1240,7 +1250,7 @@
                 <select name="khuvuc" id="">
                     <option value=""></option>
                     <option value="Khu vực 1" <?php 
-                                        if ($array_diem_uu_tien[0] == "Khu vực 1") {
+                                        if ($array_khu_vuc_uu_tien[0] == "Khu vực 1") {
                                             echo 'selected'; 
                                         } else {
                                             if(isset($_SESSION['khuvuc'])){
@@ -1251,7 +1261,7 @@
                                         }
                                     ?> >Khu vực 1</option>
                     <option value="Khu vực 2" <?php 
-                                        if ($array_diem_uu_tien[0] == "Khu vực 2") {
+                                        if ($array_khu_vuc_uu_tien[0] == "Khu vực 2") {
                                             echo 'selected'; 
                                         } else {
                                             if(isset($_SESSION['khuvuc'])){
@@ -1262,7 +1272,7 @@
                                         }
                                     ?> >Khu vực 2</option>
                     <option value="Khu vực 3" <?php 
-                                        if ($array_diem_uu_tien[0] == "Khu vực 3") {
+                                        if ($array_khu_vuc_uu_tien[0] == "Khu vực 3") {
                                             echo 'selected'; 
                                         } else {
                                             if(isset($_SESSION['khuvuc'])){
@@ -1277,10 +1287,10 @@
 
             <div>
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Đối tượng ưu tiên</div>
-                <span class="red" style="position: absolute; top: 8px; right: 250px;"><?php echo (isset($message_error_21)||isset($message_error_26)) ? "nhap doi tuong uu tien" : "" ?></span>
+                <span class="red" style="position: absolute; top: 8px; right: 250px;"><?php echo (isset($message_error_22)) ? "nhap doi tuong uu tien" : "" ?></span>
                 <input name="doituonguutien" type="text" value=
-                "<?php if(isset($array_diem_uu_tien[1]) && $array_diem_uu_tien[1]!=""){
-                            echo $array_diem_uu_tien[1];
+                "<?php if(isset($array_doi_tuong_uu_tien[0]) && $array_doi_tuong_uu_tien[0]!=""){
+                            echo $array_doi_tuong_uu_tien[0];
                         } else {
                             if(isset($_SESSION['doituonguutien'])){
                                 echo $_SESSION['doituonguutien'];
@@ -1292,10 +1302,10 @@
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Minh chứng</div>
                 <span class="red" style="width: 108px; text-align: left; position: absolute; top: 8px; right: -99px;">
                     <?php #if(!isset($array_diem_uu_tien[2])){echo (isset($message_error_22) || isset($message_error_24)) ? "upload file" : "";} ?>
-                    <?php if(isset($m5)){
-                            echo $m5;
+                    <?php if(isset($m4)){
+                            echo $m4;
                         } else {
-                            if(!isset($array_diem_uu_tien[2])){echo (isset($message_error_22) || isset($message_error_24)) ? "upload file" : "";}
+                            if(!isset($array_doi_tuong_uu_tien[1])){echo (isset($message_error_21)) ? "upload file" : "";}
                         }
                         ?>
                 </span>
@@ -1346,7 +1356,7 @@
         const fileInput_potrait = document.getElementById('fileInput_potrait');
         const fileInput_truongchuyen = document.getElementById('fileInput_truongchuyen');
         const fileInput_hsg = document.getElementById('fileInput_hsg');
-        const fileInput_ilets = document.getElementById('fileInput_ilets');
+        const fileInput_ielts = document.getElementById('fileInput_ielts');
         const fileInput_otherAchieve = document.getElementById('fileInput_otherAchieve');
         const fileInput_priority = document.getElementById('fileInput_priority');
 
@@ -1355,7 +1365,7 @@
         const formUploadChuyen = document.getElementById('form_upload_minhchung_chuyen');
         const formUploadHsg = document.getElementById('form_upload_minhchung_hsg');
         const formUploadOtherAchieve = document.getElementById('form_upload_minhchung_otherAchieve');
-        const formUploadIlets = document.getElementById('form_upload_minhchung_ilets');
+        const formUploadielts = document.getElementById('form_upload_minhchung_ielts');
         const formUploadPrior = document.getElementById('form_upload_minhchung_priority');
 
 
@@ -1408,7 +1418,7 @@
         listenUploadFile(formUploadChuyen, fileInput_truongchuyen);
         listenUploadFile(formUploadHsg, fileInput_hsg);
         listenUploadFile(formUploadOtherAchieve, fileInput_otherAchieve);
-        listenUploadFile(formUploadIlets, fileInput_ilets);
+        listenUploadFile(formUploadielts, fileInput_ielts);
         listenUploadFile(formUploadPrior, fileInput_priority);
 
 
@@ -1440,4 +1450,3 @@
         xhr.send('tenNganh=' + tenNganh);
     });
 </script>
-
