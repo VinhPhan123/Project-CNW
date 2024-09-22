@@ -1,6 +1,10 @@
 <?php
     if(isset($_POST['tenNganh'])){
-        $connect = new mysqli('localhost', 'root', 'Vinh123204@', 'xettuyen');
+        $server = 'localhost';
+        $user = 'root';
+        $pass = '';
+        $database = 'xettuyen';
+        $connect = new mysqli($server, $user,$pass, $database);
         $tenNganh = $_POST['tenNganh'];
         $query1 = "SELECT * FROM majors WHERE major_name = '$tenNganh';";
         $result1 = mysqli_query($connect, $query1);
