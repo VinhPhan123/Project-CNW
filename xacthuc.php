@@ -1,11 +1,5 @@
 <?php 
    include './layouts/header.php';
-   use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
-
-    require 'vendor/PHPMailer/src/Exception.php';
-    require 'vendor/PHPMailer/src/PHPMailer.php';
-    require 'vendor/PHPMailer/src/SMTP.php';
 ?>
 
 <script>
@@ -77,6 +71,10 @@
     if(isset($_POST['submit'])){
         $verify_code = $_POST['verifyCode'];
         if(in_array($verify_code, $array_codes)){
+            // $b = "UPDATE guest SET status = 2 WHERE teacher_email = '$email';";
+            // mysqli_query($connect, $b);
+
+            // nếu xác minh thành công thì đổi status của email trong bảng guest
             // $b = "UPDATE guest SET status = 2 WHERE teacher_email = '$email';";
             // mysqli_query($connect, $b);
 
