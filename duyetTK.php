@@ -101,7 +101,7 @@
             $mail->send();
             // echo 'Message has been sent';
         } catch (Exception $e) {
-            // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
         
         // thay đổi status của email hiện tại thành 2 (đã duyệt)

@@ -130,8 +130,8 @@
 						<li class="nav-item dropdown dropstart"><a
 							class="nav-link dropdown-toggle" href="#" role="button"
 							data-bs-toggle="dropdown" aria-expanded="false">
-							<?php echo($_SESSION['hoVaTen']);
-							?></a>
+							<?php echo($_SESSION['hoVaTen']); ?>
+							</a>
 							<ul class="dropdown-menu">
 								<li><a class="dropdown-item" href="#">Đơn hàng của tôi</a></li>
 								<li><a class="dropdown-item" href="#">Thông báo</a></li>

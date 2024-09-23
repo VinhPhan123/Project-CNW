@@ -1,0 +1,102 @@
+.infor_text {
+    color: #0c6efd;
+    font-weight: bold;
+    height: 10px;
+}
+
+.body_content {
+    margin-top: 50px;
+}
+
+#form_upload_potrait:hover{
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#form_upload_potrait {
+    overflow: hidden;
+}
+
+#form_upload_minhchung_chuyen:hover {
+    cursor: pointer;
+    font-weight: bold;
+}
+#form_upload_minhchung_hsg:hover{
+    cursor: pointer;
+    font-weight: bold;
+}
+#form_upload_minhchung_otherAchieve:hover{
+    cursor: pointer;
+    font-weight: bold;
+}
+#form_upload_minhchung_ielts:hover{
+    cursor: pointer;
+    font-weight: bold;
+}
+#form_upload_minhchung_priority:hover{
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#preview {
+    width: 90px;
+    height: 120px;
+    background-size: cover;
+    border: 0.5px solid #000;
+    margin-left: 50px;
+}
+
+.infor_content {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* .left_content {
+    flex: 0.5;
+}
+
+.mid_content {
+    flex: 1;
+} */
+
+.mid_content div label,
+.right_content div label {
+    min-width: 110px;
+    font-weight: 500;
+}
+
+
+.mid_content > div, .right_content > div {
+    margin: 12px 0;
+}
+
+.achievements {
+    width: 1000px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+/* select {
+    min-width: 200px;
+}
+
+input {
+    min-width: 220px;
+} */
+
+.thanh_tich, 
+.diem_uu_tien, 
+.nguyen_vong {
+    margin-top: 20px;
+    margin-bottom: 4px;
+}
+
+.mb_top_8px {
+    margin-top: 8px;
+}
+
+input, select {
+    width: 245px;
+    height: 28px;
+}

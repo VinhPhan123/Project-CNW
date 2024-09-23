@@ -6,112 +6,6 @@
     $token = md5(uniqid());
 ?>
 
-<style>
-    .infor_text {
-        color: #b50206;
-        font-weight: bold;
-        height: 10px;
-    }
-
-    .body_content {
-        margin-top: 50px;
-    }
-
-    #form_upload_potrait:hover{
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    #form_upload_potrait {
-        overflow: hidden;
-    }
-
-    #form_upload_minhchung_chuyen:hover {
-        cursor: pointer;
-        font-weight: bold;
-    }
-    #form_upload_minhchung_hsg:hover{
-        cursor: pointer;
-        font-weight: bold;
-    }
-    #form_upload_minhchung_otherAchieve:hover{
-        cursor: pointer;
-        font-weight: bold;
-    }
-    #form_upload_minhchung_ielts:hover{
-        cursor: pointer;
-        font-weight: bold;
-    }
-    #form_upload_minhchung_priority:hover{
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    #preview {
-        width: 90px;
-        height: 120px;
-        background-size: cover;
-        border: 0.5px solid #000;
-        margin-left: 50px;
-    }
-
-    .infor_content {
-        display: flex;
-        justify-content: space-around;
-    }
-
-    /* .left_content {
-        flex: 0.5;
-    }
-
-    .mid_content {
-        flex: 1;
-    } */
-
-    .mid_content div label,
-    .right_content div label {
-        min-width: 110px;
-        font-weight: 500;
-    }
-
-
-    .mid_content > div, .right_content > div {
-        margin: 12px 0;
-    }
-
-    .achievements {
-        width: 1000px;
-        display: flex;
-        justify-content: space-between;
-        position: relative;
-    }
-
-    /* select {
-        min-width: 200px;
-    }
-
-    input {
-        min-width: 220px;
-    } */
-
-    .thanh_tich, 
-    .diem_uu_tien, 
-    .nguyen_vong {
-        margin-top: 20px;
-        margin-bottom: 4px;
-    }
-
-    .mb_top_8px {
-        margin-top: 8px;
-    }
-
-    input, select {
-        width: 245px;
-        height: 28px;
-    }
-
-</style>
-
 
 <?php
     // nếu chưa đăng nhập tài khoản student thì out
@@ -301,7 +195,7 @@
                 $m1 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a1 = "file is too large";
                 $check = 0;
             }
@@ -372,8 +266,9 @@
                 $m2 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a2 = "file is too large";
+                $check = 0;
             }
         }
 
@@ -413,7 +308,7 @@
                 $m3 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a3 = "file is too large";
                 $check = 0;
             }
@@ -481,7 +376,7 @@
                 $m5 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a5 = "file is too large";
                 $check = 0;
             }
@@ -526,7 +421,7 @@
                 $m4 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a4 = "file is too large";
                 $check = 0;
             }
@@ -549,7 +444,7 @@
     }
 ?>
 
-<?php echo $check ?>
+<!-- <?php echo $check ?> -->
 
 
 <?php
@@ -704,9 +599,11 @@
 ?>
 
 <div class="body_content" style="display: block; width: 100%;">
-	
+
+<link rel="stylesheet" href="./assets/css/student_nop_ho_so.css">
+
 <form id="form" method="post" enctype="multipart/form-data">
-    <div class="container" style="width: 1500px;">
+    <div class="container" style="width: 1200px;">
         <div class="infor_text">
             THÔNG TIN CÁ NHÂN
         </div>
@@ -768,7 +665,7 @@
         </div>
 
 
-        <div class="thanh_tich" style="font-size: 18px; font-weight: bold; color: #b50206;">1. Thành tích học tập</div>
+        <div class="thanh_tich" style="font-size: 18px; font-weight: bold; color: #0c6efd;">1. Thành tích học tập</div>
         <div class="academic_achivements">
 
         <!-- trường chuyên -->
@@ -822,6 +719,8 @@
                         <?php #if(!isset($array_truongchuyen[2])){echo (isset($message_error_2) || isset($message_error_4)) ? "upload file" : "";} ?>
                         <?php if(isset($m1)){
                             echo $m1;
+                        } else if(isset($a1)) {
+                            echo $a1;
                         } else {
                             if(!isset($array_truongchuyen[2])){echo (isset($message_error_2) || isset($message_error_4)) ? "upload file" : "";}
                         }
@@ -1037,6 +936,8 @@
                     <?php #if(!isset($array_giai_hs_gioi[2])){echo (isset($message_error_8) || isset($message_error_10)) ? "upload file" : "";} ?>
                     <?php if(isset($m2)){
                             echo $m2;
+                    }else if(isset($a2)) {
+                        echo $a2;
                     } else {
                         if(!isset($array_giai_hs_gioi[2])){echo (isset($message_error_8) || isset($message_error_10)) ? "upload file" : "";}
                     }
@@ -1191,6 +1092,8 @@
                         <?php #if(!isset($array_chung_chi_ielts[2])){echo (isset($message_error_16) || isset($message_error_18)) ? "upload file" : "";} ?>
                         <?php if(isset($m5)){
                             echo $m5;
+                        } else if(isset($a5)) {
+                            echo $a5;
                         } else {
                             if(!isset($array_chung_chi_ielts[2])){echo (isset($message_error_16) || isset($message_error_18)) ? "upload file" : "";}
                         }
@@ -1226,6 +1129,8 @@
                         <?php #if(!isset($array_giai_thuong_khac[1])){echo isset($message_error_13) ? "upload file" : "";} ?>
                         <?php if(isset($m3)){
                             echo $m3;
+                        } else if(isset($a3)) {
+                            echo $a3;
                         } else {
                             if(!isset($array_giai_thuong_khac[1])){echo isset($message_error_13) ? "upload file" : "";}
                         }
@@ -1242,7 +1147,7 @@
 
 
         <!-- Điểm ưu tiên -->
-        <div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #b50206;">2. Điểm ưu tiên</div>
+        <div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #0c6efd;">2. Điểm ưu tiên</div>
         <div class="priority_point achievements">
             <div>
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Khu vực</div>
@@ -1304,6 +1209,8 @@
                     <?php #if(!isset($array_diem_uu_tien[2])){echo (isset($message_error_22) || isset($message_error_24)) ? "upload file" : "";} ?>
                     <?php if(isset($m4)){
                             echo $m4;
+                        } else if(isset($a4)) {
+                            echo $a4;
                         } else {
                             if(!isset($array_doi_tuong_uu_tien[1])){echo (isset($message_error_21)) ? "upload file" : "";}
                         }
@@ -1317,7 +1224,7 @@
             </div>
         </div>
 
-        <div class="nguyen_vong" style="font-size: 18px; font-weight: bold; color: #b50206;">3. Đăng ký nguyện vọng xết tuyển</div>
+        <div class="nguyen_vong" style="font-size: 18px; font-weight: bold; color: #0c6efd;">3. Đăng ký nguyện vọng xết tuyển</div>
         <div class="register achievements">
             <div style="flex: 1;">
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Chọn ngành</div>
