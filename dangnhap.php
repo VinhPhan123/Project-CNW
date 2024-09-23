@@ -39,6 +39,7 @@
             }
             
             if($check) {
+                $_SESSION['id_student'] = $arr['id_student'];
                 $_SESSION['hoVaTen'] = $arr['fullname'];
                 $_SESSION['taiKhoan'] = $arr['username'];
                 $_SESSION['matKhau'] = $arr['password'];
@@ -50,6 +51,7 @@
                 $_SESSION['menu_status'] = "close";
     
                 header("location: index.php");
+                exit();
             } else {
                 echo("<script>alert('Tài khoản hoặc mật khẩu chưa đúng!')</script>");
             }

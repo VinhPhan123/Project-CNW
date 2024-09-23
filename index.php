@@ -10,9 +10,6 @@
 	}
 ?>
 
-<!-- <?php echo $_SESSION['taiKhoan'] ?> -->
-
-
 <link rel="stylesheet" href="./assets/css/index.css">
 <div style="display: block; width: 100%;">
 	
@@ -56,6 +53,7 @@
 					</button>
 				</div>
 				<!-- End Slider -->
+				 <hr>
 				<!-- Products -->
 				<div class="row">
 					<div class="col-lg-4 col-md-6 mb-4">
@@ -155,6 +153,7 @@
 					</div>
 				</div>
 				<!-- End Products -->
+				 <hr>
 			</div>
 			<!-- End Slider and Products -->
 		</div>
@@ -162,6 +161,11 @@
 	<!-- End Page content -->
 
 	<?php 
+		// if($_SESSION['id_student'] == '') {
+		// 	echo 'false';
+		// } else {
+		// 	echo $_SESSION['id_student']; 
+		// }
 		include './layouts/footer.php';
 	?>
 </div>

@@ -44,7 +44,7 @@
 		$_SESSION['email'] = $email;
 		$_SESSION['menu_status'] = "close";
 
-		echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email . '  63<br>';
+		// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email . '  63<br>';
 		
 		$s = "SELECT username FROM students WHERE username='$taiKhoan'";
 		$query = mysqli_query($connect, $s);
