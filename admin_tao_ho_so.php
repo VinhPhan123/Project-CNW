@@ -78,10 +78,10 @@
                         for($j=0; $j<$result_select_chuyennganh; $j++) {
                             array_push($tmp_arr_to_hop_mon, $arr_select_chuyennganh[$j][1]);
                         }
+                        echo "<p style='margin: 0px; text-align: left; margin-left: 10px'>";
+                        echo $tmp_arr_to_hop_mon[0] . " - " . $arr_select_subject_combination[0][1] . " - " . $arr_select_subject_combination[0][2] . " - " . $arr_select_subject_combination[0][3];
+                        echo "</p>";
                     }
-                    echo "<p style='margin: 0px; text-align: left; margin-left: 10px'>";
-                    echo $tmp_arr_to_hop_mon[0] . " - " . $arr_select_subject_combination[0][1] . " - " . $arr_select_subject_combination[0][2] . " - " . $arr_select_subject_combination[0][3];
-                    echo "</p>";
                     echo "</td>";
                     $tmp = $i+1;
                     echo "<td>";
@@ -118,6 +118,7 @@
                     }
                     echo "<td>";
                     echo "<form action='admin_sua_ho_so.php' method='post'>
+                        <input type='hidden' name='count_sb' value='" . $result_select_chuyennganh . "'>
                         <input type='hidden' name='id_major' value='" . $arr_select_chuyennganh[0][0] . "'>
                         <input type='hidden' name='id_SB' value='" . $arr_select_chuyennganh[0][1] . "'>";
                         echo "<input type='hidden' name='major_name' value='" . $arr_select_majors[$i][1] . "'>";

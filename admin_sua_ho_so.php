@@ -16,7 +16,12 @@
     $token = md5(uniqid());
 ?>
 
-<?php    
+<?php
+    if(isset($_POST['count_sb']) && $_POST['count_sb'] == 0) {
+        echo "<script>alert('Ngành này chưa có tổ hợp môn nào được chọn!');</script>";
+        echo '<script>window.location="admin_tao_ho_so.php";</script>';
+    }
+
     $sql_select_subject_combination = "SELECT * FROM subject_combination";
     $query_select_subject_combination = mysqli_query($connect, $sql_select_subject_combination);
     $result_select_subject_combination = mysqli_num_rows($query_select_subject_combination);
