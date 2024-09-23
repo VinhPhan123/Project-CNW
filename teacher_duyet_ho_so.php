@@ -36,7 +36,7 @@
     $query_major_list = mysqli_query($connect, $sql_major_list);
     $arr_major_list = array();
     while($row = mysqli_fetch_array($query_major_list)){
-        array_push($arr_major_list, $row['major_name']);
+        array_push($arr_major_list, $row);
     }
 ?>
 
@@ -54,17 +54,17 @@
         <div class="register achievements">
             <div style="flex: 1;">
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Chọn ngành</div>
-                <select name="chonnganh" id="chonnganh" required>
+                <select name="id_major" id="chonnganh" required>
                     <option value=""></option>
-                    <?php foreach($arr_major_list as $ten_nganh) { ?>
-                        <?php echo '<option value="' . $ten_nganh .'">' . $ten_nganh . '</option>'?>
+                    <?php foreach($arr_major_list as $nganh) { ?>
+                        <?php echo '<option value="' . $nganh[0] .'">' . $nganh[1] . '</option>'?>
                     <?php } ?>
                 </select>
             </div>
         </div>
     </div>
     <div class="danh_sach_container">
-        <table>
+        <table id="danh_sach_inner">
             <tr>
                 <th>STT</th>
                 <th>Tên thí sinh</th>
@@ -73,15 +73,10 @@
                 <th>Access</th>
                 <th>Deny</th>
             </tr>
-            <div class="danh_sach_inner" id="danh_sach_inner">
-                <tr>
-                    <td>1</td>
-                    <td>Nguyễn Văn A</td>
-                    <td>A00</td>
-                    <td><input type="button" class="btn btn-primary" value="View" name="view"/></td>
-                    <td><input type="submit" class="btn btn-success" value="Access" name="access"/></td>
-                    <td><input type="submit" class="btn btn-danger" value="Deny" name="deny"/></td>
-                </tr>
+            <tr>
+                <td colspan="6">Bạn chưa chọn tổ hợp môn!</td>
+            </tr>
+            <!-- <div class="danh_sach_inner" id="danh_sach_inner"> -->
             </div>
         </table>
     </div>
@@ -97,25 +92,20 @@
 <script>
     document.getElementById('chonnganh').addEventListener('change', function() {
         var danhSachAjax = document.getElementById("danh_sach_inner");
-        const tenNganh = this.value;
-        console.log(tenNganh); 
+        const id_major = this.value;
+        // console.log(id_major); 
 
         const xhr = new XMLHttpRequest();
         xhr.open('POST', "teacher_duyet_ho_so_ajax.php", true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
+            console.log(this.responseText);
             if (xhr.status === 200) {
-                if(this.responseText != '<td colspan="6">Không có thí sinh nào!</td>'){
-                    danhSachAjax.innerHTML = this.response;
-                    // console.log(this.responseText);
-                } else {
-                    danhSachAjax.innerHTML = '<td colspan="6">Không có thí sinh nào!</td>';
-                }
-
+                danhSachAjax.innerHTML = this.response;
             } else {
                 console.log('Failed to send data');
             }
         };
-        xhr.send('tenNganh=' + tenNganh);
+        xhr.send('id_major=' + id_major);
     });
 </script>
