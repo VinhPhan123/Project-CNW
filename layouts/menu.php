@@ -26,6 +26,7 @@
                 } elseif($_SESSION['role'] == 'teacher') {
                     echo("<p>GIÀNH CHO TEACHER</p>");
                     echo('<li class="dropdown-item"><a href="teacher_duyet_ho_so.php">Duyệt hồ sơ</a></li>');
+                    echo('<li class="dropdown-item"><a href="teacher_danh_sach_ho_so.php">Danh sách hồ sơ</a></li>');
                 } else {
                     echo("<p>GIÀNH CHO STUDENT</p>");
                     echo('<li class="dropdown-item"><a href="student_knowled_record.php">Học bạ</a></li>');

@@ -71,7 +71,7 @@
     }
 
     input, select {
-        width: 220px;
+        width: 240px;
         height: 28px;
     }
 
@@ -234,16 +234,6 @@
 	// print_r($array_chuyennganh_duocphan);
 ?>
 
-
-<?php
-	// xử lí nút access
-	if(isset($_POST['access']) && ($_SESSION['token'] == $_POST['_token'])){
-		$ids = $_POST['row_id'];
-		echo $ids;
-	}
-?>
-
-
 <?php
 	// xu li phan chon nganh
 	if(isset($_POST['chonnganh_btn']) && ($_SESSION['token'] == $_POST['_token'])){
@@ -282,10 +272,6 @@
 	}
 ?>
 
-
-
-
-
 <div style="display: block; width: 100%;">
 	
 	<div class="container mt-4">
@@ -319,76 +305,54 @@
 
 		<div class="table_ledgers">
 			<form action="" method="post">
-				<table>
-					<th>STT</th>
-					<th>Tên thí sinh</th>
-					<th>Tổ hợp đăng ký</th>
-					<th>Hồ sơ thí sinh</th>
-					<th>Access</th>
-					<th>Deny</th>
-								
-					<?php
-						if(isset($student_ledgers_array)){
-							if(sizeof($student_ledgers_array)!=0){
-								$count = 0;
-								foreach($student_ledgers_array as $id_student => $array_tohop){
-									// lay ra ten student
-									// echo $id_student . ' - ';
-									$sql4 = "SELECT * FROM students WHERE id_student = '$id_student';";
-									$query4 = mysqli_query($connect, $sql4);
-									$student_name = mysqli_fetch_array($query4)['username'];
-									// echo $student_name;
+			<table>
+				<th>STT</th>
+				<th>Tên thí sinh</th>
+				<th>Tổ hợp đăng ký</th>
+				<th>Hồ sơ thí sinh</th>
+				<th>Access</th>
+				<th>Deny</th>
+							
+				<?php
+					if(isset($student_ledgers_array)){
+						if(sizeof($student_ledgers_array)!=0){
+							$count = 0;
+							foreach($student_ledgers_array as $id_student => $array_majors){
+								// lay ra ten student
+								// echo $id_student . ' - ';
+								$sql4 = "SELECT * FROM students WHERE id_student = '$id_student';";
+								$query4 = mysqli_query($connect, $sql4);
+								$student_name = mysqli_fetch_array($query4)['username'];
+								// echo $student_name;
 
-									// lấy ra id_ledgers
-									$sql5 = "SELECT * FROM ledgers WHERE id_student = '$id_student';";
-									$query5 = mysqli_query($connect, $sql5);
-									$id_ledgers = mysqli_fetch_array($query5)['id_ledger'];
-									// lấy ra số lượng tohop có status = null với id_major
-									$sql7 = "SELECT * FROM ledgers WHERE id_major='$id_major' AND id_student='$id_student' AND ledger_status is null";
-									$query7 = mysqli_query($connect, $sql7);
-
-									$count_tohop = mysqli_num_rows($query7);
-									// echo $count_tohop
-
-									if($count_tohop != 0){
-										echo '<tr>';
-										echo '<td rowspan="' . $count_tohop . '">' . $count . '</td>';
-										echo '<td rowspan="' . $count_tohop . '">' . $student_name . '</td>';
-										echo '<input type="hidden" name="row_id" value="' . $count . '">';
-									}
-
-									foreach($array_tohop as $tohop){
-										// kiểm tra status, nếu NULL thì hiển thị
-										$sql6 = "SELECT * FROM ledgers WHERE id_student=$id_student AND id_SB='$tohop';";
-										$query6 = mysqli_query($connect, $sql6);
-										$ledger_status =  mysqli_fetch_array($query6)['ledger_status'];
-										if($ledger_status == NULL){
-											echo '<td class="get_to_hop">' . $tohop . '</td>';
-											echo '<td><button style="color: #fff;" class="btn btn-warning" name="show">Click</button></td>';
-											echo '<input type="hidden" name="_token" value="' . $token . '">';
-											$_SESSION['token'] = $token; 
-											echo '<input type="hidden" name="get_id_ledger" class="get_id_ledger" value="' . $id_ledgers . '">';
-											echo '<td><button type="submit" class="btn btn-success" name="access">Click</button></td>';
-											echo '<input type="hidden" name="_token" value="' . $token . '">';
-											$_SESSION['token'] = $token; 
-											echo '<td><button type="submit" class="btn btn-danger" name="deny">Click</button></td>';
-											echo '<input type="hidden" name="_token" value="' . $token . '">';
-											$_SESSION['token'] = $token; 
-											echo '</tr>';
-										}
-									}
-									
-									$count = $count+1;
-
-								}
-							} else {
-								echo "<tr><td colspan='6'>Không có thí sinh nào !</td></tr>";
+								// lấy ra id_ledgers
+								$sql5 = "SELECT * FROM ledgers WHERE id_student = '$id_student';";
+								$query5 = mysqli_query($connect, $sql5);
+								$id_ledgers = mysqli_fetch_array($query5)['id_ledger'];
+								// echo $id_ledgers . ' - ';
+	
+								$string_majors = implode(' - ', $array_majors);
+								// echo $string_majors;
+								echo '<tr>';
+								echo '<td>' . $count . '</td>';
+								echo '<td>' . $student_name . '</td>';
+								echo '<td>' . $string_majors . '</td>';
+								echo '<td><button class="btn btn-warning" name="show">Click</button></td>';
+								echo '<input type="hidden" name="get_id_ledger" id="get_id_ledger" value="' . $id_ledgers . '">';
+								echo '<td><button type="submit" class="btn btn-success" name="access">Click</button></td>';
+								echo '<td><button type="submit" class="btn btn-danger" name="deny">Click</button></td>';
+								$_SESSION['token'] = $token; 
+								$count = $count+1;
+								echo '</tr>';
 							}
 						} else {
 							echo "<tr><td colspan='6'>Không có thí sinh nào !</td></tr>";
 						}
-					?>	
-				</table>
+					} else {
+						echo "<tr><td colspan='6'>Không có thí sinh nào !</td></tr>";
+					}
+				?>	
+			</table>
 			</form>
 		</div>
 		
@@ -404,27 +368,15 @@
 
 <!-- xử lí ajax khi bấm view gửi đi và nhận lại id_ledger -->
 <script>
-	const nganh_selected = document.getElementById("chonnganh_select");
-	const chuyennganh = nganh_selected.value;
-	// console.log(chuyennganh);
-
-	// const tohop_selected = document.getElementById("get_to_hop");
-	// const tohop = tohop_selected.textContent;
-	// console.log(tohop);
-
 	document.querySelectorAll('button[name="show"]').forEach(button => {
 		button.addEventListener('click', function(event) {
 			// ngăn chặn hành động submit của thẻ button
 			event.preventDefault(); 
 
 			const form_ajax = document.querySelector('.overlay');
-			const inputElement = this.closest('tr').querySelector('input[class="get_id_ledger"]');
+			const inputElement = this.closest('tr').querySelector('input[id="get_id_ledger"]');
 			const id_ledger = inputElement.value;
-			// console.log(id_ledger);
-
-			const tohop_selected = this.closest('tr').querySelector('.get_to_hop');
-			const tohop = tohop_selected.textContent;
-			console.log(tohop);
+			console.log(id_ledger);
 
 			const xhr = new XMLHttpRequest();
 			xhr.open('POST', "teacher_duyet_ho_so_ajax.php", true);
@@ -438,11 +390,10 @@
 					console.log('Failed to send data');
 				}
 			};
-			xhr.send('id_ledger=' + id_ledger + '&chuyen_nganh=' + chuyennganh + '&to_hop=' + tohop);
+			xhr.send('id_ledger=' + id_ledger);
 		});
 	});
 </script>
-
 
 <script>
 	const a = document.querySelector('.overlay');
@@ -462,7 +413,7 @@
 				const btn_close = document.getElementById('close');
 
 				if (btn_close) {
-					// console.log(btn_close);
+					console.log(btn_close);
 					btn_close.addEventListener('click', function() {
 						overlay.style.display = 'none';
 					});

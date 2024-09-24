@@ -2,62 +2,68 @@
 		include './layouts/header.php';
 ?>
 
+
 <?php
-    $sql2 = "SELECT * FROM students WHERE id_student = 1;";
-    $query2 = mysqli_query($connect, $sql2);
-    $row = mysqli_fetch_array($query2);
+    $sql = "SELECT * FROM academic_records WHERE id_student=1";
+    $query = mysqli_query($connect, $sql);
 
-    // Lấy thông tin cá nhân
-    $fullname = $row['fullname'];
-    $ngaysinh = $row['ngaysinh'];
-    $phone_number = $row['phone_number'];
-    $gender = $row['gender'];
-    $address = $row['address'];
-    $email = $row['email'];
+    // $array = mysqli_fetch_array($query);
+    $assoc = mysqli_fetch_assoc($query);
+    print_r($assoc);
+    echo '<br>';
 
-    // echo $fullname . ' - ' . $ngaysinh . ' - ' . $phone_number . ' - ' . $gender . ' - ' .  $address . ' - ' . $email;
-    $truong_chuyen = $row['truong_chuyen'];
-    $giai_hs_gioi = $row['giai_hs_gioi'];
-    $chung_chi_ielts = $row['chung_chi_ielts'];
-    $giai_thuong_khac = $row['giai_thuong_khac'];
-    $doi_tuong_uu_tien = $row['doi_tuong_uu_tien'];
-    $khu_vuc_uu_tien = $row['khu_vuc_uu_tien'];
+    $array_mon = array();
+    $sql1 =  "SELECT * FROM subject_combination WHERE id_SB='A01';";
+    $query1 = mysqli_query($connect, $sql1);
+    $row = mysqli_fetch_array($query1); // Lưu kết quả vào biến
 
-    // echo $truong_chuyen . ' - ' . $giai_hs_gioi . ' - ' . $chung_chi_ielts . ' - ' . $giai_thuong_khac . ' - ' .  $doi_tuong_uu_tien . ' - ' . $    $khu_vuc_uu_tien = $row['khu_vuc_uu_tien'];
-    // Tên trường - Lớp - Minh chứng
-    $array_truong_chuyen = explode(" | ", $truong_chuyen);
-    foreach($array_truong_chuyen as $value){
-        // echo $value . '<br>';
-    }
-    // Môn - Giải - Minh chứng
-    $array_giai_hs_gioi = explode(" | ", $giai_hs_gioi);
-    foreach($array_giai_hs_gioi as $value){
-        // echo $value . '<br>';
+    if ($row) { // Kiểm tra xem có dữ liệu không
+        array_push($array_mon, $row['sub_1']);
+        array_push($array_mon, $row['sub_2']);
+        array_push($array_mon, $row['sub_3']);
     }
 
-    // Mã chứng nhân - Điểm - Minh chứng
-    $array_chung_chi_ielts = explode(" | ", $chung_chi_ielts);
-    foreach($array_chung_chi_ielts as $value){
-        // echo $value . '<br>';
+    print_r($array_mon);
+    echo '<br>';
+
+    $mark = 0;
+    foreach($assoc as $index => $value){
+        if($index == 'Toan') {
+            $mon_hoc = 'Toán';
+        } else if($index == 'NguVan') {
+            $mon_hoc = 'Ngữ Văn';
+        } else if($index == 'TiengAnh') {
+            $mon_hoc = 'Tiếng Anh';
+        } else if($index == 'VatLy') {
+            $mon_hoc = 'Vật Lý';
+        } else if($index == 'HoaHoc') {
+            $mon_hoc = 'Hóa Học';
+        } else if($index == 'SinhHoc') {
+            $mon_hoc = 'Sinh Học';
+        } else if($index == 'LichSu') {
+            $mon_hoc = 'Lịch Sử';
+        } else if($index == 'DiaLy') {
+            $mon_hoc = 'Địa Lý';
+        } else if($index == 'TinHoc') {
+            $mon_hoc = 'Tin Học';
+        } else if($index == 'CongNghe') {
+            $mon_hoc = 'Công Nghệ';
+        } else if($index == 'GiaoDucCongDan') {
+            $mon_hoc = 'Giáo Dục Công Dân';
+        } else if($index == 'GiaoDucTheChat') {
+            $mon_hoc = 'Giáo Dục Thể Chất';
+        } else {
+            continue;
+        }
+        foreach($array_mon as $mon){
+            // echo $mon . '-';
+            if($mon_hoc === $mon) {
+                $mark += $value;
+            }
+        }
     }
 
-    // Mô tả - Minh chứng
-    $array_giai_thuong_khac = explode(" | ", $giai_thuong_khac);
-    foreach($array_giai_thuong_khac as $value){
-        // echo $value . '<br>';
-    }
-
-    // Đối tượng - Minh chứng
-    $array_doi_tuong_uu_tien = explode(" | ", $doi_tuong_uu_tien);
-    foreach($array_doi_tuong_uu_tien as $value){
-        echo $value . '<br>';
-    }
-
-    // Khu vực
-    $array_khu_vuc_uu_tien = explode(" | ", $khu_vuc_uu_tien);
-    foreach($array_khu_vuc_uu_tien as $value){
-        // echo $value . '<br>';
-    }
+    echo $mark;
 
 
 ?>

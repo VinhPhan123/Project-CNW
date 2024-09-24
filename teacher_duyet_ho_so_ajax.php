@@ -8,6 +8,10 @@ if (isset($_POST['id_ledger'])) {
 
     // Lấy id_ledger từ POST
     $id_ledger = $_POST['id_ledger'];
+    // lấy ra chuyên ngành
+    $chuyen_nganh = $_POST['chuyen_nganh'];
+    // lấy ra tổ hợp
+    $to_hop = $_POST['to_hop'];
 
     // Kiểm tra kết nối
     if ($connect->connect_error) {
@@ -17,10 +21,13 @@ if (isset($_POST['id_ledger'])) {
     // Lấy ra id_student
     $sql1 = "SELECT * FROM ledgers WHERE id_ledger='$id_ledger';";
     $query1 = mysqli_query($connect, $sql1);
+
     
     // Kiểm tra xem có kết quả không
     if (mysqli_num_rows($query1) > 0) {
         $id_student = mysqli_fetch_array($query1)['id_student'];
+
+        // lấy ra ledger_status, nếu bằng NULL - chưa duyệt, 1 - đã duyệt
 
         $sql2 = "SELECT * FROM students WHERE id_student = '$id_student';";
         $query2 = mysqli_query($connect, $sql2);
@@ -96,18 +103,16 @@ if (isset($_POST['id_ledger'])) {
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Trường chuyên</div>
                             <span class="red" style="position: absolute; top: 8px; left: 116px;"><?php if(!isset($array_truongchuyen[0])){echo (isset($message_error_3)||isset($message_error_5)) ? "nhap truong chuyen" : "";}?></span>
-                            <select name="truongchuyen" id="">
-                                <option value="">' . $array_truong_chuyen[0] . '</option>
-                            </select>
+                            <input readonly type="text" value="' . $array_truong_chuyen[0] . '">
                         </div>
 
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Lớp chuyên</div>
-                            <input name="lopchuyen" type="text" value="' . $array_truong_chuyen[1] . '">
+                            <input readonly name="lopchuyen" type="text" value="' . $array_truong_chuyen[1] . '">
                         </div>
 
-                        <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
-                            <img style="position: relative; top: 20px;" width="50px" height="50px" src="' . $array_truong_chuyen[2] . '">
+                        <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                            <img class="img_truong_chuyen" style="position: absolute;" width="50px" height="50px" src="' . $array_truong_chuyen[2] . '">
                         </div>
                     </div>';
         }
@@ -118,20 +123,17 @@ if (isset($_POST['id_ledger'])) {
                     <div class="achievements">
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Môn thi</div>
-                            <select name="monthi" id="">
-                                 <option value="">' . $array_giai_hs_gioi[0] . '</option>
-                            </select>
+                            <input readonly type="text" value="' . $array_giai_hs_gioi[0] . '">
                         </div>
 
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Giải</div>
-                            <select name="giai" id="">
-                                <option value="">' . $array_giai_hs_gioi[1] . '</option>
-                            </select>
+                            <input readonly type="text" value="' . $array_giai_hs_gioi[1] . '">
+                        
                         </div>
 
-                        <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
-                            <img style="position: relative; top: 20px;" width="50px" height="50px" src="' . $array_giai_hs_gioi[2] . '">
+                        <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                            <img class="img_hs_gioi" style="position: absolute;" width="50px" height="50px" src="' . $array_giai_hs_gioi[2] . '">
                         </div>	
                     </div>';
         }
@@ -141,18 +143,16 @@ if (isset($_POST['id_ledger'])) {
                     <div class="achievements">
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mã chứng nhận</div>
-                            <input name="machungnhan" type="text" value="' . $array_chung_chi_ielts[0] . '">
+                            <input readonly name="machungnhan" type="text" value="' . $array_chung_chi_ielts[0] . '">
                         </div>
 
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Điểm</div>
-                            <select name="diem" id="">
-                                <option value="">' . $array_chung_chi_ielts[1] . '</option>
-                            </select>
+                            <input readonly type="text" value="' . $array_chung_chi_ielts[1] . '">
                         </div>
 
-                        <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
-                            <img style="position: relative; top: 20px;" width="50px" height="50px" src="' . $array_chung_chi_ielts[2] . '">
+                        <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                            <img class="img_chung_chi_ielts" style="position: absolute;" width="50px" height="50px" src="' . $array_chung_chi_ielts[2] . '">
                         </div>
                     </div>';
         }
@@ -162,11 +162,11 @@ if (isset($_POST['id_ledger'])) {
                     <div class="achievements">
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mô tả</div>
-                            <input name="doituonguutien" type="text" value="' . $array_giai_thuong_khac[0] . '">
+                            <input readonly name="doituonguutien" type="text" value="' . $array_giai_thuong_khac[0] . '">
                         </div>
 
-                        <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
-                            <img style="position: relative; top: 20px;" width="50px" height="50px" src="' . $array_giai_thuong_khac[1] . '">
+                        <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                            <img class="img_giai_thuong_khac" style="position: absolute;" width="50px" height="50px" src="' . $array_giai_thuong_khac[1] . '">
                         </div>
                     </div>';
         }
@@ -179,26 +179,99 @@ if (isset($_POST['id_ledger'])) {
         if($khu_vuc_uu_tien != ''){
             echo '<div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Khu vực</div>
-                    <select name="khuvuc" id="">
-                         <option value="">' . $array_khu_vuc_uu_tien[0] . '</option>
-                    </select>
+                    <input readonly type="text" value="' . $array_khu_vuc_uu_tien[0] . '">
                 </div>';
         }
 
         if($doi_tuong_uu_tien != ''){
             echo '<div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Đối tượng ưu tiên</div>
-                    <input name="doituonguutien" type="text" value="' . $array_doi_tuong_uu_tien[0] . '">
+                    <input readonly name="doituonguutien" type="text" value="' . $array_doi_tuong_uu_tien[0] . '">
                 </div>
 
-                <div style="position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100px; height: 72px;">
-                    <img style="position: relative; top: 20px;" width="50px" height="50px" src="' . $array_doi_tuong_uu_tien[1] . '">
+                <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                    <img class="img_doi_tuong_uu_tien" style="position: absolute;" width="50px" height="50px" src="' . $array_doi_tuong_uu_tien[1] . '">
                 </div>';
         }
 
         if($khu_vuc_uu_tien != '' || $doi_tuong_uu_tien!=''){
             echo '</div>';
         }
+
+        // xử lí phần lấy điểm
+
+        // tạo array lưu academic_records với id_student tương ứng
+        $sql3 = "SELECT * FROM academic_records WHERE id_student='$id_student';";
+        $query3 = mysqli_query($connect, $sql3);
+        $assoc_academic = mysqli_fetch_assoc($query3);
+        // var_dump($assoc_academic);
+
+        // tạo array lưu các môn với tổ hợp tương ứng
+        $array_mon = array();
+        $sql4 =  "SELECT * FROM subject_combination WHERE id_SB='$to_hop';";
+        $query4 = mysqli_query($connect, $sql4);
+        $row = mysqli_fetch_array($query4);
+
+        if ($row) { // Kiểm tra xem có dữ liệu không
+            array_push($array_mon, $row['sub_1']);
+            array_push($array_mon, $row['sub_2']);
+            array_push($array_mon, $row['sub_3']);
+        }
+
+        // lấy ra tổng điểm các môn của tổ hợp tương ứng
+        $mark = 0;
+        foreach($assoc_academic as $index => $value){
+            if($index == 'Toan') {
+                $mon_hoc = 'Toán';
+            } else if($index == 'NguVan') {
+                $mon_hoc = 'Ngữ Văn';
+            } else if($index == 'TiengAnh') {
+                $mon_hoc = 'Tiếng Anh';
+            } else if($index == 'VatLy') {
+                $mon_hoc = 'Vật Lý';
+            } else if($index == 'HoaHoc') {
+                $mon_hoc = 'Hóa Học';
+            } else if($index == 'SinhHoc') {
+                $mon_hoc = 'Sinh Học';
+            } else if($index == 'LichSu') {
+                $mon_hoc = 'Lịch Sử';
+            } else if($index == 'DiaLy') {
+                $mon_hoc = 'Địa Lý';
+            } else if($index == 'TinHoc') {
+                $mon_hoc = 'Tin Học';
+            } else if($index == 'CongNghe') {
+                $mon_hoc = 'Công Nghệ';
+            } else if($index == 'GiaoDucCongDan') {
+                $mon_hoc = 'Giáo Dục Công Dân';
+            } else if($index == 'GiaoDucTheChat') {
+                $mon_hoc = 'Giáo Dục Thể Chất';
+            } else {
+                continue;
+            }
+            foreach($array_mon as $mon){
+                // echo $mon . '-';
+                if($mon_hoc === $mon) {
+                    $mark += $value;
+                }
+            }
+        }
+
+
+        // hiển thị ngành và điểm
+        echo '<div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #b50206;">3. Điểm xét tuyển</div>
+            <div class="achievements" style="width: 645px;">
+                <div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Ngành xét tuyển</div>
+                    <input readonly name="nganhxettuyen" type="text" value="' . $chuyen_nganh . '">
+                </div>
+
+                <div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Điểm xét tuyển</div>
+                    <input readonly type="text" value="' . $mark . '">
+                </div>
+
+                <div>   </div>
+            </div>';
 
         
         echo '          <br><input type="submit" class="btn btn-primary" value="Close" id="close" name="close" style="text-align: center; width: 100%; height: 36px; color: #fff; background-color: #b50206;"/>
