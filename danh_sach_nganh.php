@@ -137,7 +137,7 @@
                                             echo '<option value="' . $arr_select_subject_combination[$j][0] .'">' . $arr_select_subject_combination[$j][0] . '</option>';
                                         }
                             echo '</select>';
-                            echo '<button id="insert-button" type="submit" class="btn btn-primary" name="insert">Thêm</button>';
+                            echo '<button id="insert-button" type="submit" class="btn btn-success" name="insert">Thêm</button>';
                             echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';                        
                         } else {
                             // print_r($arr_major);
@@ -154,7 +154,7 @@
                                             }
                                     echo '</select>';
                                     echo '<button id="insert-button" type="submit" class="btn btn-success" name="insert">Thêm</button>';
-                                    echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';                        
+                                    echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';
                             } else {
                                 echo "<td>Đã hết tổ hợp môn có thể thêm vào ngành này!</td>";
                             }
@@ -183,6 +183,7 @@
                         echo '<button type="submit" class="btn btn-danger" name="delete_major_alert">Xóa ngành</button>';
                         echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';
                         echo "</td>";
+                        $tmp_arr_select_chuyennganh = [];
                     }
                     echo "</tr>";
                 }
@@ -244,7 +245,7 @@
                     if(in_array($id_SB, $tmp_arr)) {
                         echo "<script>alert('Tổ hợp môn này đã tồn tại trong mã ngành!');</script>";
                     } else {
-                        $sql_insert_chuyennganh = "INSERT INTO chuyennganh VALUES($id_major, '$id_SB')";
+                        $sql_insert_chuyennganh = "INSERT INTO chuyennganh(id_major, id_SB) VALUES($id_major, '$id_SB')";
                         mysqli_query($connect, $sql_insert_chuyennganh);
                         echo "<script>alert('Đã thêm tổ hợp môn thành công!');</script>";
                         echo '<script>window.location="danh_sach_nganh.php";</script>';

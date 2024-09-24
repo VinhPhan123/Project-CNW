@@ -19,14 +19,13 @@
             <?php
                 if($_SESSION['role'] == "admin") {
                     echo("<p>GIÀNH CHO ADMIN</p>");
-                    echo('<li class="dropdown-item"><a href="">Nộp hồ sơ</a></li>');
                     echo('<li class="dropdown-item"><a href="admin_tao_ho_so.php">Tạo Hồ sơ</a></li>');
                     echo('<li class="dropdown-item"><a href="danh_sach_nganh.php">Danh sách ngành</a></li>');
                     echo('<li class="dropdown-item"><a href="admin_phan_nganh_gv.php">Phân ngành GV</a></li>');
                     echo('<li class="dropdown-item"><a href="duyetTK.php?#">Duyệt GV đăng ký</a></li>');
                 } elseif($_SESSION['role'] == 'teacher') {
                     echo("<p>GIÀNH CHO TEACHER</p>");
-                    echo('<li class="dropdown-item"><a href="">Duyệt hồ sơ</a></li>');
+                    echo('<li class="dropdown-item"><a href="teacher_duyet_ho_so.php">Duyệt hồ sơ</a></li>');
                 } else {
                     echo("<p>GIÀNH CHO STUDENT</p>");
                     echo('<li class="dropdown-item"><a href="student_knowled_record.php">Học bạ</a></li>');

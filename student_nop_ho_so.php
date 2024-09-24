@@ -218,17 +218,6 @@
 ?>
 
 <?php
-    if(isset($_POST['rate']) && ($_SESSION['token'] == $_POST['_token'])){
-        $tohopdangky = $_POST['toHopDangKy'];
-        echo $tohopdangky;
-        // echo "1321241243";
-    }
-
-?>
-
-
-
-<?php
     // tạo thư mục uploads nếu chưa tồn tại
     $upload_dir = "uploads/";
     if (!is_dir($upload_dir)) {
@@ -285,10 +274,10 @@
             }
         }
 
-        if($_FILES['fileInput_truongchuyen']['name'] == '' && $_POST['lopchuyen'] == '' && $_POST['truongchuyen'] == ''){
-            $sql2 = "UPDATE students SET truong_chuyen = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql2);
-        }
+        // if($_FILES['fileInput_truongchuyen']['name'] == '' && $_POST['lopchuyen'] == '' && $_POST['truongchuyen'] == ''){
+        //     $sql2 = "UPDATE students SET truong_chuyen = '' WHERE id_student = '$id_student';";
+        //     mysqli_query($connect, $sql2);
+        // }
 
         if($_FILES['fileInput_truongchuyen']['name'] != '' && $_POST['lopchuyen'] != '' && $_POST['truongchuyen'] != ''){
             $permitted_extensions = ['png', 'jpg', 'jpeg'];
@@ -301,7 +290,7 @@
                 $m1 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a1 = "file is too large";
                 $check = 0;
             }
@@ -345,10 +334,10 @@
             $check = 0;
         }
 
-        if($_FILES['fileInput_hsg']['name'] == '' && $_POST['giai'] == '' && $_POST['monthi'] == ''){
-            $sql = "UPDATE students SET giai_hs_gioi = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql);
-        }
+        // if($_FILES['fileInput_hsg']['name'] == '' && $_POST['giai'] == '' && $_POST['monthi'] == ''){
+        //     $sql = "UPDATE students SET giai_hs_gioi = '' WHERE id_student = '$id_student';";
+        //     mysqli_query($connect, $sql);
+        // }
 
 
         if($_FILES['fileInput_hsg']['name'] != '' || $_POST['monthi'] != '' || $_POST['giai'] != ''){
@@ -372,8 +361,9 @@
                 $m2 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a2 = "file is too large";
+                $check = 0;
             }
         }
 
@@ -397,11 +387,6 @@
             $_SESSION['giaithuongkhac'] = $_POST['giaithuongkhac'];
         }
 
-        if($_FILES['fileInput_otherAchieve']['name'] == '' && $_POST['giaithuongkhac'] == ''){
-            $sql = "UPDATE students SET giai_thuong_khac = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql);
-        }
-
         if($_FILES['fileInput_otherAchieve']['name'] != '' && $_POST['giaithuongkhac'] != ''){
             $permitted_extensions = ['png', 'jpg', 'jpeg'];
             $file_name = $_FILES['fileInput_otherAchieve']['name'];
@@ -413,7 +398,7 @@
                 $m3 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a3 = "file is too large";
                 $check = 0;
             }
@@ -465,10 +450,6 @@
             }
         }
 
-        if($_FILES['fileInput_ielts']['name'] == '' && $_POST['diem']== '' && $_POST['machungnhan'] == ''){
-            $sql = "UPDATE students SET chung_chi_ielts = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql);
-        }
 
         if($_FILES['fileInput_ielts']['name'] != '' && $_POST['diem'] != '' && $_POST['machungnhan'] != ''){
             $permitted_extensions = ['png', 'jpg', 'jpeg'];
@@ -481,7 +462,7 @@
                 $m5 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a5 = "file is too large";
                 $check = 0;
             }
@@ -510,10 +491,6 @@
             }
         }
 
-        if($_FILES['fileInput_priority']['name'] == '' && $_POST['doituonguutien'] == ''){
-            $sql = "UPDATE students SET doi_tuong_uu_tien = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql);
-        }
 
         if($_FILES['fileInput_priority']['name'] != '' && $_POST['doituonguutien'] != ''){
             $permitted_extensions = ['png', 'jpg', 'jpeg'];
@@ -526,7 +503,7 @@
                 $m4 = "invalid file type";
                 $check = 0;
             }
-            if($file_size >= 1000000){
+            if($file_size >= 10000000){
                 $a4 = "file is too large";
                 $check = 0;
             }
@@ -549,7 +526,93 @@
     }
 ?>
 
-<?php echo $check ?>
+
+<?php
+    // echo $_SESSION['token'];
+    // echo '<br>';
+    // echo $_POST['_token'];
+    // echo '<br>';
+    // echo $check;
+    // xử lí chọn ngành và tổ hợp
+    if(isset($_POST['send']) && ($_SESSION['token'] == $_POST['_token']) && $check == 1){
+        // echo isset($_POST['send']);
+        // echo '<br>';
+        // echo $_POST['chonnganh'];
+        // echo '<br>';
+        // echo $_POST['toHopDangKy'];
+        // echo '<br>';
+        if($_POST['chonnganh']!='' && $_POST['toHopDangKy']!=''){
+            $nganh = $_POST['chonnganh'];
+            $tohopdangky = $_POST['toHopDangKy'];
+            // echo $nganh;
+            // echo $tohopdangky;
+            $s1 = "SELECT * FROM majors WHERE major_name = '$nganh';";
+            $result = mysqli_query($connect, $s1);
+            $id_major = mysqli_fetch_array($result)['id_major'];
+            
+
+            // kiểm tra nếu chuyên ngành-tổ hợp đã được nộp trước đó chưa, nếu có rồi thì báo Chuyên ngành - tổ hợp đã đăng ký trước đó
+            $b1 = "SELECT * FROM ledgers WHERE id_student = $id_student AND id_major = $id_major AND id_SB='$tohopdangky';";
+            $query_ledgers = mysqli_query($connect, $b1);
+            $count_row = mysqli_num_rows($query_ledgers);
+            // echo mysqli_num_rows($query_ledgers);
+            if($count_row >= 1){
+                $check = 0;
+                ?>
+                <script>
+                    alert("Ngành và tổ hợp đã được đăng ký trước đó !");
+                    location.reload(true);
+                </script>
+                <?php
+            } else {
+                $sql = "INSERT INTO ledgers(id_student, id_major, id_SB) VALUES('$id_student', '$id_major', '$tohopdangky');";
+                $res = mysqli_query($connect, $sql);
+                // echo $res;
+                // echo "abc";
+                if($res) {
+                    // echo "Success";
+                    ?>
+                    <script>
+                        alert("Nop ho so thanh cong!");
+                        // location.reload(true);x
+                    </script>
+                    <?php
+                }
+            }
+
+        }
+    }
+?>
+
+<?php
+    if(isset($_POST['send']) && $_SESSION['token'] == $_POST['_token'] && $check==1){
+        if($_FILES['fileInput_truongchuyen']['name'] == '' && $_POST['lopchuyen'] == '' && $_POST['truongchuyen'] == ''){
+            $sql2 = "UPDATE students SET truong_chuyen = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql2);
+        }
+
+        if($_FILES['fileInput_hsg']['name'] == '' && $_POST['giai'] == '' && $_POST['monthi'] == ''){
+            $sql = "UPDATE students SET giai_hs_gioi = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql);
+        }
+
+        if($_FILES['fileInput_otherAchieve']['name'] == '' && $_POST['giaithuongkhac'] == ''){
+            $sql = "UPDATE students SET giai_thuong_khac = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql);
+        }
+
+        if($_FILES['fileInput_ielts']['name'] == '' && $_POST['diem']== '' && $_POST['machungnhan'] == ''){
+            $sql = "UPDATE students SET chung_chi_ielts = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql);
+        }
+
+        if($_FILES['fileInput_priority']['name'] == '' && $_POST['doituonguutien'] == ''){
+            $sql = "UPDATE students SET doi_tuong_uu_tien = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql);
+        }
+
+    }
+?>
 
 
 <?php
@@ -646,7 +709,7 @@
 
         
 
-            echo($file_name=="");
+            // echo($file_name=="");
 
         // xóa các session trong ô input, select thay vào đó là dữ liệu đã được insert
             unset($_SESSION['truongchuyen']);
@@ -665,31 +728,16 @@
 
 
 
-
 <?php
-    // xử lí chọn ngành và tổ hợp
-    if(isset($_POST['send']) && ($_SESSION['token'] == $_POST['_token']) && $check == 1){
-        if($_POST['chonnganh']!='' && $_POST['toHopDangKy']!=''){
-            $nganh = $_POST['chonnganh'];
-            $tohopdangky = $_POST['toHopDangKy'];
-            // echo $nganh;
-            // echo $tohopdangky;
-            $s1 = "SELECT * FROM majors WHERE major_name = '$nganh';";
-            $result = mysqli_query($connect, $s1);
-            $id_major = mysqli_fetch_array($result)['id_major'];
-            $sql = "INSERT INTO ledgers(id_student, id_major, id_SB) VALUES('$id_student', '$id_major', '$tohopdangky');";
-            $res = mysqli_query($connect, $sql);
-            if($res) {
-                // echo "Success";
-                ?>
-                <script>
-                    alert("Nop ho so thanh cong!");
-                </script>
-                <?php
-            }
-        }
+    if(isset($_FILES['fileInput_potrait']) && isset($_POST['send']) && ($_SESSION['token'] == $_POST['_token'])){
+        $fileInput_potrait_name = $_FILES['fileInput_potrait']['name'];
+        echo $fileInput_potrait_name;
+        // echo "1233";
     }
 ?>
+
+
+
 
 <?php
     // echo $_SESSION['truongchuyen'];
@@ -715,7 +763,7 @@
         <div class="infor_content">
             <div class="left_content">
                 <div>
-                    <input type="file" id="fileInput_potrait" accept="image/*" hidden>
+                    <input type="file" id="fileInput_potrait" name="fileInput_potrait" accept="image/*" hidden>
                     <img id="preview" alt="">
                 </div>
     
@@ -822,6 +870,8 @@
                         <?php #if(!isset($array_truongchuyen[2])){echo (isset($message_error_2) || isset($message_error_4)) ? "upload file" : "";} ?>
                         <?php if(isset($m1)){
                             echo $m1;
+                        } else if(isset($a1)) {
+                            echo $a1;
                         } else {
                             if(!isset($array_truongchuyen[2])){echo (isset($message_error_2) || isset($message_error_4)) ? "upload file" : "";}
                         }
@@ -1037,6 +1087,8 @@
                     <?php #if(!isset($array_giai_hs_gioi[2])){echo (isset($message_error_8) || isset($message_error_10)) ? "upload file" : "";} ?>
                     <?php if(isset($m2)){
                             echo $m2;
+                    }else if(isset($a2)) {
+                        echo $a2;
                     } else {
                         if(!isset($array_giai_hs_gioi[2])){echo (isset($message_error_8) || isset($message_error_10)) ? "upload file" : "";}
                     }
@@ -1191,6 +1243,8 @@
                         <?php #if(!isset($array_chung_chi_ielts[2])){echo (isset($message_error_16) || isset($message_error_18)) ? "upload file" : "";} ?>
                         <?php if(isset($m5)){
                             echo $m5;
+                        } else if(isset($a5)) {
+                            echo $a5;
                         } else {
                             if(!isset($array_chung_chi_ielts[2])){echo (isset($message_error_16) || isset($message_error_18)) ? "upload file" : "";}
                         }
@@ -1226,6 +1280,8 @@
                         <?php #if(!isset($array_giai_thuong_khac[1])){echo isset($message_error_13) ? "upload file" : "";} ?>
                         <?php if(isset($m3)){
                             echo $m3;
+                        } else if(isset($a3)) {
+                            echo $a3;
                         } else {
                             if(!isset($array_giai_thuong_khac[1])){echo isset($message_error_13) ? "upload file" : "";}
                         }
@@ -1304,6 +1360,8 @@
                     <?php #if(!isset($array_diem_uu_tien[2])){echo (isset($message_error_22) || isset($message_error_24)) ? "upload file" : "";} ?>
                     <?php if(isset($m4)){
                             echo $m4;
+                        } else if(isset($a4)) {
+                            echo $a4;
                         } else {
                             if(!isset($array_doi_tuong_uu_tien[1])){echo (isset($message_error_21)) ? "upload file" : "";}
                         }

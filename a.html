@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .modal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.2);
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+        
+
+        .open {
+            display: flex;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                transform: translateY(-100px);
+            }
+            to {
+                transform: translateY(-0px);
+            }
+        }
+
+        
+        .modal-content {
+            width: 200px;
+            height: 150px;
+            background-color: aqua;
+            animation: modalFadeIn ease-in-out .5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Test</h1>
+        <button class="js-click">Click</button>
+    </div>
+
+    <div class="modal">
+        <div class="modal-content">
+            <h1>Xin chào</h1>
+            <button class="close">Click</button>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    const btn_visible = document.querySelector('.js-click');
+    const modal = document.querySelector('.modal');
+    const modal_content = document.querySelector('.modal-content');
+    const btn_close = document.querySelector('.close');
+
+    console.log(btn_visible);
+    console.log(modal);
+    console.log(btn_close);
+
+    btn_visible.addEventListener('click', function(){
+        modal.classList.add('open');
+    });
+
+    btn_close.addEventListener('click', function(){
+        modal.classList.remove('open');
+    });
+
+    modal.addEventListener('click', function(){
+        modal.classList.remove('open');
+    });
+
+    modal_content.addEventListener('click', function(e){
+        e.stopPropagation();
+    });
+</script>
