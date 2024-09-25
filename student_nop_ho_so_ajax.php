@@ -10,7 +10,10 @@
         $result1 = mysqli_query($connect, $query1);
         $id_major = mysqli_fetch_array($result1)['id_major'];
 
-        $query2 = "SELECT * FROM chuyennganh WHERE id_major = '$id_major';";
+        // lấy ra những id_SB còn thời hạn và ở trạng thái hiện thông
+        // $query2 = "SELECT * FROM chuyennganh WHERE id_major = '$id_major';";
+        $query2 = "SELECT id_SB FROM chuyennganh 
+                    where id_major='$id_major' and  NOW() <= chuyennganh.time_end and chuyennganh.status = 'Hiện';";
         $result2 = mysqli_query($connect, $query2);
 
         $array_tohop = array();

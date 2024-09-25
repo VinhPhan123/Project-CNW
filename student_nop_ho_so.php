@@ -208,8 +208,10 @@
 ?>
 
 <?php
-    // lấy ra những ngành đã được set tổ hợp trong bảng majors
-    $s3 = "SELECT * FROM majors;";
+    // lấy ra những ngành đã được set tổ hợp trong bảng majors và có status hiện, còn thời hạn trong bảng chuyennganh;
+    // $s3 = "SELECT * FROM majors;";
+    $s3 = "SELECT DISTINCT major_name FROM majors join chuyennganh on majors.id_major = chuyennganh.id_major
+            where NOW() <= chuyennganh.time_end and chuyennganh.status = 'Hiện';";
     $query3 = mysqli_query($connect, $s3);
     $nganh_duoc_xet_array = array();
     while($row = mysqli_fetch_array($query3)){
@@ -528,58 +530,116 @@
 
 
 <?php
-    // echo $_SESSION['token'];
-    // echo '<br>';
-    // echo $_POST['_token'];
-    // echo '<br>';
-    // echo $check;
+    // if(isset($_POST["diemsan"])){
+    //     echo $_POST["diemsan"];
+    // }
+?>
+
+<?php
     // xử lí chọn ngành và tổ hợp
-    if(isset($_POST['send']) && ($_SESSION['token'] == $_POST['_token']) && $check == 1){
-        // echo isset($_POST['send']);
-        // echo '<br>';
-        // echo $_POST['chonnganh'];
-        // echo '<br>';
-        // echo $_POST['toHopDangKy'];
-        // echo '<br>';
+    if(isset($_POST['send']) && ($_SESSION['token'] == $_POST['_token']) && $check == 1 && isset($_POST["diemsan"])){
         if($_POST['chonnganh']!='' && $_POST['toHopDangKy']!=''){
             $nganh = $_POST['chonnganh'];
             $tohopdangky = $_POST['toHopDangKy'];
             // echo $nganh;
             // echo $tohopdangky;
-            $s1 = "SELECT * FROM majors WHERE major_name = '$nganh';";
-            $result = mysqli_query($connect, $s1);
-            $id_major = mysqli_fetch_array($result)['id_major'];
-            
 
-            // kiểm tra nếu chuyên ngành-tổ hợp đã được nộp trước đó chưa, nếu có rồi thì báo Chuyên ngành - tổ hợp đã đăng ký trước đó
-            $b1 = "SELECT * FROM ledgers WHERE id_student = $id_student AND id_major = $id_major AND id_SB='$tohopdangky';";
-            $query_ledgers = mysqli_query($connect, $b1);
-            $count_row = mysqli_num_rows($query_ledgers);
-            // echo mysqli_num_rows($query_ledgers);
-            if($count_row >= 1){
-                $check = 0;
-                ?>
-                <script>
-                    alert("Ngành và tổ hợp đã được đăng ký trước đó !");
-                    location.reload(true);
-                </script>
-                <?php
-            } else {
-                $sql = "INSERT INTO ledgers(id_student, id_major, id_SB) VALUES('$id_student', '$id_major', '$tohopdangky');";
-                $res = mysqli_query($connect, $sql);
-                // echo $res;
-                // echo "abc";
-                if($res) {
-                    // echo "Success";
-                    ?>
-                    <script>
-                        alert("Nop ho so thanh cong!");
-                        // location.reload(true);x
-                    </script>
-                    <?php
+
+            $diemsan = $_POST["diemsan"];
+            // kiểm tra điểm học bạ có lớn hơn điểm sàn hay không ?
+            // xử lí phần lấy điểm học bạ
+            // tạo array lưu academic_records với id_student tương ứng
+            $sql7 = "SELECT * FROM academic_records WHERE id_student='$id_student';";
+            $query7 = mysqli_query($connect, $sql7);
+            $assoc_academic = mysqli_fetch_assoc($query7);
+            // var_dump($assoc_academic);
+
+            // tạo array lưu các môn với tổ hợp tương ứng
+            $array_mon = array();
+            $sql8 =  "SELECT * FROM subject_combination WHERE id_SB='$tohopdangky';";
+            $query8 = mysqli_query($connect, $sql8);
+            $row = mysqli_fetch_array($query8);
+
+            if ($row) { // Kiểm tra xem có dữ liệu không
+                array_push($array_mon, $row['sub_1']);
+                array_push($array_mon, $row['sub_2']);
+                array_push($array_mon, $row['sub_3']);
+            }
+
+            // lấy ra tổng điểm các môn của tổ hợp tương ứng
+            $mark = 0;
+            foreach($assoc_academic as $index => $value){
+                if($index == 'Toan') {
+                    $mon_hoc = 'Toán';
+                } else if($index == 'NguVan') {
+                    $mon_hoc = 'Ngữ Văn';
+                } else if($index == 'TiengAnh') {
+                    $mon_hoc = 'Tiếng Anh';
+                } else if($index == 'VatLy') {
+                    $mon_hoc = 'Vật Lý';
+                } else if($index == 'HoaHoc') {
+                    $mon_hoc = 'Hóa Học';
+                } else if($index == 'SinhHoc') {
+                    $mon_hoc = 'Sinh Học';
+                } else if($index == 'LichSu') {
+                    $mon_hoc = 'Lịch Sử';
+                } else if($index == 'DiaLy') {
+                    $mon_hoc = 'Địa Lý';
+                } else if($index == 'TinHoc') {
+                    $mon_hoc = 'Tin Học';
+                } else if($index == 'CongNghe') {
+                    $mon_hoc = 'Công Nghệ';
+                } else if($index == 'GiaoDucCongDan') {
+                    $mon_hoc = 'Giáo Dục Công Dân';
+                } else if($index == 'GiaoDucTheChat') {
+                    $mon_hoc = 'Giáo Dục Thể Chất';
+                } else {
+                    continue;
+                }
+                foreach($array_mon as $mon){
+                    // echo $mon . '-';
+                    if($mon_hoc === $mon) {
+                        $mark += $value;
+                    }
                 }
             }
 
+            if($mark > $diemsan){
+                $s1 = "SELECT * FROM majors WHERE major_name = '$nganh';";
+                $result = mysqli_query($connect, $s1);
+                $id_major = mysqli_fetch_array($result)['id_major'];
+                
+    
+                // kiểm tra nếu chuyên ngành-tổ hợp đã được nộp trước đó chưa, nếu có rồi thì báo Chuyên ngành - tổ hợp đã đăng ký trước đó
+                $b1 = "SELECT * FROM ledgers WHERE id_student = $id_student AND id_major = $id_major AND id_SB='$tohopdangky';";
+                $query_ledgers = mysqli_query($connect, $b1);
+                $count_row = mysqli_num_rows($query_ledgers);
+                if($count_row >= 1){
+                    $check = 0;
+                    ?>
+                    <script>
+                        alert("Ngành và tổ hợp đã được đăng ký trước đó !");
+                        location.reload(true);
+                    </script>
+                    <?php
+                } else {
+                    $sql = "INSERT INTO ledgers(id_student, id_major, id_SB) VALUES('$id_student', '$id_major', '$tohopdangky');";
+                    $res = mysqli_query($connect, $sql);
+                    if($res) {
+                        ?>
+                        <script>
+                            alert("Nop ho so thanh cong!");
+                        </script>
+                        <?php
+                    }
+                }
+            } else {
+                ?>
+                <script>
+                    alert("Yêu cầu đăng ký thất bại \n Điểm học bạ thấp hơn điểm sàn!");
+                </script>
+                <?php
+            }
         }
     }
 ?>
@@ -1388,11 +1448,15 @@
             </div>
 
 
-            <div style="flex: 1.2;">
+            <div style="flex: 1.25;">
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Tổ hợp đăng ký</div>
                 <select name="toHopDangKy" id="toHopDangKy" required>
                     <option value=""></option>
                 </select>
+            </div>
+
+            <div style="position: absolute; right: 34px;">
+                <span id="insert_diem_san"></span>
             </div>
         </div>
 
@@ -1487,7 +1551,7 @@
     document.getElementById('chonnganh').addEventListener('change', function() {
         var toHopAjax = document.getElementById("toHopDangKy");
         const tenNganh = this.value;
-        console.log(tenNganh); 
+        // console.log(tenNganh); 
 
         const xhr = new XMLHttpRequest();
         xhr.open('POST', "student_nop_ho_so_ajax.php", true);
@@ -1506,5 +1570,30 @@
             }
         };
         xhr.send('tenNganh=' + tenNganh);
+    });
+</script>
+
+
+<script>
+    document.getElementById('toHopDangKy').addEventListener('change', function() {
+        const tenNganh =  document.getElementById('chonnganh').value;
+        const tohop = this.value;
+        // console.log(tohop); 
+        // console.log(tenNganh);
+
+        $insert_diem_san = document.getElementById("insert_diem_san");
+        
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', "student_respone_diem_san_ajax.php", true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                insert_diem_san.innerHTML = this.response;
+            } else {
+                console.log('Failed to send data');
+            }
+        };
+        xhr.send('tenNganh=' + tenNganh + '&toHop=' + tohop);
     });
 </script>
