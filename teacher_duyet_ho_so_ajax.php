@@ -2,7 +2,7 @@
 if (isset($_POST['id_ledger'])) {
     $server = 'localhost';
     $user = 'root';
-    $pass = '';
+    $pass = 'Vinh123204@';
     $database = 'xettuyen';
     $connect = new mysqli($server, $user, $pass, $database);
 

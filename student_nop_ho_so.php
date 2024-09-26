@@ -4,6 +4,7 @@
 
 <?php
     $token = md5(uniqid());
+    $date_now = date('Y-m-d');        #Thời gian hiện tại
 ?>
 
 <style>
