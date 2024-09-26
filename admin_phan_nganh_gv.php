@@ -31,7 +31,7 @@
 	// hàm insert vào bảng phannganh_giaovien nếu cặp dữ liệu (major_id, teacher_id) không bị trùng lặp
 	function insertIfNotExist($major_id, $teacher_id){
 
-        $connect = new mysqli('localhost', 'root', '', 'xettuyen');
+        $connect = new mysqli('localhost', 'root', 'Vinh123204@', 'xettuyen');
 
         // Câu lệnh SQL để tạo và gọi stored procedure
         $sql = "
@@ -313,10 +313,15 @@
 										<?php
 											foreach($username_listMajor_array as $username => $listMajor){
 												if($username == $teacher){
+													echo '<td style="text-align: left; padding: 20px;">';
 													if(!empty($listMajor)){
-														$majors_string = implode(" - ", $listMajor);
-														echo '<td>' . $majors_string . '</td>';
+														foreach($listMajor as $value){
+															echo $value .'<br>';
+														}
+														// $majors_string = implode(" - ", $listMajor);
+														// echo '<td>' . $majors_string . '</td>';
 													} 
+													echo '</td>';
 												}
 											}
 											// nếu teacher không nằm trong bảng phannganh_giaovien thì hiển thị cặp thẻ td

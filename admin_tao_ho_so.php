@@ -101,21 +101,22 @@
                         $time_end = date_format($date,"d/m/Y");
                     }
                     echo "<td>" . $time_end . "</td>";
+                    echo "<td>";
+                    echo $arr_select_chuyennganh[0][5];
                     if(isset($arr_select_chuyennganh[0][2])) {
                         if(strtotime($date_now) < strtotime($arr_select_chuyennganh[0][2])) {
-                            echo "<td>" . $arr_select_chuyennganh[0][5] . "<p style='color:#1f96f6; font-style: italic;'>(Chưa mở)</p></td>";
+                            echo "<p style='color:#1f96f6; font-style: italic;'>(Chưa mở)</p>";
                         } else {
                             if(isset($arr_select_chuyennganh[$i][3])) {
                                 if(strtotime($date_now) < strtotime($arr_select_chuyennganh[0][3])) {
-                                    echo "<td>" . $arr_select_chuyennganh[0][5] . "<p style='color:#79d28d; font-style: italic;'>(Còn hạn)</p></td>";
+                                    echo "<p style='color:#79d28d; font-style: italic;'>(Còn hạn)</p>";
                                 } else {
-                                    echo "<td>" . $arr_select_chuyennganh[0][5] . "<p style='color:#e13647; font-style: italic;'>(Hết hạn)</p></td>";
+                                    echo "<p style='color:#e13647; font-style: italic;'>(Hết hạn)</p>";
                                 }
                             }
                         }
-                    } else {
-                        echo "<td>". $arr_select_chuyennganh[0][5] . "</td>";
                     }
+                    echo "</td>";
                     echo "<td>";
                     echo "<form action='admin_sua_ho_so.php' method='post'>
                         <input type='hidden' name='count_sb' value='" . $result_select_chuyennganh . "'>
@@ -127,7 +128,8 @@
                         echo "<input type='hidden' name='diem_san' value='" . $arr_select_chuyennganh[0][4]  . "'>";
                         echo "<input type='hidden' name='status' value='" . $arr_select_chuyennganh[0][5]  . "'>";
                         echo '<input type="hidden" name="_token" value="'. $token .'"/>';
-                        echo "<button name='setting_major' type='submit' class='btn btn-primary'>Sửa</button></form>";
+                        echo "<button name='setting_major' type='submit' class='btn btn-primary'>Sửa</button>
+                    </form>";
                     echo "</td>";
                     echo "</tr>";
 
@@ -153,21 +155,22 @@
                                 $time_end = date_format($date,"d/m/Y");
                             }
                             echo "<td>" . $time_end . "</td>";
+                            echo '<td>';
+                            echo $arr_select_chuyennganh[$j][5];
                             if(isset($arr_select_chuyennganh[$j][2])) {
                                 if(strtotime($date_now) < strtotime($arr_select_chuyennganh[$j][2])) {
-                                    echo "<td>" . $arr_select_chuyennganh[$j][5] . "<p style='color:#1f96f6; font-style: italic;'>(Chưa mở)</p></td>";
+                                    echo "<p style='color:#1f96f6; font-style: italic;'>(Chưa mở)</p>";
                                 } else {
                                     if(isset($arr_select_chuyennganh[$j][3])) {
                                         if(strtotime($date_now) < strtotime($arr_select_chuyennganh[$j][3])) {
-                                            echo "<td>" . $arr_select_chuyennganh[$j][5] . "<p style='color:#79d28d; font-style: italic;'>(Còn hạn)</p></td>";
+                                            echo "<p style='color:#79d28d; font-style: italic;'>(Còn hạn)</p>";
                                         } else {
-                                            echo "<td>" . $arr_select_chuyennganh[$j][5] . "<p style='color:#e13647; font-style: italic;'>(Hết hạn)</p></td>";
+                                            echo "<p style='color:#e13647; font-style: italic;'>(Hết hạn)</p>";
                                         }
                                     }
                                 }
-                            } else {
-                                echo "<td>". $arr_select_chuyennganh[$j][5] . "</td>";
                             }
+                            echo '</td>';
                             echo "<td>";
                             echo "<form action='admin_sua_ho_so.php' method='post'>
                                 <input type='hidden' name='id_major' value='" . $arr_select_chuyennganh[$j][0] . "'>
@@ -178,7 +181,8 @@
                                 echo "<input type='hidden' name='diem_san' value='" . $arr_select_chuyennganh[$j][4]  . "'>";
                                 echo "<input type='hidden' name='status' value='" . $arr_select_chuyennganh[$j][5]  . "'>";
                                 echo '<input type="hidden" name="_token" value="'. $token .'"/>';
-                                echo "<button name='setting_major' type='submit' class='btn btn-primary'>Sửa</button></form>";
+                                echo "<button name='setting_major' type='submit' class='btn btn-primary'>Sửa</button>
+                            </form>";
                             echo "</td>";
                             echo "</tr>";
                         }

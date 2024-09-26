@@ -14,6 +14,7 @@
     $m=0;
     $n=0;
     $token = md5(uniqid());
+    $date_now = date('Y-m-d');        #Thời gian hiện tại
 ?>
 
 <?php
@@ -104,7 +105,7 @@
                     echo "<tr>";
                     echo "<td id='stt'>" . $tmp . "</td>";
                     echo "<td id='major_name'>" . $arr_major[$i][1] . "</td>";
-                    echo "<td id='sub'>";
+                    echo "<td id='sub' style='text-align: left;'>";
                         $sql_select_chuyennganh = "SELECT * FROM chuyennganh WHERE id_major = " . $arr_major[$i][0] . " ORDER BY id_SB;";
                         $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
                         $result_select_chuyennganh = mysqli_num_rows($query_select_chuyennganh);
@@ -116,12 +117,40 @@
                             for($j=0; $j<$result_select_chuyennganh; $j++) {
                                 array_push($tmp_arr_select_chuyennganh, $arr_select_chuyennganh[$j][1]);
                             }
-                            
+                            $check = false;
                             for($j=0; $j<$result_select_chuyennganh; $j++) {
-                                echo "<p style='margin: 0px; text-align: left; margin-left: 10px'>";
-                                echo $tmp_arr_select_chuyennganh[$j] . " - " . $arr_select_subject_combination[$j][1] . " - " . $arr_select_subject_combination[$j][2] . " - " . $arr_select_subject_combination[$j][3];
-                                if($j < $result_select_chuyennganh-1) echo '<br>';
-                                echo "</p>";
+                                if($arr_select_chuyennganh[$j][5] == "Hiện") {
+                                    $check = true;
+                                    break;
+                                }
+                            }
+                            for($j=0; $j<$result_select_chuyennganh; $j++) {
+                                if($arr_select_chuyennganh[$j][5] == "Hiện") {
+                                    echo $arr_select_chuyennganh[$j][1] . " - " . $arr_select_subject_combination[$j][1] . " - " . $arr_select_subject_combination[$j][2] . " - " . $arr_select_subject_combination[$j][3] . " | ";
+                                    if(strtotime($date_now) < strtotime($arr_select_chuyennganh[$j][2])) {
+                                        echo "<p style='color:#1f96f6; font-style: italic; display: inline;'>(Chưa mở)</p>";
+                                    } else {
+                                        if(isset($arr_select_chuyennganh[$j][3])) {
+                                            if(strtotime($date_now) < strtotime($arr_select_chuyennganh[$j][3])) {
+                                                echo "<p style='color:#79d28d; font-style: italic; display: inline;'>(Còn hạn)</p>";
+                                            } else {
+                                                echo "<p style='color:#e13647; font-style: italic; display: inline;'>(Hết hạn)</p>";
+                                            }
+                                        }
+                                        if($j < $result_select_chuyennganh-1) echo '<br>';
+                                    }
+                                } else {
+                                    if($_SESSION['role'] == "admin") {
+                                        echo $arr_select_chuyennganh[$j][1] . " - " . $arr_select_subject_combination[$j][1] . " - " . $arr_select_subject_combination[$j][2] . " - " . $arr_select_subject_combination[$j][3] . " | ";
+                                        echo "<p style='color:#e13647; font-style: italic; display: inline;'>(Ẩn)</p>";
+                                        if($j < $result_select_chuyennganh-1) echo '<br>';
+                                    }
+                                }
+                            }
+                            if($_SESSION['role'] != "admin") {
+                                if(!$check) {
+                                    echo "Chưa có tổ hợp môn";
+                                }
                             }
                         }
                     echo "</td>";
@@ -245,7 +274,7 @@
                     if(in_array($id_SB, $tmp_arr)) {
                         echo "<script>alert('Tổ hợp môn này đã tồn tại trong mã ngành!');</script>";
                     } else {
-                        $sql_insert_chuyennganh = "INSERT INTO chuyennganh(id_major, id_SB) VALUES($id_major, '$id_SB')";
+                        $sql_insert_chuyennganh = "INSERT INTO chuyennganh(id_major, id_SB, status) VALUES($id_major, '$id_SB', 'Ẩn')";
                         mysqli_query($connect, $sql_insert_chuyennganh);
                         echo "<script>alert('Đã thêm tổ hợp môn thành công!');</script>";
                         echo '<script>window.location="danh_sach_nganh.php";</script>';

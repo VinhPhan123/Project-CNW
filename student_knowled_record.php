@@ -9,7 +9,23 @@
 		include './layouts/menu.php';
 	}
 ?>
+<style>
+    #preview {
+        width: 90px;
+        height: 120px;
+        background-size: cover;
+        border: 0.5px solid #000;
+    }
+	
+    #form_upload_potrait:hover{
+        cursor: pointer;
+        font-weight: bold;
+    }
 
+    #form_upload_potrait {
+        overflow: hidden;
+    }
+</style>
 <link rel="stylesheet" href="./assets/css/student_knowled_record.css">
 	<div style="display: block; width: 100%;">
 
@@ -22,7 +38,8 @@
 					s.gender,
 					s.phone_number,
 					s.address,
-					s.email
+					s.email,
+					s.avt
 				FROM students AS s
 				WHERE s.id_student = '$id_student'";
 			$sql_record ="SELECT
@@ -56,7 +73,10 @@
 			<h5 class="content-label">Thông tin cá nhân</h5>
 			<button type="button" id="btn-open-infor" style="position: absolute; right: 50px; top: 0px;" class="btn btn-primary">Sửa</button>
 		</div>
-		<div class="content">
+		<div class="content" style="display: flex;">
+			<div class="infor" style="margin-left: 0px; margin-right: 50px;">
+				<img id="preview" src="<?php if($arr_infor['avt'] != null) {echo $arr_infor['avt'];} ?>"><br>
+			</div>
 			<div class="infor" style="margin-right: 100px;">
 				<label>Họ và tên:</label>
 				<input disabled type="text" value="<?php echo $arr_infor[0]; ?>"><br>
@@ -67,9 +87,9 @@
 			</div>
 			<div class="infor">
 				<label>Số điện thoại:</label>
-				<input disabled type="tel" value="<?php echo $arr_infor[3]; ?>"><br>
+				<input style="width: 300px;" disabled type="tel" value="<?php echo $arr_infor[3]; ?>"><br>
 				<label>Địa chỉ thường trú:</label>
-				<input disabled type="text" value="<?php echo $arr_infor[4]; ?>"><br>
+				<input style="width: 300px;" disabled type="text" value="<?php echo $arr_infor[4]; ?>"><br>
 				<label>Địa chỉ email:</label>
 				<input style="width: 300px;" disabled type="email" value="<?php echo $arr_infor[5]; ?>">
 			</div>
@@ -187,3 +207,4 @@
 		include './layouts/footer.php';
 	?>
 </div>
+

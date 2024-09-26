@@ -1,0 +1,285 @@
+<?php
+if (isset($_POST['id_ledger'])) {
+    $server = 'localhost';
+    $user = 'root';
+    $pass = 'Vinh123204@';
+    $database = 'xettuyen';
+    $connect = new mysqli($server, $user, $pass, $database);
+
+    // Lấy id_ledger từ POST
+    $id_ledger = $_POST['id_ledger'];
+    // lấy ra chuyên ngành
+    $chuyen_nganh = $_POST['chuyen_nganh'];
+    // lấy ra tổ hợp
+    $to_hop = $_POST['to_hop'];
+
+    // Kiểm tra kết nối
+    if ($connect->connect_error) {
+        die("Connection failed: " . $connect->connect_error);
+    }
+
+    // Lấy ra id_student
+    $sql1 = "SELECT * FROM ledgers WHERE id_ledger='$id_ledger';";
+    $query1 = mysqli_query($connect, $sql1);
+
+    
+    // Kiểm tra xem có kết quả không
+    if (mysqli_num_rows($query1) > 0) {
+        $id_student = mysqli_fetch_array($query1)['id_student'];
+
+        // lấy ra ledger_status, nếu bằng NULL - chưa duyệt, 1 - đã duyệt
+
+        $sql2 = "SELECT * FROM students WHERE id_student = '$id_student';";
+        $query2 = mysqli_query($connect, $sql2);
+        $row = mysqli_fetch_array($query2);
+
+        // Lấy thông tin cá nhân
+        $fullname = $row['fullname'];
+        $ngaysinh = $row['ngaysinh'];
+        $phone_number = $row['phone_number'];
+        $gender = $row['gender'];
+        $address = $row['address'];
+        $email = $row['email'];
+        $avt = $row['avt'];
+        $truong_chuyen = $row['truong_chuyen'];
+        $giai_hs_gioi = $row['giai_hs_gioi'];
+        $chung_chi_ielts = $row['chung_chi_ielts'];
+        $giai_thuong_khac = $row['giai_thuong_khac'];
+        $doi_tuong_uu_tien = $row['doi_tuong_uu_tien'];
+        $khu_vuc_uu_tien = $row['khu_vuc_uu_tien'];
+        // Tên trường - Lớp - Minh chứng
+        $array_truong_chuyen = explode(" | ", $truong_chuyen);
+        // Môn - Giải - Minh chứng
+        $array_giai_hs_gioi = explode(" | ", $giai_hs_gioi);
+        // Mã chứng nhân - Điểm - Minh chứng
+        $array_chung_chi_ielts = explode(" | ", $chung_chi_ielts);
+        // Mô tả - Minh chứng
+        $array_giai_thuong_khac = explode(" | ", $giai_thuong_khac);
+        // Đối tượng - Minh chứng
+        $array_doi_tuong_uu_tien = explode(" | ", $doi_tuong_uu_tien);
+        // Khu vực
+        $array_khu_vuc_uu_tien = explode(" | ", $khu_vuc_uu_tien);
+
+
+
+        // Hiển thị thông tin
+        echo '<div class="overlay" style="overflow: scroll ;position: fixed; top: 0; bottom: 0; left: 0; right: 0; background-color: rgba(0, 0, 0, 0.2); display: flex; justify-content: center; align-items: center;">
+            <div class="overlay_content" id="overlay_content">
+                <div id="form" method="post" enctype="multipart/form-data" style="background-color: #fff; width: 900px; margin: auto; padding: 32px 8px; margin-top: 24px; border-radius: 4px;">
+                    <div class="container" style="width: 800px;">
+                        <div class="infor_text">THÔNG TIN CÁ NHÂN</div>
+                        <hr>
+                        <div class="infor_content">
+                            <div class="left_content">
+                                <div>
+                                    <input type="file" id="fileInput_potrait" accept="image/*" hidden>
+					                <img style="margin-left: 0px;" id="preview" src="'. $avt.'"><br>
+                                </div>
+                            </div>
+                            <div class="mid_content">
+                                <div><label>Họ và tên</label><input type="text" value="' . $fullname . '" disabled></div>
+                                <div><label>Ngày sinh</label><input type="date" value="' . $ngaysinh . '" disabled></div>
+                                <div><label>Giới tính</label>
+                                    <select name="" id="" disabled>
+                                        <option value=""></option>
+                                        <option value="nam"' . (($gender == 'Nam') ? 'selected' : '') . '>Nam</option>
+                                        <option value="nu"' . (($gender == 'Nữ') ? 'selected' : '') . '>Nữ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="right_content">
+                                <div><label>Email</label><input type="email" value="' . $email . '" disabled></div>
+                                <div><label>Số điện thoại</label><input type="text" value="' . $phone_number . '" disabled></div>
+                                <div><label>Địa chỉ</label><input type="text" value="' . $address . '" disabled></div>
+                            </div>
+                        </div>';
+
+        if($truong_chuyen != '' || $giai_hs_gioi != '' || $chung_chi_ielts != '' || $giai_thuong_khac != ''){
+            echo '<div class="thanh_tich" style="font-size: 18px; font-weight: bold; color: #b50206;">1. Thành tích học tập</div>';
+        }
+   
+        if($truong_chuyen != ''){
+            echo '<div class="mb_top_8px" style="font-weight: 600;">1.1. Minh chứng lớp chuyên (nếu có)</div>
+                    <div class="achievements">
+                        <div>
+                            <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Trường chuyên</div>
+                            <span class="red" style="position: absolute; top: 8px; left: 116px;"><?php if(!isset($array_truongchuyen[0])){echo (isset($message_error_3)||isset($message_error_5)) ? "nhap truong chuyen" : "";}?></span>
+                            <input disabled type="text" value="' . $array_truong_chuyen[0] . '">
+                        </div>
+
+                        <div>
+                            <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Lớp chuyên</div>
+                            <input disabled name="lopchuyen" type="text" value="' . $array_truong_chuyen[1] . '">
+                        </div>
+
+                        <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                            <img class="img_truong_chuyen" style="position: absolute;" width="50px" height="50px" src="' . $array_truong_chuyen[2] . '">
+                        </div>
+                    </div>';
+        }
+
+        
+        if($giai_hs_gioi != ''){
+            echo '<div class="mb_top_8px" style="font-weight: 600;">1.2. Giải học sinh giỏi (nếu có)</div>
+                    <div class="achievements">
+                        <div>
+                            <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Môn thi</div>
+                            <input disabled type="text" value="' . $array_giai_hs_gioi[0] . '">
+                        </div>
+
+                        <div>
+                            <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Giải</div>
+                            <input disabled type="text" value="' . $array_giai_hs_gioi[1] . '">
+                        
+                        </div>
+
+                        <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                            <img class="img_hs_gioi" style="position: absolute;" width="50px" height="50px" src="' . $array_giai_hs_gioi[2] . '">
+                        </div>	
+                    </div>';
+        }
+
+        if($chung_chi_ielts != ''){
+            echo '<div class="mb_top_8px" style="font-weight: 600;">1.3. Chứng chỉ ielts (nếu có)</div>
+                    <div class="achievements">
+                        <div>
+                            <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mã chứng nhận</div>
+                            <input disabled name="machungnhan" type="text" value="' . $array_chung_chi_ielts[0] . '">
+                        </div>
+
+                        <div>
+                            <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Điểm</div>
+                            <input disabled type="text" value="' . $array_chung_chi_ielts[1] . '">
+                        </div>
+
+                        <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                            <img class="img_chung_chi_ielts" style="position: absolute;" width="50px" height="50px" src="' . $array_chung_chi_ielts[2] . '">
+                        </div>
+                    </div>';
+        }
+
+        if($giai_thuong_khac != ''){
+            echo '<div class="mb_top_8px" style="font-weight: 600;">1.4. Các thành tích giải thưởng khác</div>
+                    <div class="achievements">
+                        <div>
+                            <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mô tả</div>
+                            <input disabled name="doituonguutien" type="text" value="' . $array_giai_thuong_khac[0] . '">
+                        </div>
+
+                        <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                            <img class="img_giai_thuong_khac" style="position: absolute;" width="50px" height="50px" src="' . $array_giai_thuong_khac[1] . '">
+                        </div>
+                    </div>';
+        }
+
+        if($khu_vuc_uu_tien != '' || $doi_tuong_uu_tien!=''){
+            echo '<div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #b50206;">2. Điểm ưu tiên</div>
+                <div class="priority_point achievements">';
+        }
+
+        if($khu_vuc_uu_tien != ''){
+            echo '<div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Khu vực</div>
+                    <input disabled type="text" value="' . $array_khu_vuc_uu_tien[0] . '">
+                </div>';
+        }
+
+        if($doi_tuong_uu_tien != ''){
+            echo '<div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Đối tượng ưu tiên</div>
+                    <input disabled name="doituonguutien" type="text" value="' . $array_doi_tuong_uu_tien[0] . '">
+                </div>
+
+                <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
+                    <img class="img_doi_tuong_uu_tien" style="position: absolute;" width="50px" height="50px" src="' . $array_doi_tuong_uu_tien[1] . '">
+                </div>';
+        }
+
+        if($khu_vuc_uu_tien != '' || $doi_tuong_uu_tien!=''){
+            echo '</div>';
+        }
+
+        // xử lí phần lấy điểm
+
+        // tạo array lưu academic_records với id_student tương ứng
+        $sql3 = "SELECT * FROM academic_records WHERE id_student='$id_student';";
+        $query3 = mysqli_query($connect, $sql3);
+        $assoc_academic = mysqli_fetch_assoc($query3);
+        // var_dump($assoc_academic);
+
+        // tạo array lưu các môn với tổ hợp tương ứng
+        $array_mon = array();
+        $sql4 =  "SELECT * FROM subject_combination WHERE id_SB='$to_hop';";
+        $query4 = mysqli_query($connect, $sql4);
+        $row = mysqli_fetch_array($query4);
+
+        if ($row) { // Kiểm tra xem có dữ liệu không
+            array_push($array_mon, $row['sub_1']);
+            array_push($array_mon, $row['sub_2']);
+            array_push($array_mon, $row['sub_3']);
+        }
+
+        // lấy ra tổng điểm các môn của tổ hợp tương ứng
+        $mark = 0;
+        foreach($assoc_academic as $index => $value){
+            if($index == 'Toan') {
+                $mon_hoc = 'Toán';
+            } else if($index == 'NguVan') {
+                $mon_hoc = 'Ngữ Văn';
+            } else if($index == 'TiengAnh') {
+                $mon_hoc = 'Tiếng Anh';
+            } else if($index == 'VatLy') {
+                $mon_hoc = 'Vật Lý';
+            } else if($index == 'HoaHoc') {
+                $mon_hoc = 'Hóa Học';
+            } else if($index == 'SinhHoc') {
+                $mon_hoc = 'Sinh Học';
+            } else if($index == 'LichSu') {
+                $mon_hoc = 'Lịch Sử';
+            } else if($index == 'DiaLy') {
+                $mon_hoc = 'Địa Lý';
+            } else if($index == 'TinHoc') {
+                $mon_hoc = 'Tin Học';
+            } else if($index == 'CongNghe') {
+                $mon_hoc = 'Công Nghệ';
+            } else if($index == 'GiaoDucCongDan') {
+                $mon_hoc = 'Giáo Dục Công Dân';
+            } else if($index == 'GiaoDucTheChat') {
+                $mon_hoc = 'Giáo Dục Thể Chất';
+            } else {
+                continue;
+            }
+            foreach($array_mon as $mon){
+                // echo $mon . '-';
+                if($mon_hoc === $mon) {
+                    $mark += $value;
+                }
+            }
+        }
+
+
+        // hiển thị ngành và điểm
+        echo '<div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #b50206;">3. Điểm xét tuyển</div>
+            <div class="achievements" style="width: 645px;">
+                <div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Ngành xét tuyển</div>
+                    <input disabled name="nganhxettuyen" type="text" value="' . $chuyen_nganh . '">
+                </div>
+
+                <div>
+                    <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Điểm xét tuyển</div>
+                    <input disabled type="text" value="' . $mark . '">
+                </div>
+
+                <div>   </div>
+            </div>';
+
+        
+        echo '          <br><input type="submit" class="btn btn-primary" value="Close" id="close" name="close" style="text-align: center; width: 100%; height: 36px; color: #fff; background-color: #b50206;"/>
+                    </div>
+                </div>
+            </div>
+        </div>';
+    }
+}
+?>

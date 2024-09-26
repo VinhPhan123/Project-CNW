@@ -6,6 +6,112 @@
     $token = md5(uniqid());
 ?>
 
+<style>
+    .infor_text {
+        color: #b50206;
+        font-weight: bold;
+        height: 10px;
+    }
+
+    .body_content {
+        margin-top: 50px;
+    }
+
+    #form_upload_potrait:hover{
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #form_upload_potrait {
+        overflow: hidden;
+    }
+
+    #form_upload_minhchung_chuyen:hover {
+        cursor: pointer;
+        font-weight: bold;
+    }
+    #form_upload_minhchung_hsg:hover{
+        cursor: pointer;
+        font-weight: bold;
+    }
+    #form_upload_minhchung_otherAchieve:hover{
+        cursor: pointer;
+        font-weight: bold;
+    }
+    #form_upload_minhchung_ielts:hover{
+        cursor: pointer;
+        font-weight: bold;
+    }
+    #form_upload_minhchung_priority:hover{
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #preview {
+        width: 90px;
+        height: 120px;
+        background-size: cover;
+        border: 0.5px solid #000;
+        margin-left: 50px;
+    }
+
+    .infor_content {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    /* .left_content {
+        flex: 0.5;
+    }
+
+    .mid_content {
+        flex: 1;
+    } */
+
+    .mid_content div label,
+    .right_content div label {
+        min-width: 110px;
+        font-weight: 500;
+    }
+
+
+    .mid_content > div, .right_content > div {
+        margin: 12px 0;
+    }
+
+    .achievements {
+        width: 1000px;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+    }
+
+    /* select {
+        min-width: 200px;
+    }
+
+    input {
+        min-width: 220px;
+    } */
+
+    .thanh_tich, 
+    .diem_uu_tien, 
+    .nguyen_vong {
+        margin-top: 20px;
+        margin-bottom: 4px;
+    }
+
+    .mb_top_8px {
+        margin-top: 8px;
+    }
+
+    input, select {
+        width: 245px;
+        height: 28px;
+    }
+
+</style>
+
 
 <?php
     // nếu chưa đăng nhập tài khoản student thì out
@@ -42,6 +148,7 @@
     $gender = $row['gender'];
     $address = $row['address'];
     $email = $row['email'];
+    $avt = $row['avt'];
 
     // echo $id_student . ' - ' . $fullname . ' - ' . $ngaysinh . ' - ' . $phone_number . ' - ' . $gender . ' - ' . $address . ' - ' . $email;
 ?>
@@ -102,25 +209,16 @@
 ?>
 
 <?php
-    // lấy ra những ngành đã được set tổ hợp trong bảng majors
-    $s3 = "SELECT * FROM majors;";
+    // lấy ra những ngành đã được set tổ hợp trong bảng majors và có status hiện, còn thời hạn trong bảng chuyennganh;
+    // $s3 = "SELECT * FROM majors;";
+    $s3 = "SELECT DISTINCT major_name FROM majors join chuyennganh on majors.id_major = chuyennganh.id_major
+            where NOW() <= chuyennganh.time_end and chuyennganh.status = 'Hiện';";
     $query3 = mysqli_query($connect, $s3);
     $nganh_duoc_xet_array = array();
     while($row = mysqli_fetch_array($query3)){
         array_push($nganh_duoc_xet_array, $row['major_name']);
     }
 ?>
-
-<?php
-    if(isset($_POST['rate']) && ($_SESSION['token'] == $_POST['_token'])){
-        $tohopdangky = $_POST['toHopDangKy'];
-        echo $tohopdangky;
-        // echo "1321241243";
-    }
-
-?>
-
-
 
 <?php
     // tạo thư mục uploads nếu chưa tồn tại
@@ -179,10 +277,10 @@
             }
         }
 
-        if($_FILES['fileInput_truongchuyen']['name'] == '' && $_POST['lopchuyen'] == '' && $_POST['truongchuyen'] == ''){
-            $sql2 = "UPDATE students SET truong_chuyen = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql2);
-        }
+        // if($_FILES['fileInput_truongchuyen']['name'] == '' && $_POST['lopchuyen'] == '' && $_POST['truongchuyen'] == ''){
+        //     $sql2 = "UPDATE students SET truong_chuyen = '' WHERE id_student = '$id_student';";
+        //     mysqli_query($connect, $sql2);
+        // }
 
         if($_FILES['fileInput_truongchuyen']['name'] != '' && $_POST['lopchuyen'] != '' && $_POST['truongchuyen'] != ''){
             $permitted_extensions = ['png', 'jpg', 'jpeg'];
@@ -239,10 +337,10 @@
             $check = 0;
         }
 
-        if($_FILES['fileInput_hsg']['name'] == '' && $_POST['giai'] == '' && $_POST['monthi'] == ''){
-            $sql = "UPDATE students SET giai_hs_gioi = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql);
-        }
+        // if($_FILES['fileInput_hsg']['name'] == '' && $_POST['giai'] == '' && $_POST['monthi'] == ''){
+        //     $sql = "UPDATE students SET giai_hs_gioi = '' WHERE id_student = '$id_student';";
+        //     mysqli_query($connect, $sql);
+        // }
 
 
         if($_FILES['fileInput_hsg']['name'] != '' || $_POST['monthi'] != '' || $_POST['giai'] != ''){
@@ -290,11 +388,6 @@
 
         if(isset($_POST['giaithuongkhac'])){
             $_SESSION['giaithuongkhac'] = $_POST['giaithuongkhac'];
-        }
-
-        if($_FILES['fileInput_otherAchieve']['name'] == '' && $_POST['giaithuongkhac'] == ''){
-            $sql = "UPDATE students SET giai_thuong_khac = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql);
         }
 
         if($_FILES['fileInput_otherAchieve']['name'] != '' && $_POST['giaithuongkhac'] != ''){
@@ -360,10 +453,6 @@
             }
         }
 
-        if($_FILES['fileInput_ielts']['name'] == '' && $_POST['diem']== '' && $_POST['machungnhan'] == ''){
-            $sql = "UPDATE students SET chung_chi_ielts = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql);
-        }
 
         if($_FILES['fileInput_ielts']['name'] != '' && $_POST['diem'] != '' && $_POST['machungnhan'] != ''){
             $permitted_extensions = ['png', 'jpg', 'jpeg'];
@@ -405,10 +494,6 @@
             }
         }
 
-        if($_FILES['fileInput_priority']['name'] == '' && $_POST['doituonguutien'] == ''){
-            $sql = "UPDATE students SET doi_tuong_uu_tien = '' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql);
-        }
 
         if($_FILES['fileInput_priority']['name'] != '' && $_POST['doituonguutien'] != ''){
             $permitted_extensions = ['png', 'jpg', 'jpeg'];
@@ -444,7 +529,151 @@
     }
 ?>
 
-<!-- <?php echo $check ?> -->
+
+<?php
+    // if(isset($_POST["diemsan"])){
+    //     echo $_POST["diemsan"];
+    // }
+?>
+
+<?php
+    // xử lí chọn ngành và tổ hợp
+    if(isset($_POST['send']) && ($_SESSION['token'] == $_POST['_token']) && $check == 1 && isset($_POST["diemsan"])){
+        if($_POST['chonnganh']!='' && $_POST['toHopDangKy']!=''){
+            $nganh = $_POST['chonnganh'];
+            $tohopdangky = $_POST['toHopDangKy'];
+            // echo $nganh;
+            // echo $tohopdangky;
+
+
+            $diemsan = $_POST["diemsan"];
+            // kiểm tra điểm học bạ có lớn hơn điểm sàn hay không ?
+            // xử lí phần lấy điểm học bạ
+            // tạo array lưu academic_records với id_student tương ứng
+            $sql7 = "SELECT * FROM academic_records WHERE id_student='$id_student';";
+            $query7 = mysqli_query($connect, $sql7);
+            $assoc_academic = mysqli_fetch_assoc($query7);
+            // var_dump($assoc_academic);
+
+            // tạo array lưu các môn với tổ hợp tương ứng
+            $array_mon = array();
+            $sql8 =  "SELECT * FROM subject_combination WHERE id_SB='$tohopdangky';";
+            $query8 = mysqli_query($connect, $sql8);
+            $row = mysqli_fetch_array($query8);
+
+            if ($row) { // Kiểm tra xem có dữ liệu không
+                array_push($array_mon, $row['sub_1']);
+                array_push($array_mon, $row['sub_2']);
+                array_push($array_mon, $row['sub_3']);
+            }
+
+            // lấy ra tổng điểm các môn của tổ hợp tương ứng
+            $mark = 0;
+            foreach($assoc_academic as $index => $value){
+                if($index == 'Toan') {
+                    $mon_hoc = 'Toán';
+                } else if($index == 'NguVan') {
+                    $mon_hoc = 'Ngữ Văn';
+                } else if($index == 'TiengAnh') {
+                    $mon_hoc = 'Tiếng Anh';
+                } else if($index == 'VatLy') {
+                    $mon_hoc = 'Vật Lý';
+                } else if($index == 'HoaHoc') {
+                    $mon_hoc = 'Hóa Học';
+                } else if($index == 'SinhHoc') {
+                    $mon_hoc = 'Sinh Học';
+                } else if($index == 'LichSu') {
+                    $mon_hoc = 'Lịch Sử';
+                } else if($index == 'DiaLy') {
+                    $mon_hoc = 'Địa Lý';
+                } else if($index == 'TinHoc') {
+                    $mon_hoc = 'Tin Học';
+                } else if($index == 'CongNghe') {
+                    $mon_hoc = 'Công Nghệ';
+                } else if($index == 'GiaoDucCongDan') {
+                    $mon_hoc = 'Giáo Dục Công Dân';
+                } else if($index == 'GiaoDucTheChat') {
+                    $mon_hoc = 'Giáo Dục Thể Chất';
+                } else {
+                    continue;
+                }
+                foreach($array_mon as $mon){
+                    // echo $mon . '-';
+                    if($mon_hoc === $mon) {
+                        $mark += $value;
+                    }
+                }
+            }
+
+            if($mark >= $diemsan){
+                $s1 = "SELECT * FROM majors WHERE major_name = '$nganh';";
+                $result = mysqli_query($connect, $s1);
+                $id_major = mysqli_fetch_array($result)['id_major'];
+                
+    
+                // kiểm tra nếu chuyên ngành-tổ hợp đã được nộp trước đó chưa, nếu có rồi thì báo Chuyên ngành - tổ hợp đã đăng ký trước đó
+                $b1 = "SELECT * FROM ledgers WHERE id_student = $id_student AND id_major = $id_major AND id_SB='$tohopdangky';";
+                $query_ledgers = mysqli_query($connect, $b1);
+                $count_row = mysqli_num_rows($query_ledgers);
+                if($count_row >= 1){
+                    $check = 0;
+                    ?>
+                    <script>
+                        alert("Ngành và tổ hợp đã được đăng ký trước đó !");
+                        location.reload(true);
+                    </script>
+                    <?php
+                } else {
+                    $sql = "INSERT INTO ledgers(id_student, id_major, id_SB) VALUES('$id_student', '$id_major', '$tohopdangky');";
+                    $res = mysqli_query($connect, $sql);
+                    if($res) {
+                        ?>
+                        <script>
+                            alert("Nop ho so thanh cong!");
+                        </script>
+                        <?php
+                    }
+                }
+            } else {
+                ?>
+                <script>
+                    alert("Yêu cầu đăng ký thất bại \n Điểm học bạ thấp hơn điểm sàn!");
+                </script>
+                <?php
+            }
+        }
+    }
+?>
+
+<?php
+    if(isset($_POST['send']) && $_SESSION['token'] == $_POST['_token'] && $check==1){
+        if($_FILES['fileInput_truongchuyen']['name'] == '' && $_POST['lopchuyen'] == '' && $_POST['truongchuyen'] == ''){
+            $sql2 = "UPDATE students SET truong_chuyen = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql2);
+        }
+
+        if($_FILES['fileInput_hsg']['name'] == '' && $_POST['giai'] == '' && $_POST['monthi'] == ''){
+            $sql = "UPDATE students SET giai_hs_gioi = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql);
+        }
+
+        if($_FILES['fileInput_otherAchieve']['name'] == '' && $_POST['giaithuongkhac'] == ''){
+            $sql = "UPDATE students SET giai_thuong_khac = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql);
+        }
+
+        if($_FILES['fileInput_ielts']['name'] == '' && $_POST['diem']== '' && $_POST['machungnhan'] == ''){
+            $sql = "UPDATE students SET chung_chi_ielts = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql);
+        }
+
+        if($_FILES['fileInput_priority']['name'] == '' && $_POST['doituonguutien'] == ''){
+            $sql = "UPDATE students SET doi_tuong_uu_tien = '' WHERE id_student = '$id_student';";
+            mysqli_query($connect, $sql);
+        }
+
+    }
+?>
 
 
 <?php
@@ -541,7 +770,7 @@
 
         
 
-            echo($file_name=="");
+            // echo($file_name=="");
 
         // xóa các session trong ô input, select thay vào đó là dữ liệu đã được insert
             unset($_SESSION['truongchuyen']);
@@ -560,31 +789,16 @@
 
 
 
-
 <?php
-    // xử lí chọn ngành và tổ hợp
-    if(isset($_POST['send']) && ($_SESSION['token'] == $_POST['_token']) && $check == 1){
-        if($_POST['chonnganh']!='' && $_POST['toHopDangKy']!=''){
-            $nganh = $_POST['chonnganh'];
-            $tohopdangky = $_POST['toHopDangKy'];
-            // echo $nganh;
-            // echo $tohopdangky;
-            $s1 = "SELECT * FROM majors WHERE major_name = '$nganh';";
-            $result = mysqli_query($connect, $s1);
-            $id_major = mysqli_fetch_array($result)['id_major'];
-            $sql = "INSERT INTO ledgers(id_student, id_major, id_SB) VALUES('$id_student', '$id_major', '$tohopdangky');";
-            $res = mysqli_query($connect, $sql);
-            if($res) {
-                // echo "Success";
-                ?>
-                <script>
-                    alert("Nop ho so thanh cong!");
-                </script>
-                <?php
-            }
-        }
+    if(isset($_FILES['fileInput_potrait']) && isset($_POST['send']) && ($_SESSION['token'] == $_POST['_token'])){
+        $fileInput_potrait_name = $_FILES['fileInput_potrait']['name'];
+        echo $fileInput_potrait_name;
+        // echo "1233";
     }
 ?>
+
+
+
 
 <?php
     // echo $_SESSION['truongchuyen'];
@@ -599,11 +813,9 @@
 ?>
 
 <div class="body_content" style="display: block; width: 100%;">
-
-<link rel="stylesheet" href="./assets/css/student_nop_ho_so.css">
-
+	
 <form id="form" method="post" enctype="multipart/form-data">
-    <div class="container" style="width: 1200px;">
+    <div class="container" style="width: 1000px;">
         <div class="infor_text">
             THÔNG TIN CÁ NHÂN
         </div>
@@ -612,12 +824,11 @@
         <div class="infor_content">
             <div class="left_content">
                 <div>
-                    <input type="file" id="fileInput_potrait" accept="image/*" hidden>
-                    <img id="preview" alt="">
+                    <input type="file" id="fileInput_potrait" name="fileInput_potrait" accept="image/*" hidden>
+                    <img id="preview" src="<?php if($avt != null) {echo $avt;} ?>"><br>
                 </div>
     
-    
-                <span id="form_upload_potrait" style=" color: #000;">
+                <span id="form_upload_potrait" style="color: #000; display: none;">
                     <i class="ti-cloud-up"></i>
                     <span style="font-size: 12px;">Tải lên</span>
                 </span>
@@ -665,7 +876,7 @@
         </div>
 
 
-        <div class="thanh_tich" style="font-size: 18px; font-weight: bold; color: #0c6efd;">1. Thành tích học tập</div>
+        <div class="thanh_tich" style="font-size: 18px; font-weight: bold; color: #b50206;">1. Thành tích học tập</div>
         <div class="academic_achivements">
 
         <!-- trường chuyên -->
@@ -1147,7 +1358,7 @@
 
 
         <!-- Điểm ưu tiên -->
-        <div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #0c6efd;">2. Điểm ưu tiên</div>
+        <div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #b50206;">2. Điểm ưu tiên</div>
         <div class="priority_point achievements">
             <div>
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Khu vực</div>
@@ -1224,7 +1435,7 @@
             </div>
         </div>
 
-        <div class="nguyen_vong" style="font-size: 18px; font-weight: bold; color: #0c6efd;">3. Đăng ký nguyện vọng xết tuyển</div>
+        <div class="nguyen_vong" style="font-size: 18px; font-weight: bold; color: #b50206;">3. Đăng ký nguyện vọng xét tuyển</div>
         <div class="register achievements">
             <div style="flex: 1;">
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Chọn ngành</div>
@@ -1237,11 +1448,15 @@
             </div>
 
 
-            <div style="flex: 1.2;">
+            <div style="flex: 1.25;">
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Tổ hợp đăng ký</div>
                 <select name="toHopDangKy" id="toHopDangKy" required>
                     <option value=""></option>
                 </select>
+            </div>
+
+            <div style="position: absolute; right: 34px;">
+                <span id="insert_diem_san"></span>
             </div>
         </div>
 
@@ -1336,7 +1551,7 @@
     document.getElementById('chonnganh').addEventListener('change', function() {
         var toHopAjax = document.getElementById("toHopDangKy");
         const tenNganh = this.value;
-        console.log(tenNganh); 
+        // console.log(tenNganh); 
 
         const xhr = new XMLHttpRequest();
         xhr.open('POST', "student_nop_ho_so_ajax.php", true);
@@ -1355,5 +1570,31 @@
             }
         };
         xhr.send('tenNganh=' + tenNganh);
+    });
+</script>
+
+
+<script>
+    document.getElementById('toHopDangKy').addEventListener('change', function() {
+        const tenNganh =  document.getElementById('chonnganh').value;
+        const tohop = this.value;
+        // console.log(tohop); 
+        // console.log(tenNganh);
+
+        $insert_diem_san = document.getElementById("insert_diem_san");
+        
+        if(tohop != '') {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', "student_respone_diem_san_ajax.php", true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    insert_diem_san.innerHTML = this.response;
+                } else {
+                    console.log('Failed to send data');
+                }
+            };
+            xhr.send('tenNganh=' + tenNganh + '&toHop=' + tohop);
+        }
     });
 </script>

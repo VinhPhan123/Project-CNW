@@ -5,12 +5,14 @@
         $pass = 'Vinh123204@';
         $database = 'xettuyen';
         $connect = new mysqli($server, $user,$pass, $database);
+        
         $tenNganh = $_POST['tenNganh'];
         $query1 = "SELECT * FROM majors WHERE major_name = '$tenNganh';";
         $result1 = mysqli_query($connect, $query1);
         $id_major = mysqli_fetch_array($result1)['id_major'];
 
-        $query2 = "SELECT * FROM chuyennganh WHERE id_major = '$id_major';";
+        $query2 = "SELECT * FROM chuyennganh
+                    WHERE id_major = '$id_major' AND NOW() >= time_start and NOW() <= time_end and status = 'Hiện';";
         $result2 = mysqli_query($connect, $query2);
 
         $array_tohop = array();
