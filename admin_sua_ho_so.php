@@ -114,7 +114,8 @@
         if(isset($_POST['delete']) && isset($_SESSION['token']) && $_SESSION['token'] == $_POST['_token']) {
             $id_major = $_POST['id_major'];
             $id_SB = $_POST['id_SB'];
-
+            echo $id_major;
+            echo $id_SB;
             $sql_delete_chuyennganh = "DELETE FROM chuyennganh WHERE id_major=$id_major AND id_SB='$id_SB';";
 
             mysqli_query($connect, $sql_delete_chuyennganh);

@@ -604,7 +604,7 @@
                 }
             }
 
-            if($mark > $diemsan){
+            if($mark >= $diemsan){
                 $s1 = "SELECT * FROM majors WHERE major_name = '$nganh';";
                 $result = mysqli_query($connect, $s1);
                 $id_major = mysqli_fetch_array($result)['id_major'];
@@ -1435,7 +1435,7 @@
             </div>
         </div>
 
-        <div class="nguyen_vong" style="font-size: 18px; font-weight: bold; color: #b50206;">3. Đăng ký nguyện vọng xết tuyển</div>
+        <div class="nguyen_vong" style="font-size: 18px; font-weight: bold; color: #b50206;">3. Đăng ký nguyện vọng xét tuyển</div>
         <div class="register achievements">
             <div style="flex: 1;">
                 <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Chọn ngành</div>
