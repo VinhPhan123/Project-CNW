@@ -2,7 +2,7 @@
 if (isset($_POST['id_ledger'])) {
     $server = 'localhost';
     $user = 'root';
-    $pass = '';
+    $pass = 'Vinh123204@';
     $database = 'xettuyen';
     $connect = new mysqli($server, $user, $pass, $database);
 
@@ -76,8 +76,8 @@ if (isset($_POST['id_ledger'])) {
                                 </div>
                             </div>
                             <div class="mid_content">
-                                <div><label>Họ và tên</label><input type="text" value="' . $fullname . '" readonly></div>
-                                <div><label>Ngày sinh</label><input type="date" value="' . $ngaysinh . '" readonly></div>
+                                <div><label>Họ và tên</label><input type="text" value="' . $fullname . '" disabled></div>
+                                <div><label>Ngày sinh</label><input type="date" value="' . $ngaysinh . '" disabled></div>
                                 <div><label>Giới tính</label>
                                     <select name="" id="" disabled>
                                         <option value=""></option>
@@ -87,9 +87,9 @@ if (isset($_POST['id_ledger'])) {
                                 </div>
                             </div>
                             <div class="right_content">
-                                <div><label>Email</label><input type="email" value="' . $email . '" readonly></div>
-                                <div><label>Số điện thoại</label><input type="text" value="' . $phone_number . '" readonly></div>
-                                <div><label>Địa chỉ</label><input type="text" value="' . $address . '" readonly></div>
+                                <div><label>Email</label><input type="email" value="' . $email . '" disabled></div>
+                                <div><label>Số điện thoại</label><input type="text" value="' . $phone_number . '" disabled></div>
+                                <div><label>Địa chỉ</label><input type="text" value="' . $address . '" disabled></div>
                             </div>
                         </div>';
 
@@ -103,12 +103,12 @@ if (isset($_POST['id_ledger'])) {
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Trường chuyên</div>
                             <span class="red" style="position: absolute; top: 8px; left: 116px;"><?php if(!isset($array_truongchuyen[0])){echo (isset($message_error_3)||isset($message_error_5)) ? "nhap truong chuyen" : "";}?></span>
-                            <input readonly type="text" value="' . $array_truong_chuyen[0] . '">
+                            <input disabled type="text" value="' . $array_truong_chuyen[0] . '">
                         </div>
 
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Lớp chuyên</div>
-                            <input readonly name="lopchuyen" type="text" value="' . $array_truong_chuyen[1] . '">
+                            <input disabled name="lopchuyen" type="text" value="' . $array_truong_chuyen[1] . '">
                         </div>
 
                         <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
@@ -123,12 +123,12 @@ if (isset($_POST['id_ledger'])) {
                     <div class="achievements">
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Môn thi</div>
-                            <input readonly type="text" value="' . $array_giai_hs_gioi[0] . '">
+                            <input disabled type="text" value="' . $array_giai_hs_gioi[0] . '">
                         </div>
 
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Giải</div>
-                            <input readonly type="text" value="' . $array_giai_hs_gioi[1] . '">
+                            <input disabled type="text" value="' . $array_giai_hs_gioi[1] . '">
                         
                         </div>
 
@@ -143,12 +143,12 @@ if (isset($_POST['id_ledger'])) {
                     <div class="achievements">
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mã chứng nhận</div>
-                            <input readonly name="machungnhan" type="text" value="' . $array_chung_chi_ielts[0] . '">
+                            <input disabled name="machungnhan" type="text" value="' . $array_chung_chi_ielts[0] . '">
                         </div>
 
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Điểm</div>
-                            <input readonly type="text" value="' . $array_chung_chi_ielts[1] . '">
+                            <input disabled type="text" value="' . $array_chung_chi_ielts[1] . '">
                         </div>
 
                         <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
@@ -162,7 +162,7 @@ if (isset($_POST['id_ledger'])) {
                     <div class="achievements">
                         <div>
                             <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Mô tả</div>
-                            <input readonly name="doituonguutien" type="text" value="' . $array_giai_thuong_khac[0] . '">
+                            <input disabled name="doituonguutien" type="text" value="' . $array_giai_thuong_khac[0] . '">
                         </div>
 
                         <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
@@ -179,14 +179,14 @@ if (isset($_POST['id_ledger'])) {
         if($khu_vuc_uu_tien != ''){
             echo '<div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Khu vực</div>
-                    <input readonly type="text" value="' . $array_khu_vuc_uu_tien[0] . '">
+                    <input disabled type="text" value="' . $array_khu_vuc_uu_tien[0] . '">
                 </div>';
         }
 
         if($doi_tuong_uu_tien != ''){
             echo '<div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Đối tượng ưu tiên</div>
-                    <input readonly name="doituonguutien" type="text" value="' . $array_doi_tuong_uu_tien[0] . '">
+                    <input disabled name="doituonguutien" type="text" value="' . $array_doi_tuong_uu_tien[0] . '">
                 </div>
 
                 <div style="position: relative; display: flex; flex-direction: row; justify-content: space-between; width: 100px; height: 72px;align-items: center;">
@@ -262,12 +262,12 @@ if (isset($_POST['id_ledger'])) {
             <div class="achievements" style="width: 645px;">
                 <div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Ngành xét tuyển</div>
-                    <input readonly name="nganhxettuyen" type="text" value="' . $chuyen_nganh . '">
+                    <input disabled name="nganhxettuyen" type="text" value="' . $chuyen_nganh . '">
                 </div>
 
                 <div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Điểm xét tuyển</div>
-                    <input readonly type="text" value="' . $mark . '">
+                    <input disabled type="text" value="' . $mark . '">
                 </div>
 
                 <div>   </div>

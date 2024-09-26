@@ -200,11 +200,14 @@
                             <hr>
                             <div style="width: 100%; text-align: center;">Bạn muốn xóa ngành?</div>
                             <div style="text-align: center; margin-top: 30px;">';
-                    echo '<form style="margin-left: auto; margin-right: auto; width: 100px; display: inline-block; margin-left: auto; margin-right: auto;" action="" method="post">
-                        <input type="hidden" name="row_id" value="' . $_POST['row_id'] . '">';
-                    echo '<button style="margin-left: auto; margin-right: auto; width: 100px; display: inline-block; margin-left: auto; margin-right: auto;" type="submit" class="btn btn-danger" name="delete_major">Xóa</button>';
-                    echo '<input type="hidden" name="_token" value="'. $token .'"/>';
-                    echo'<button type="submit" style="color: #0b5ed7; background-color: white; width: 100px; display: inline-block ;margin-left: 20px; margin-right: auto; " class="btn btn-primary">Hủy</button></form>
+                            echo '<form style="margin-left: auto; margin-right: auto; width: 100%; display: inline-block; margin-left: auto; margin-right: auto;" action="" method="post">
+                                  <input type="hidden" name="row_id" value="' . $_POST['row_id'] . '">';
+                            echo '<div style="display: flex; width: 60%; justify-content: space-evenly; margin-left: auto; margin-right: auto;">
+                                    <button type="submit" class="btn btn-danger" name="delete_major">Xóa</button>';
+                                echo '<input type="hidden" name="_token" value="'. $token .'"/>';
+                                echo '<button style="color: #0b5ed7; background-color: white;" type="submit" class="btn btn-primary">Hủy</button>
+                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>';

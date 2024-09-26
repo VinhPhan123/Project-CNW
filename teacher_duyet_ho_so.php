@@ -213,8 +213,6 @@
     }
 ?>
 
-
-
 <?php
 	// lấy ra id_teacher trong bảng teachers;
 	$sql1 = "SELECT * FROM teachers;";
@@ -234,65 +232,13 @@
 	// print_r($array_chuyennganh_duocphan);
 ?>
 
-
-<?php
-	// xử lí nút access
-	if(isset($_POST['access']) && ($_SESSION['token'] == $_POST['_token'])){
-		$ids = $_POST['row_id'];
-		echo $ids;
-	}
-?>
-
-
-<?php
-	// xu li phan chon nganh
-	if(isset($_POST['chonnganh_btn']) && ($_SESSION['token'] == $_POST['_token'])){
-		if($_POST['chonnganh_select'] != ''){
-			$nganh = $_POST['chonnganh_select'];
-			$_SESSION['nganh'] = $nganh;
-			// echo $nganh;
-	
-			// lấy ra id của ngành
-			$sql3 = "SELECT id_major FROM majors WHERE major_name='$nganh';";
-			$query3 = mysqli_query($connect, $sql3);
-			$id_major = mysqli_fetch_array($query3)['id_major'];
-			// echo $id_major;
-	
-			// array lưu các student đăng ký xét tuyển ngành được chọn
-			$sql3 = "SELECT * FROM ledgers WHERE id_major = '$id_major';";
-			$query3 = mysqli_query($connect, $sql3);
-			$student_ledgers_array = array();
-			
-			while ($r = mysqli_fetch_assoc($query3)) {
-				$student_id_SB = $r['id_SB'];
-				$id_student = $r['id_student'];
-			
-				// Nếu chưa có, khởi tạo mảng cho id_student này
-				if (!isset($student_ledgers_array[$id_student])) {
-					$student_ledgers_array[$id_student] = array();
-				}
-			
-				// Thêm id_SB vào mảng tương ứng với id_student
-				$student_ledgers_array[$id_student][] = $student_id_SB;
-			}
-			
-			// print_r($student_ledgers_array);
-
-		}
-	}
-?>
-
-
-
-
-
 <div style="display: block; width: 100%;">
 	
 	<div class="container mt-4">
 	<!-- Page content -->
 	
 		<h2 style="text-align: center; margin-bottom: 16px;">Duyệt hồ sơ xét tuyển học bạ</h2>
-		<form action="" method="post" style="margin-bottom: 24px;">
+		<form action="teacher_duyet_ho_so_major.php" method="post" style="margin-bottom: 24px;">
 			<div class="chonnganh_xettuyen">	
 				<div class="select_content">
 					<h5>Chọn ngành duyệt hồ sơ</h5>
@@ -300,7 +246,7 @@
 						<option value=""></option>
 						<?php
 							foreach($array_chuyennganh_duocphan as $chuyen_nganh){
-								echo '<option value="' . $chuyen_nganh . '" ' . (isset($_SESSION['nganh']) && $_SESSION['nganh'] == $chuyen_nganh && isset($student_ledgers_array) ? 'selected' : '') . '>' . $chuyen_nganh . '</option>';
+								echo '<option value="' . $chuyen_nganh . '">' . $chuyen_nganh . '</option>';
 
 							}
 						?>
@@ -314,172 +260,9 @@
 				</div>
 			</div>
 		</form>
-
-
-
-		<div class="table_ledgers">
-			<form action="" method="post">
-				<table>
-					<th>STT</th>
-					<th>Tên thí sinh</th>
-					<th>Tổ hợp đăng ký</th>
-					<th>Hồ sơ thí sinh</th>
-					<th>Access</th>
-					<th>Deny</th>
-								
-					<?php
-						if(isset($student_ledgers_array)){
-							if(sizeof($student_ledgers_array)!=0){
-								$count = 0;
-								foreach($student_ledgers_array as $id_student => $array_tohop){
-									// lay ra ten student
-									// echo $id_student . ' - ';
-									$sql4 = "SELECT * FROM students WHERE id_student = '$id_student';";
-									$query4 = mysqli_query($connect, $sql4);
-									$student_name = mysqli_fetch_array($query4)['username'];
-									// echo $student_name;
-
-									// lấy ra id_ledgers
-									$sql5 = "SELECT * FROM ledgers WHERE id_student = '$id_student';";
-									$query5 = mysqli_query($connect, $sql5);
-									$id_ledgers = mysqli_fetch_array($query5)['id_ledger'];
-									// lấy ra số lượng tohop có status = null với id_major
-									$sql7 = "SELECT * FROM ledgers WHERE id_major='$id_major' AND id_student='$id_student' AND ledger_status is null";
-									$query7 = mysqli_query($connect, $sql7);
-
-									$count_tohop = mysqli_num_rows($query7);
-									// echo $count_tohop
-
-									if($count_tohop != 0){
-										echo '<tr>';
-										echo '<td rowspan="' . $count_tohop . '">' . $count . '</td>';
-										echo '<td rowspan="' . $count_tohop . '">' . $student_name . '</td>';
-										echo '<input type="hidden" name="row_id" value="' . $count . '">';
-									}
-
-									foreach($array_tohop as $tohop){
-										// kiểm tra status, nếu NULL thì hiển thị
-										$sql6 = "SELECT * FROM ledgers WHERE id_student=$id_student AND id_SB='$tohop';";
-										$query6 = mysqli_query($connect, $sql6);
-										$ledger_status =  mysqli_fetch_array($query6)['ledger_status'];
-										if($ledger_status == NULL){
-											echo '<td class="get_to_hop">' . $tohop . '</td>';
-											echo '<td><button style="color: #fff;" class="btn btn-warning" name="show">Click</button></td>';
-											echo '<input type="hidden" name="_token" value="' . $token . '">';
-											$_SESSION['token'] = $token; 
-											echo '<input type="hidden" name="get_id_ledger" class="get_id_ledger" value="' . $id_ledgers . '">';
-											echo '<td><button type="submit" class="btn btn-success" name="access">Click</button></td>';
-											echo '<input type="hidden" name="_token" value="' . $token . '">';
-											$_SESSION['token'] = $token; 
-											echo '<td><button type="submit" class="btn btn-danger" name="deny">Click</button></td>';
-											echo '<input type="hidden" name="_token" value="' . $token . '">';
-											$_SESSION['token'] = $token; 
-											echo '</tr>';
-										}
-									}
-									
-									$count = $count+1;
-
-								}
-							} else {
-								echo "<tr><td colspan='6'>Không có thí sinh nào !</td></tr>";
-							}
-						} else {
-							echo "<tr><td colspan='6'>Không có thí sinh nào !</td></tr>";
-						}
-					?>	
-				</table>
-			</form>
-		</div>
-		
-		<div class="overlay"></div>
-	
 	<!-- End Page content -->
 	</div>
 	<?php 
-		// include './layouts/footer.php';
+		include './layouts/footer.php';
 	?>
 </div>
-
-
-<!-- xử lí ajax khi bấm view gửi đi và nhận lại id_ledger -->
-<script>
-	const nganh_selected = document.getElementById("chonnganh_select");
-	const chuyennganh = nganh_selected.value;
-	// console.log(chuyennganh);
-
-	// const tohop_selected = document.getElementById("get_to_hop");
-	// const tohop = tohop_selected.textContent;
-	// console.log(tohop);
-
-	document.querySelectorAll('button[name="show"]').forEach(button => {
-		button.addEventListener('click', function(event) {
-			// ngăn chặn hành động submit của thẻ button
-			event.preventDefault(); 
-
-			const form_ajax = document.querySelector('.overlay');
-			const inputElement = this.closest('tr').querySelector('input[class="get_id_ledger"]');
-			const id_ledger = inputElement.value;
-			// console.log(id_ledger);
-
-			const tohop_selected = this.closest('tr').querySelector('.get_to_hop');
-			const tohop = tohop_selected.textContent;
-			console.log(tohop);
-
-			const xhr = new XMLHttpRequest();
-			xhr.open('POST', "teacher_duyet_ho_so_ajax.php", true);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-			xhr.onload = function() {
-				if (xhr.status === 200) {
-					// console.log(this.response);
-					form_ajax.innerHTML = this.response; // Cập nhật nội dung overlay
-					form_ajax.style.display = 'block'; // Hiển thị overlay
-				} else {
-					console.log('Failed to send data');
-				}
-			};
-			xhr.send('id_ledger=' + id_ledger + '&chuyen_nganh=' + chuyennganh + '&to_hop=' + tohop);
-		});
-	});
-</script>
-
-
-<script>
-	const a = document.querySelector('.overlay');
-	a.addEventListener('click', function() {
-		this.style.display = 'none';
-	});
-
-</script>
-
-<script>
-	const overlay = document.querySelector('.overlay');
-
-	// Tạo một observer
-	const observer = new MutationObserver(mutations => {
-		mutations.forEach(mutation => {
-			if (mutation.type === 'childList') {
-				const btn_close = document.getElementById('close');
-
-				if (btn_close) {
-					// console.log(btn_close);
-					btn_close.addEventListener('click', function() {
-						overlay.style.display = 'none';
-					});
-				}
-
-				const overlay_content = document.getElementById('overlay_content');
-				overlay_content.addEventListener('click', function(e){
-					e.stopPropagation();
-				});
-			}
-		});
-	});
-
-	// Bắt đầu theo dõi sự thay đổi trong overlay
-	// observe(targetNode, config)
-	observer.observe(overlay, {
-		childList: true, // Theo dõi thêm hoặc xóa các phần tử con
-		subtree: true    //  Theo dõi tất cả các phần tử con trong cây DOM, không chỉ phần tử trực tiếp con của overlay.
-	});
-</script>
