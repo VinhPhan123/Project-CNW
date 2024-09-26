@@ -624,7 +624,7 @@
                     </script>
                     <?php
                 } else {
-                    $sql = "INSERT INTO ledgers(id_student, id_major, id_SB) VALUES('$id_student', '$id_major', '$tohopdangky');";
+                    $sql = "INSERT INTO ledgers(id_student, id_major, id_SB, score) VALUES('$id_student', '$id_major', '$tohopdangky', $mark);";
                     $res = mysqli_query($connect, $sql);
                     if($res) {
                         ?>

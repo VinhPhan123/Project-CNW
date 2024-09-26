@@ -302,7 +302,7 @@
 								$query5 = mysqli_query($connect, $sql5);
 								$id_ledgers = mysqli_fetch_array($query5)['id_ledger'];
 								// lấy ra số lượng tohop có status = null với id_major
-								$sql7 = "SELECT * FROM ledgers WHERE id_major='$id_major' AND id_student='$id_student'";
+								$sql7 = "SELECT * FROM ledgers WHERE id_major=$id_major AND id_student=$id_student";
 								$query7 = mysqli_query($connect, $sql7);
 
 								$count_tohop = mysqli_num_rows($query7);
@@ -317,7 +317,7 @@
 
 								foreach($array_tohop as $tohop){
 									// kiểm tra status, nếu NULL thì hiển thị
-									$sql6 = "SELECT * FROM ledgers WHERE id_student=$id_student AND id_SB='$tohop';";
+									$sql6 = "SELECT * FROM ledgers WHERE id_major=$id_major AND id_student=$id_student AND id_SB='$tohop';";
 									$query6 = mysqli_query($connect, $sql6);
 									$arr_query6 = mysqli_fetch_array($query6);
 									$ledger_status = $arr_query6['ledger_status'];

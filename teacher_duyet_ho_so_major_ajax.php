@@ -22,10 +22,11 @@ if (isset($_POST['id_ledger'])) {
     $sql1 = "SELECT * FROM ledgers WHERE id_ledger='$id_ledger';";
     $query1 = mysqli_query($connect, $sql1);
 
-    
     // Kiểm tra xem có kết quả không
     if (mysqli_num_rows($query1) > 0) {
-        $id_student = mysqli_fetch_array($query1)['id_student'];
+        $array_query1 = mysqli_fetch_array($query1);
+        $id_student = $array_query1['id_student'];
+        $score = $array_query1['score'];
 
         // lấy ra ledger_status, nếu bằng NULL - chưa duyệt, 1 - đã duyệt
 
@@ -199,65 +200,6 @@ if (isset($_POST['id_ledger'])) {
             echo '</div>';
         }
 
-        // xử lí phần lấy điểm
-
-        // tạo array lưu academic_records với id_student tương ứng
-        $sql3 = "SELECT * FROM academic_records WHERE id_student='$id_student';";
-        $query3 = mysqli_query($connect, $sql3);
-        $assoc_academic = mysqli_fetch_assoc($query3);
-        // var_dump($assoc_academic);
-
-        // tạo array lưu các môn với tổ hợp tương ứng
-        $array_mon = array();
-        $sql4 =  "SELECT * FROM subject_combination WHERE id_SB='$to_hop';";
-        $query4 = mysqli_query($connect, $sql4);
-        $row = mysqli_fetch_array($query4);
-
-        if ($row) { // Kiểm tra xem có dữ liệu không
-            array_push($array_mon, $row['sub_1']);
-            array_push($array_mon, $row['sub_2']);
-            array_push($array_mon, $row['sub_3']);
-        }
-
-        // lấy ra tổng điểm các môn của tổ hợp tương ứng
-        $mark = 0;
-        foreach($assoc_academic as $index => $value){
-            if($index == 'Toan') {
-                $mon_hoc = 'Toán';
-            } else if($index == 'NguVan') {
-                $mon_hoc = 'Ngữ Văn';
-            } else if($index == 'TiengAnh') {
-                $mon_hoc = 'Tiếng Anh';
-            } else if($index == 'VatLy') {
-                $mon_hoc = 'Vật Lý';
-            } else if($index == 'HoaHoc') {
-                $mon_hoc = 'Hóa Học';
-            } else if($index == 'SinhHoc') {
-                $mon_hoc = 'Sinh Học';
-            } else if($index == 'LichSu') {
-                $mon_hoc = 'Lịch Sử';
-            } else if($index == 'DiaLy') {
-                $mon_hoc = 'Địa Lý';
-            } else if($index == 'TinHoc') {
-                $mon_hoc = 'Tin Học';
-            } else if($index == 'CongNghe') {
-                $mon_hoc = 'Công Nghệ';
-            } else if($index == 'GiaoDucCongDan') {
-                $mon_hoc = 'Giáo Dục Công Dân';
-            } else if($index == 'GiaoDucTheChat') {
-                $mon_hoc = 'Giáo Dục Thể Chất';
-            } else {
-                continue;
-            }
-            foreach($array_mon as $mon){
-                // echo $mon . '-';
-                if($mon_hoc === $mon) {
-                    $mark += $value;
-                }
-            }
-        }
-
-
         // hiển thị ngành và điểm
         echo '<div class="diem_uu_tien" style="font-size: 18px; font-weight: bold; color: #b50206;">3. Điểm xét tuyển</div>
             <div class="achievements" style="width: 645px;">
@@ -268,7 +210,7 @@ if (isset($_POST['id_ledger'])) {
 
                 <div>
                     <div class="mb_top_8px" style="font-weight: 500; margin-bottom: 4px;">Điểm xét tuyển</div>
-                    <input disabled type="text" value="' . $mark . '">
+                    <input disabled type="text" value="' . $score . '">
                 </div>
 
                 <div>   </div>
