@@ -1,5 +1,6 @@
 <?php 
     include './layouts/header.php';
+    include './XuLyPhien/admin.php';
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
 
@@ -7,23 +8,6 @@
     require 'vendor/PHPMailer/src/PHPMailer.php';
     require 'vendor/PHPMailer/src/SMTP.php';
 ?>
-
-<?php
-    $token = md5(uniqid());
-?>
-
-<?php 
-    // nếu chưa đăng nhập thì out
-    $sql = "SELECT * FROM admins;";
-    $res = mysqli_query($connect, $sql);
-    $query_username = mysqli_fetch_array($res);
-    $username_admin = $query_username['username'];
-    if($_SESSION['taiKhoan'] != $username_admin){
-        header("location: logout.php");
-        exit();
-    }
-?>
-
 <?php 
     $token = md5(uniqid());
     // hàm random ra 1 chuỗi 15 kí tự

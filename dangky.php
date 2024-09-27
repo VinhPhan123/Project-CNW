@@ -33,6 +33,7 @@
         $soDienThoai = $_POST['soDienThoai'];
         $email = $_POST['email'];
 
+		$_SESSION['role'] = "student";
 		$_SESSION['hoVaTen'] = $hoVaTen;
 		$_SESSION['taiKhoan'] = $taiKhoan;
 		$_SESSION['matKhau'] = $matKhau;
@@ -46,17 +47,38 @@
 
 		// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email . '  63<br>';
 		
-		$s = "SELECT username FROM students WHERE username='$taiKhoan'";
-		$query = mysqli_query($connect, $s);
-		if(mysqli_num_rows($query) > 0){
-			$error_taiKhoan = 'Tài khoản đã tồn tại';
-		} else {
-			// header("location: student.php");
-			?>
-			<script>
-				window.location.href="student.php";
-			</script>
-			<?php
+        $sql1 = "SELECT * FROM teachers WHERE email='$email';";
+        $sql2 = "SELECT * FROM students WHERE email='$email';";
+    
+        $result1 = mysqli_query($connect, $sql1);
+        $result2 = mysqli_query($connect, $sql2);
+    
+        if(mysqli_num_rows($result1) > 0 || mysqli_num_rows($result2)>0){
+            echo 'alert("Email đã được đăng ký, hãy chọn email khác");';
+        } else {
+			$s = "SELECT username FROM students WHERE username='$taiKhoan'";
+			$query = mysqli_query($connect, $s);
+			if(mysqli_num_rows($query) > 0){
+				$error_taiKhoan = 'Tài khoản đã tồn tại';
+			} else {
+				$sql3 = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
+						('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$email');";
+				
+				$result3 = mysqli_query($connect, $sql3);
+			
+				if($result3){
+					$affected_row = mysqli_affected_rows($connect);
+					if($affected_row > 0){
+						$_SESSION['taiKhoan'] = $taiKhoan;
+						?>
+						<script>
+							alert("Đăng ký tài khoản thành công !");    
+							window.location.href="index.php";
+						</script>
+					<?php 
+					}
+				}
+			}
 		}
     }
 
@@ -74,7 +96,7 @@
         $soDienThoai = $_POST['soDienThoai'];
         $email = $_POST['email'];
 
-
+		$_SESSION['role'] = "teacher";
 		$_SESSION['hoVaTen'] = $hoVaTen;
 		$_SESSION['taiKhoan'] = $taiKhoan;
 		$_SESSION['matKhau'] = $matKhau;
@@ -87,11 +109,28 @@
 		$_SESSION['menu_status'] = "close";
 
 		// header("location: xacthuc.php"); 
-		?>
-		<script>
-			window.location.href = "xacthuc.php";
-		</script>
-		<?php
+        $sql1 = "SELECT * FROM teachers WHERE email='$email';";
+        $sql2 = "SELECT * FROM students WHERE email='$email';";
+    
+        $result1 = mysqli_query($connect, $sql1);
+        $result2 = mysqli_query($connect, $sql2);
+    
+        if(mysqli_num_rows($result1) > 0 || mysqli_num_rows($result2)>0){
+            echo 'alert("Email đã được đăng ký, hãy chọn email khác");';
+        } else {
+			$s = "SELECT username FROM students WHERE username='$taiKhoan'";
+			$query = mysqli_query($connect, $s);
+			if(mysqli_num_rows($query) > 0){
+				$error_taiKhoan = 'Tài khoản đã tồn tại';
+			} else {
+				// header("location: student.php");
+				?>
+				<script>
+					window.location.href = "xacthuc.php";
+				</script>
+				<?php
+			}
+		}
     }
 ?>
 

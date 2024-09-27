@@ -1,5 +1,6 @@
-<?php 
-		include './layouts/header.php';
+<?php
+	include './layouts/header.php';
+	include './XuLyPhien/admin.php';
 ?>
 
 <style>

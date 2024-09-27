@@ -84,6 +84,7 @@
             VALUES ('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh', '$diaChi', '$email');"; 
             mysqli_query($connect, $insert_teacher);
 
+            $_SESSION['role'] = "teacher";
             ?>
             <script>
                 alert("Xác minh thành công");
@@ -93,7 +94,7 @@
         } else {
             ?>
             <script>
-                alert("Passcode không chính xác hoạt đã quá thời hạn, mời bạn quay lại trang đăng ký !");
+                alert("Passcode không chính xác hoặc đã quá thời hạn, mời bạn quay lại trang đăng ký !");
                 window.location.href="dangky.php";
             </script>
             <?php

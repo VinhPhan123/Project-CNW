@@ -1,5 +1,6 @@
 <?php 
-		include './layouts/header.php';
+	include './layouts/header.php';
+	include './XuLyPhien/student.php';
 ?>
 
 <div style="display: flex; justify-content: center;">

@@ -1,5 +1,6 @@
 <?php 
-		include './layouts/header.php';
+    include './layouts/header.php';
+    include './XuLyPhien/all.php';
 ?>
 
 <div style="display: flex; justify-content: center;">

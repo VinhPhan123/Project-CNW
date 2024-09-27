@@ -39,7 +39,7 @@
             }
             
             if($check) {
-                $_SESSION['id_student'] = $arr['id_student'];
+                $_SESSION['id'] = $arr[0];
                 $_SESSION['hoVaTen'] = $arr['fullname'];
                 $_SESSION['taiKhoan'] = $arr['username'];
                 $_SESSION['matKhau'] = $arr['password'];
