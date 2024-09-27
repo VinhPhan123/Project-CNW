@@ -216,7 +216,8 @@
 
 <?php
 	// lấy ra id_teacher trong bảng teachers;
-	$sql1 = "SELECT * FROM teachers;";
+	$taiKhoan = $_SESSION['taiKhoan'];
+	$sql1 = "SELECT * FROM teachers WHERE username='$taiKhoan';";
 	$query1 = mysqli_query($connect, $sql1);
 	$id_teacher = mysqli_fetch_array($query1)['id_teacher'];
 	// echo $id_teacher;

@@ -2,7 +2,7 @@
     if(isset($_POST['tenNganh'])){
         $server = 'localhost';
         $user = 'root';
-        $pass = 'Vinh123204@';
+        $pass = '';
         $database = 'xettuyen';
         $connect = new mysqli($server, $user,$pass, $database);
         

@@ -10,6 +10,7 @@
 		include './layouts/menu.php';
 	}
 ?>
+
 <style>
     #preview {
         width: 90px;

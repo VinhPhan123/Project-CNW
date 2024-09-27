@@ -32,7 +32,7 @@
 	// hàm insert vào bảng phannganh_giaovien nếu cặp dữ liệu (major_id, teacher_id) không bị trùng lặp
 	function insertIfNotExist($major_id, $teacher_id){
 
-        $connect = new mysqli('localhost', 'root', 'Vinh123204@', 'xettuyen');
+        $connect = new mysqli('localhost', 'root', '', 'xettuyen');
 
         // Câu lệnh SQL để tạo và gọi stored procedure
         $sql = "
