@@ -1,6 +1,14 @@
 <?php 
     include './layouts/header.php';
 	include './XuLyPhien/student.php';
+
+    $id_check = $_SESSION['id_student'];
+    $sql_check = "SELECT * FROM academic_records WHERE id_student = $id_check";
+    $query_check = mysqli_query($connect, $sql_check);
+    if (mysqli_num_rows($query_check) == 0) {
+        echo '<script>alert("Bạn chưa điền học bạ!")</script>';
+        header("Refresh:0; url=student_knowled_record.php");
+    }
 ?>
 
 <?php
@@ -112,29 +120,6 @@
     }
 
 </style>
-
-
-<?php
-    // nếu chưa đăng nhập tài khoản student thì out
-    if(isset($_SESSION['taiKhoan'])){
-        $sql = "SELECT * FROM students;";
-        $res = mysqli_query($connect, $sql);
-        // $username_student = $query_username['username'];
-        $array_username_student = array();
-        while($r = mysqli_fetch_array($res)){
-            array_push($array_username_student, $r['username']);
-        }
-        if(!in_array($_SESSION['taiKhoan'], $array_username_student)){
-            header("location: logout.php");
-        }
-    } else {
-        ?>
-        <script>
-            window.location.href = "logout.php";
-        </script>
-        <?php
-    }
-?>
 
 <?php
     // lấy ra thông tin student đang đăng nhập

@@ -70,6 +70,10 @@
 					$affected_row = mysqli_affected_rows($connect);
 					if($affected_row > 0){
 						$_SESSION['taiKhoan'] = $taiKhoan;
+						$sql4 = "SELECT id_student FROM students WHERE username = '$taiKhoan'";
+						$query4 = mysqli_query($connect, $sql4);
+						$result4 = mysqli_fetch_row($query4);
+						$_SESSION["id_student"] = $result4[0];
 						?>
 						<script>
 							alert("Đăng ký tài khoản thành công !");    

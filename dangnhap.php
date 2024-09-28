@@ -33,6 +33,7 @@
                 $arr = mysqli_fetch_array($query_teachers);
             } elseif($result_students == 1) {
                 $_SESSION['role'] = "student";
+                $_SESSION['id_student'] = $arr['id_student'];
                 $arr = mysqli_fetch_array($query_students);
             } else {
                 $check = false;
