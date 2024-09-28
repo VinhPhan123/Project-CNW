@@ -23,6 +23,7 @@
                     echo('<li class="dropdown-item"><a href="danh_sach_nganh.php">Danh sách ngành</a></li>');
                     echo('<li class="dropdown-item"><a href="admin_phan_nganh_gv.php">Phân ngành GV</a></li>');
                     echo('<li class="dropdown-item"><a href="admin_duyetTK.php">Duyệt GV đăng ký</a></li>');
+                    echo('<li class="dropdown-item"><a href="admin_danh_sach_ho_so.php">Danh sách hồ sơ</a></li>');
                 } elseif($_SESSION['role'] == 'teacher') {
                     echo("<p>GIÀNH CHO TEACHER</p>");
                     echo('<li class="dropdown-item"><a href="teacher_duyet_ho_so.php">Duyệt hồ sơ</a></li>');

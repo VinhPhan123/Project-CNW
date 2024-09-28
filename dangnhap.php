@@ -35,6 +35,7 @@
                 $_SESSION['role'] = "student";
                 $_SESSION['id_student'] = $arr['id_student'];
                 $arr = mysqli_fetch_array($query_students);
+                $_SESSION['id_student'] = $arr[0];
             } else {
                 $check = false;
             }

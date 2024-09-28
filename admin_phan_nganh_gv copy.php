@@ -27,6 +27,7 @@
 	$token = md5(uniqid());
 	$j=0;
 ?>
+
 <?php
 	// hàm insert vào bảng phannganh_giaovien nếu cặp dữ liệu (major_id, teacher_id) không bị trùng lặp
 	function insertIfNotExist($major_id, $teacher_id){
@@ -278,6 +279,7 @@
 	}
 ?>
 
+
 <div style="display: flex; justify-content: center;">
 
 <?php 
@@ -286,11 +288,8 @@
 	}
 ?>
 
-<div style="display: block; width: 100%;">
+<div class="container" style="display: block; width: 100%;">
 	
-	<div class="container mt-4" style="width: max-content; margin-left: auto; margin-right: auto;">
-	<!-- Page content -->
-     
 <?php 
     if($count_teacher > 0){
         echo '<div class="container_body">
@@ -431,9 +430,8 @@
         ?>
         <h2 style="text-align: center; margin-top: 30px;">Không có giáo viên nào !</h2>
         <?php
-    }?>
-	<!-- End Page content -->
-	</div>
+    }
+?>
 	<?php 
 		include './layouts/footer.php';
 	?>

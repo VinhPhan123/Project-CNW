@@ -7,8 +7,6 @@
     if($connect){
         mysqli_query($connect, "SET NAMES 'utf8' ");
     } else {
-        echo "connect unsuccessful";
+        echo "connect database unsuccessful";
     }
-
-    
 ?>

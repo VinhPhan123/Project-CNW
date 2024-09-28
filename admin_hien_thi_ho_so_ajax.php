@@ -1,5 +1,6 @@
 <?php
 if (isset($_POST['id_ledger'])) {
+    
     include './database/connect.php';
 
     // Lấy id_ledger từ POST
