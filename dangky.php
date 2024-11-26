@@ -1,11 +1,6 @@
 <?php 
     include './layouts/header.php';
-	use PHPMailer\PHPMailer\PHPMailer;
-	use PHPMailer\PHPMailer\Exception;
-	
-	require 'vendor/PHPMailer/src/Exception.php';
-	require 'vendor/PHPMailer/src/PHPMailer.php';
-	require 'vendor/PHPMailer/src/SMTP.php';
+	include './functions.php';
 ?>	
 
 <?php 
@@ -45,33 +40,46 @@
 		$_SESSION['email'] = $email;
 		$_SESSION['menu_status'] = "close";
 
-		// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email . '  63<br>';
-		
-        $sql1 = "SELECT * FROM teachers WHERE email='$email';";
-        $sql2 = "SELECT * FROM students WHERE email='$email';";
     
-        $result1 = mysqli_query($connect, $sql1);
-        $result2 = mysqli_query($connect, $sql2);
-    
-        if(mysqli_num_rows($result1) > 0 || mysqli_num_rows($result2)>0){
-            echo 'alert("Email đã được đăng ký, hãy chọn email khác");';
+		$check_email_exist = checkEmailExist($email);
+
+        if($check_email_exist){
+			?>
+			<script>
+				alert("Email đã được đăng ký, hãy chọn email khác");
+			</script>
+       	<?php
         } else {
 			$s = "SELECT username FROM students WHERE username='$taiKhoan'";
 			$query = mysqli_query($connect, $s);
 			if(mysqli_num_rows($query) > 0){
 				$error_taiKhoan = 'Tài khoản đã tồn tại';
 			} else {
-				$sql3 = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
-						('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$email');";
+				// $sql3 = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
+				// 		('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$email');";
 				
-				$result3 = mysqli_query($connect, $sql3);
+				// $result3 = mysqli_query($connect, $sql3);
+
+				$data = [
+					'username' => $taiKhoan,
+					'password' => $matKhau,
+					'fullname' => $hoVaTen,
+					'ngaysinh' => $ngaySinh,
+					'phone_number' => $soDienThoai,
+					'gender' => $gioiTinh,
+					'address' => $diaChi,
+					'email' => $email,
+				];
+				$result3 = insert('students', $data);
 			
 				if($result3){
 					$affected_row = mysqli_affected_rows($connect);
 					if($affected_row > 0){
 						$_SESSION['taiKhoan'] = $taiKhoan;
-						$sql4 = "SELECT id_student FROM students WHERE username = '$taiKhoan'";
-						$query4 = mysqli_query($connect, $sql4);
+						// $sql4 = "SELECT id_student FROM students WHERE username = '$taiKhoan'";
+						// $query4 = mysqli_query($connect, $sql4);
+
+						$query4 = select('students', ['id_student'], ['username' => $taiKhoan]);
 						$result4 = mysqli_fetch_row($query4);
 						$_SESSION["id_student"] = $result4[0];
 						?>
@@ -113,17 +121,19 @@
 		$_SESSION['menu_status'] = "close";
 
 		// header("location: xacthuc.php"); 
-        $sql1 = "SELECT * FROM teachers WHERE email='$email';";
-        $sql2 = "SELECT * FROM students WHERE email='$email';";
+        // $sql1 = "SELECT * FROM teachers WHERE email='$email';";
+        // $sql2 = "SELECT * FROM students WHERE email='$email';";
     
-        $result1 = mysqli_query($connect, $sql1);
-        $result2 = mysqli_query($connect, $sql2);
+        // $result1 = mysqli_query($connect, $sql1);
+        // $result2 = mysqli_query($connect, $sql2);
     
-        if(mysqli_num_rows($result1) > 0 || mysqli_num_rows($result2)>0){
+		$check_mail = checkEmailExist($email);
+        if($check_mail){
             echo 'alert("Email đã được đăng ký, hãy chọn email khác");';
         } else {
-			$s = "SELECT username FROM students WHERE username='$taiKhoan'";
-			$query = mysqli_query($connect, $s);
+			// $s = "SELECT username FROM students WHERE username='$taiKhoan'";
+			// $query = mysqli_query($connect, $s);
+			$query = select('students', ['username'], ['username'=>$taiKhoan]);
 			if(mysqli_num_rows($query) > 0){
 				$error_taiKhoan = 'Tài khoản đã tồn tại';
 			} else {
@@ -202,8 +212,8 @@
 				  	</div>
 				  	
 				  	<div class="mb-3" id="mail">
-					    <label for="dongYNhanMail" class="form-label">Đồng ý nhận email</label>
-					    <input type="checkbox" class="form-check-input" id="dongYNhanMail" name="dongYNhanMail">
+					    <!-- <label for="dongYNhanMail" class="form-label">Đồng ý nhận email</label>
+					    <input type="checkbox" class="form-check-input" id="dongYNhanMail" name="dongYNhanMail"> -->
 				  	</div>
 
 					<div class="mb-3">

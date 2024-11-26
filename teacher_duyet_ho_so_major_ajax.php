@@ -1,6 +1,7 @@
 <?php
 if (isset($_POST['id_ledger'])) {
     include './database/connect.php';
+    include './functions.php';
 
     // Lấy id_ledger từ POST
     $id_ledger = $_POST['id_ledger'];
@@ -15,8 +16,13 @@ if (isset($_POST['id_ledger'])) {
     }
 
     // Lấy ra id_student
-    $sql1 = "SELECT * FROM ledgers WHERE id_ledger='$id_ledger';";
-    $query1 = mysqli_query($connect, $sql1);
+    // $sql1 = "SELECT * FROM ledgers WHERE id_ledger='$id_ledger';";
+    // $query1 = mysqli_query($connect, $sql1);
+
+    $condition = [
+        'id_ledger' => $id_ledger
+    ];
+    $query1 = select('ledgers', '*', $condition);
 
     // Kiểm tra xem có kết quả không
     if (mysqli_num_rows($query1) > 0) {
@@ -26,8 +32,13 @@ if (isset($_POST['id_ledger'])) {
 
         // lấy ra ledger_status, nếu bằng NULL - chưa duyệt, 1 - đã duyệt
 
-        $sql2 = "SELECT * FROM students WHERE id_student = '$id_student';";
-        $query2 = mysqli_query($connect, $sql2);
+        // $sql2 = "SELECT * FROM students WHERE id_student = '$id_student';";
+        // $query2 = mysqli_query($connect, $sql2);
+
+        $condition = [
+            'id_student' => $id_student
+        ];
+        $query2 = select('students', '*', $condition);
         $row = mysqli_fetch_array($query2);
 
         // Lấy thông tin cá nhân

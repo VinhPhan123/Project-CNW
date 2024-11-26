@@ -1,6 +1,7 @@
 <?php 
 	include './layouts/header.php';
 	include './XuLyPhien/teacher.php';
+	include './functions.php';
 ?>
 
 <?php $token = md5(uniqid()); ?>
@@ -196,12 +197,7 @@
 <?php
     // nếu chưa đăng nhập tài khoản teacher thì out
     if(isset($_SESSION['taiKhoan'])){
-        $a = "SELECT * FROM teachers;";
-        $res = mysqli_query($connect, $a);
-        $array_username_teacher = array();
-        while($r = mysqli_fetch_array($res)){
-            array_push($array_username_teacher, $r['username']);
-        }
+		$array_username_teacher = getAllUsernameTeacher();
         if(!in_array($_SESSION['taiKhoan'], $array_username_teacher)){
             header("location: logout.php");
         }
@@ -216,23 +212,11 @@
 
 <?php
 	// lấy ra id_teacher trong bảng teachers;
-	$taiKhoan = $_SESSION['taiKhoan'];
-	$sql1 = "SELECT * FROM teachers WHERE username='$taiKhoan';";
-	$query1 = mysqli_query($connect, $sql1);
-	$id_teacher = mysqli_fetch_array($query1)['id_teacher'];
-	// echo $id_teacher;
+	$id_teacher = getIdTeacherFromUsername($_SESSION['taiKhoan']);
 	$_SESSION['id_teacher'] = $id_teacher;
-
-	// lấy ra array các ngành mà giáo viên được admin phân
-	$sql2 = "select major_name from majors inner join phannganh_giaovien 
-			on majors.id_major = phannganh_giaovien.id_major
-			where phannganh_giaovien.id_teacher = '$id_teacher';";
-	$query2 = mysqli_query($connect, $sql2);
-	$array_chuyennganh_duocphan = array();
-	while($r = mysqli_fetch_array($query2)){
-		array_push($array_chuyennganh_duocphan, $r['major_name']);
-	}
-	// print_r($array_chuyennganh_duocphan);
+	
+	$array_chuyennganh_duocphan = getArrayMajorsFromIdTeacher($id_teacher);
+	
 ?>
 
 <div style="display: block; width: 100%;">

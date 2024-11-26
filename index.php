@@ -52,7 +52,7 @@ body {
 
 .navbar {
     padding-top: 20px;
-    z-index: 10;
+    z-index: 0;
     background-color: rgb(0, 0, 0, 0) !important;   
 }
 

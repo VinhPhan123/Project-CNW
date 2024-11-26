@@ -1,6 +1,7 @@
 <?php 
 	include './layouts/header.php';
 	include './XuLyPhien/student.php';
+	include './functions.php';
 ?>
 
 <div style="display: flex; justify-content: center;">
@@ -62,8 +63,11 @@
 						FROM students AS s
 						JOIN academic_records AS ar ON s.id_student = ar.id_student
 						WHERE s.id_student = '$id_student'";
-			$query_infor = mysqli_query($connect, $sql_infor);
-			$query_record = mysqli_query($connect, $sql_record);
+			// $query_infor = mysqli_query($connect, $sql_infor);
+			// $query_record = mysqli_query($connect, $sql_record);
+
+			$query_infor = select('students', ['fullname', 'ngaysinh', 'gender', 'phone_number','address','email','avt'], ['id_student' => $id_student]);
+			$query_record = selectRecordStudent($id_student);
 			$result_infor = mysqli_num_rows($query_infor);
 			$result_record = mysqli_num_rows($query_record);
 			$arr_infor = mysqli_fetch_array($query_infor);

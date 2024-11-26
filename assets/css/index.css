@@ -83,7 +83,7 @@ bottom: 0;
 width: 100vw;
 }
 
-/* .container .row {
+.container .row {
     justify-content: center;
 }
 
@@ -95,4 +95,4 @@ width: 100vw;
 
 .carousel-control-prev-icon, .carousel-control-next-icon {
     filter: invert(50%);
-} */
+}

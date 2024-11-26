@@ -1,6 +1,7 @@
 <?php
     include './layouts/header.php';
     include './XuLyPhien/admin.php';
+    include './functions.php';
 ?>
 
 <div style="display: flex; justify-content: center;">
@@ -18,8 +19,10 @@
 ?>
 
 <?php
-    $sql_select_subject_combination = "SELECT * FROM subject_combination";
-    $query_select_subject_combination = mysqli_query($connect, $sql_select_subject_combination);
+    // $sql_select_subject_combination = "SELECT * FROM subject_combination";
+    // $query_select_subject_combination = mysqli_query($connect, $sql_select_subject_combination);
+
+    $query_select_subject_combination = select('subject_combination', '*', '');
     $result_select_subject_combination = mysqli_num_rows($query_select_subject_combination);
     $arr_select_subject_combination = mysqli_fetch_all($query_select_subject_combination);
 
@@ -92,13 +95,16 @@
                     } else {
                         // echo $id_major .'<br>'. $major_name . '<br>'. $diem_san .'<br>'. $time_start . '<br>'. $time_end .'<br>'. $status;
         
-                        $sql_update_chuyennganh = "UPDATE chuyennganh SET
-                                                    time_start = '$time_start',
-                                                    time_end = '$time_end',
-                                                    diem_san = $diem_san,
-                                                    status = '$status'
-                                                WHERE id_major = $id_major AND id_SB='$id_SB';";
-                        mysqli_query($connect, $sql_update_chuyennganh);
+                        // $sql_update_chuyennganh = "UPDATE chuyennganh SET
+                        //                             time_start = '$time_start',
+                        //                             time_end = '$time_end',
+                        //                             diem_san = $diem_san,
+                        //                             status = '$status'
+                        //                         WHERE id_major = $id_major AND id_SB='$id_SB';";
+                        // mysqli_query($connect, $sql_update_chuyennganh);
+
+                        update('chuyennganh', ['time_start' => $time_start, 'time_end' => $time_end, 'diem_san' => $diem_san, 'status' => $status],
+                            ['id_major' => $id_major, 'id_SB' => $id_SB]);
 
                         echo "<script>alert('Đã sửa hồ sơ thành công!');</script>";
                         echo '<script>window.location="admin_tao_ho_so.php";</script>';
@@ -111,10 +117,11 @@
             $id_major = $_POST['id_major'];
             $id_SB = $_POST['id_SB'];
 
-            $sql_delete_chuyennganh = "DELETE FROM chuyennganh WHERE id_major=$id_major AND id_SB='$id_SB';";
+            // $sql_delete_chuyennganh = "DELETE FROM chuyennganh WHERE id_major=$id_major AND id_SB='$id_SB';";
 
-            mysqli_query($connect, $sql_delete_chuyennganh);
-            mysqli_query($connect, $sql_delete_major);
+            // mysqli_query($connect, $sql_delete_chuyennganh);
+
+            delete('chuyennganh', ['id_major' => $id_major, 'id_SB' => $id_SB]);
 
             echo '<script>window.location="admin_tao_ho_so.php";</script>';
         }

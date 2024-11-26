@@ -1,18 +1,13 @@
 <?php 
    include './layouts/header.php';
-   use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
-
-    require 'vendor/PHPMailer/src/Exception.php';
-    require 'vendor/PHPMailer/src/PHPMailer.php';
-    require 'vendor/PHPMailer/src/SMTP.php';
+   include './functions.php';
 ?>
 
 <script>
-    // sau 60s (thời hạn mã code là 60s) reload lại trang để kiểm tra email bị admin deny hay không
+    // sau 120s (thời hạn mã code là 120s) reload lại trang để kiểm tra email bị admin deny hay không
     setTimeout(function() {
         window.location.href="xacthuc.php";
-    }, 60000);
+    }, 120000);
 </script>
 
 <?php
@@ -27,14 +22,10 @@
 
     // echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
     $email = $_SESSION['email'];
-    // kiểm tra nếu tài email đã được đăng kí thì yêu cầu nhập lại
-    $sql1 = "SELECT * FROM teachers WHERE email='$email';";
-    $sql2 = "SELECT * FROM students WHERE email='$email';";
 
-    $result1 = mysqli_query($connect, $sql1);
-    $result2 = mysqli_query($connect, $sql2);
+    $check_email_exist = checkEmailExist($email);
 
-    if(mysqli_num_rows($result1) > 0 || mysqli_num_rows($result2) > 0){
+    if($check_email_exist){
        ?>
         <script>
             alert("Email đã được đăng ký, hãy chọn email khác");
@@ -60,7 +51,6 @@
             echo $e;
         }
     
-        // echo mysqli_affected_rows($connect);
     
         // lấy ra các code còn hạn trong bảng gen_code
         $array_codes = array();
@@ -80,12 +70,32 @@
             // $b = "UPDATE guest SET status = 2 WHERE teacher_email = '$email';";
             // mysqli_query($connect, $b);
 
-            $insert_teacher = "INSERT INTO teachers(username, password, fullname, ngaysinh, phone_number, gender, address, email)
-            VALUES ('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh', '$diaChi', '$email');"; 
-            mysqli_query($connect, $insert_teacher);
+            // $insert_teacher = "INSERT INTO teachers(username, password, fullname, ngaysinh, phone_number, gender, address, email)
+            // VALUES ('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh', '$diaChi', '$email');"; 
+            // mysqli_query($connect, $insert_teacher);
 
-            $update_status = "UPDATE guest SET status = 0 WHERE teacher_email = '$email';";
-            mysqli_query($connect, $update_status);
+            $data = [
+                'username' => $taiKhoan,
+                'password' => $matKhau,
+                'fullname' => $hoVaTen,
+                'ngaysinh' => $ngaySinh,
+                'phone_number' => $soDienThoai,
+                'gender' => $gioiTinh,
+                'address' => $diaChi,
+                'email' => $email,
+            ];
+            $check_insert = insert('teachers', $data);
+
+            // $update_status = "UPDATE guest SET status = 0 WHERE teacher_email = '$email';";
+            // mysqli_query($connect, $update_status);
+
+            $value = [
+                'status' => 0
+            ];
+            $condition = [
+                'teacher_email' => $email
+            ];
+            $check_update = update('guest', $value, $condition);
 
             $_SESSION['role'] = "teacher";
             ?>
@@ -110,16 +120,23 @@
 
 <?php
     // kiểm tra nếu email không được chấp nhận 
-    $c = "SELECT * FROM guest WHERE teacher_email='$email';";
-    $query_mail = mysqli_query($connect, $c);
+    $condition = [
+        'teacher_email' => $email
+    ];
+    // $c = "SELECT * FROM guest WHERE teacher_email='$email';";
+    $query_mail = select('guest', '*', $condition);
 
     $kq = mysqli_fetch_array($query_mail);
     $status_mail = $kq['status'];
 
     if($status_mail == 0){
         // xóa email đã gửi yêu cầu đăng ký giáo viên trong bảng guest vì có thể đăng ký lại với email đó và được admin phê duyệt
-        $m = "DELETE FROM guest WHERE teacher_email='$email';";
-        mysqli_query($connect, $m)
+        // $m = "DELETE FROM guest WHERE teacher_email='$email';";
+        // mysqli_query($connect, $m)
+        $condition = [
+            'teacher_email' => $email
+        ];
+        $check_delete = delete('guest', $condition);
         ?>
         <script>
             alert("Yêu cầu đăng ký tài khoản giáo viên của bạn không được chấp nhận !");

@@ -1,63 +1,12 @@
 <?php 
     include './layouts/header.php';
     include './XuLyPhien/admin.php';
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
-
-    require 'vendor/PHPMailer/src/Exception.php';
-    require 'vendor/PHPMailer/src/PHPMailer.php';
-    require 'vendor/PHPMailer/src/SMTP.php';
+    include './functions.php';
 ?>
 <?php 
     $token = md5(uniqid());
-    // hàm random ra 1 chuỗi 15 kí tự
-    function generateRandomString() {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
-        $maxIndex = strlen($characters) - 1;
-
-        for ($i = 0; $i < 15; $i++) {
-            $randomString .= $characters[random_int(0, $maxIndex)];
-        }
-
-        return $randomString;
-    }
 ?>
 
-<?php
-    function send_email($email_admin, $emailTeacher, $randomCode){
-        $mail = new PHPMailer(true);
-
-        try {
-            //Server settings
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = $email_admin;                     //SMTP username
-            $mail->Password   = 'fobc yprh fdlx jfss';                                //SMTP password
-            $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
-            $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS
-    
-            //Recipients
-            $mail->setFrom($emailTeacher, 'Admin');
-            $mail->addAddress($emailTeacher, 'Admin');     //Add a recipient
-
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = 'Pass Code';
-            $mail->Body    = '<b>This is your passcode</b>';
-
-            // lấy code bất kì còn hạn
-            $mail->Body    = '<b>' . $randomCode . '</b>';
-    
-            $mail->send();
-
-            header("location: admin_duyetTK.php");
-            exit();
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        }
-    }
-?>
 
 <?php
     $j = 0;
@@ -78,8 +27,9 @@
     $getEmails = array(); // [key-value]
     $emails = [];
     $statuses = [];
-    $sql = "SELECT * FROM guest WHERE status=1;";
-    $result = mysqli_query($connect, $sql);
+    // $sql = "SELECT * FROM guest WHERE status=1;";
+    // $result = mysqli_query($connect, $sql);
+    $result = select('guest', '*', ['status'=>1]);
     while($row = mysqli_fetch_array($result)){
         array_push($emails, $row['teacher_email']);
 
@@ -97,7 +47,6 @@
 
         $a1 = "INSERT INTO gen_code(id_admin, code, gen_time, expiry_time) VALUES ('$id_admin', '$randomCode', NOW(), DATE_ADD(NOW(), INTERVAL 2 MINUTE));";
         mysqli_query($connect, $a1);
-        
         $row_id = $_POST['row_id'];
 
         $emailTeacher = $getEmails[$row_id];
@@ -112,8 +61,9 @@
         $row_id = $_POST['row_id'];
         $email_guest = $getEmails[$row_id];
         echo ($email_guest);
-        $b = "UPDATE guest SET status = 0 WHERE teacher_email = '$email_guest';";
-        mysqli_query($connect, $b);
+        // $b = "UPDATE guest SET status = 0 WHERE teacher_email = '$email_guest';";
+        // mysqli_query($connect, $b);
+        update('guest', ['status'=>0], ['teacher_email'=>$email_guest]);
 
         header("location: admin_duyetTK.php");
         exit();

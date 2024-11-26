@@ -1,5 +1,6 @@
 <?php 
     include './layouts/header.php';
+    include './functions.php';
 ?>
 <pre>
 <?php 
@@ -12,13 +13,18 @@
             echo("<script>alert('Vui lòng nhập đầy đủ tài khoản và mật khẩu!')</script>");
         } else {
             // $sql = "SELECT * FROM admins WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
-            $sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
-            $sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
-            $sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
+            // $sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
+            // $sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
+            // $sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' AND password ='$matKhau_hashed'";
 
-            $query_admins = mysqli_query($connect, $sql_admins);
-            $query_teachers = mysqli_query($connect, $sql_teachers);
-            $query_students = mysqli_query($connect, $sql_students);
+            // $query_admins = mysqli_query($connect, $sql_admins);
+            // $query_teachers = mysqli_query($connect, $sql_teachers);
+            // $query_students = mysqli_query($connect, $sql_students);
+
+            $query_admins = select('admins', '*', ['username' => $taiKhoan, 'password'=>$matKhau_hashed]);
+            $query_teachers = select('teachers', '*', ['username' => $taiKhoan, 'password'=>$matKhau_hashed]);
+            $query_students = select('students', '*', ['username' => $taiKhoan, 'password'=>$matKhau_hashed]);
+
     
             $result_admins = mysqli_num_rows($query_admins);
             $result_teachers = mysqli_num_rows($query_teachers);

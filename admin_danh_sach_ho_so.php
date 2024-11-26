@@ -136,6 +136,10 @@
 	.open {
 		display: flex;
 	}
+
+    .overlay {
+        z-index: 11;
+    }
 </style>
 
 <style>

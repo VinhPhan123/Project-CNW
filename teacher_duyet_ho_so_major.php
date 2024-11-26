@@ -1,6 +1,7 @@
 <?php 
 	include './layouts/header.php';
 	include './XuLyPhien/teacher.php';
+	include './functions.php';
 ?>
 
 <?php $token = md5(uniqid()); ?>
@@ -183,6 +184,10 @@
 		cursor: pointer;
 		box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	}
+
+	.overlay {
+		z-index: 11;
+	}
 </style>
 
 
@@ -217,22 +222,11 @@
 
 
 <?php
-	// lấy ra id_teacher trong bảng teachers;
-	$sql1 = "SELECT * FROM teachers;";
-	$query1 = mysqli_query($connect, $sql1);
-	$id_teacher = mysqli_fetch_array($query1)['id_teacher'];
-	// echo $id_teacher;
+	// lấy ra id_teacher 
+	$id_teacher = getIdTeacherFromUsername($_SESSION['taiKhoan']);
 
 	// lấy ra array các ngành mà giáo viên được admin phân
-	$sql2 = "select major_name from majors inner join phannganh_giaovien 
-			on majors.id_major = phannganh_giaovien.id_major
-			where phannganh_giaovien.id_teacher = '$id_teacher';";
-	$query2 = mysqli_query($connect, $sql2);
-	$array_chuyennganh_duocphan = array();
-	while($r = mysqli_fetch_array($query2)){
-		array_push($array_chuyennganh_duocphan, $r['major_name']);
-	}
-	// print_r($array_chuyennganh_duocphan);
+	$array_chuyennganh_duocphan = getArrayMajorsFromIdTeacher($id_teacher);
 ?>
 
 
@@ -241,20 +235,28 @@
         $_SESSION['nganh'] = $_POST['chonnganh_select'];
     }
     $nganh = $_SESSION['nganh'];
-    // echo $nganh;
-
+	
     // lấy ra id của ngành
-    $sql3 = "SELECT id_major FROM majors WHERE major_name='$nganh';";
-    $query3 = mysqli_query($connect, $sql3);
+    // $sql3 = "SELECT id_major FROM majors WHERE major_name='$nganh';";
+    // $query3 = mysqli_query($connect, $sql3);
+	$condition = [
+		'major_name' => $nganh
+	];
+	$query3 = select('majors', ['id_major'], $condition);
     $id_major = mysqli_fetch_array($query3)['id_major'];
     // echo $id_major;
 
     // array lưu các student đăng ký xét tuyển ngành được chọn
-    $sql3 = "SELECT * FROM ledgers WHERE id_major = '$id_major';";
-    $query3 = mysqli_query($connect, $sql3);
+    // $sql4 = "SELECT * FROM ledgers WHERE id_major = '$id_major';";
+    // $query4 = mysqli_query($connect, $sql4);
+
+	$condition = [
+		'id_major' => $id_major
+	];
+	$query4 = select('ledgers', '*', $condition);
     $student_ledgers_array = array();
     
-    while ($r = mysqli_fetch_assoc($query3)) {
+    while ($r = mysqli_fetch_assoc($query4)) {
         $student_id_SB = $r['id_SB'];
         $id_student = $r['id_student'];
     
@@ -291,20 +293,27 @@
 						if(sizeof($student_ledgers_array)!=0){
 							$count = 0;
 							foreach($student_ledgers_array as $id_student => $array_tohop){
-								// lay ra ten student
-								// echo $id_student . ' - ';
-								$sql4 = "SELECT * FROM students WHERE id_student = '$id_student';";
-								$query4 = mysqli_query($connect, $sql4);
-								$student_name = mysqli_fetch_array($query4)['username'];
-								// echo $student_name;
+								$student_name = getStudentNameById($id_student);
 
 								// lấy ra id_ledgers
-								$sql5 = "SELECT * FROM ledgers WHERE id_student = '$id_student';";
-								$query5 = mysqli_query($connect, $sql5);
+								// $sql5 = "SELECT * FROM ledgers WHERE id_student = '$id_student';";
+								// $query5 = mysqli_query($connect, $sql5);
+
+								$condition = [
+									'id_student' => $id_student
+								];
+								$query5 = select('ledgers', '*', $condition);
 								$id_ledgers = mysqli_fetch_array($query5)['id_ledger'];
+
 								// lấy ra số lượng tohop có status = null với id_major
-								$sql7 = "SELECT * FROM ledgers WHERE id_major=$id_major AND id_student=$id_student";
-								$query7 = mysqli_query($connect, $sql7);
+								// $sql7 = "SELECT * FROM ledgers WHERE id_major=$id_major AND id_student=$id_student";
+								// $query7 = mysqli_query($connect, $sql7);
+
+								$condition = [
+									'id_major' => $id_major,
+									'id_student' => $id_student
+								];
+								$query7 = select('ledgers', '*', $condition);
 
 								$count_tohop = mysqli_num_rows($query7);
 								// echo $count_tohop
@@ -318,8 +327,15 @@
 
 								foreach($array_tohop as $tohop){
 									// kiểm tra status, nếu NULL thì hiển thị
-									$sql6 = "SELECT * FROM ledgers WHERE id_major=$id_major AND id_student=$id_student AND id_SB='$tohop';";
-									$query6 = mysqli_query($connect, $sql6);
+									// $sql6 = "SELECT * FROM ledgers WHERE id_major=$id_major AND id_student=$id_student AND id_SB='$tohop';";
+									// $query6 = mysqli_query($connect, $sql6);
+
+									$condition = [
+										'id_major' => $id_major,
+										'id_student' => $id_student,
+										'id_SB' => $tohop
+									];
+									$query6 = select('ledgers', '*', $condition);
 									$arr_query6 = mysqli_fetch_array($query6);
 									$ledger_status = $arr_query6['ledger_status'];
 									$id_ledger = $arr_query6['id_ledger'];
@@ -380,24 +396,36 @@
 <?php
 	// xử lí nút access
 	if(isset($_POST['access']) && ($_SESSION['token'] == $_POST['_token'])){
-		$id = $_POST['id_ledger'];
-		$sql_update_ledger = "UPDATE ledgers SET
-								ledger_status = 'Duyệt',
-								id_teacher = " . $_SESSION['id_teacher'] ."
-							WHERE id_ledger = $id";
-		mysqli_query($connect, $sql_update_ledger);
+		// updateLedger('Duyệt', $_POST['id_ledger'], $_SESSION['id_teacher']);
+		// $sql_update_ledger = "UPDATE ledgers SET
+		// 						ledger_status = '$status',
+		// 						id_teacher = " . $id_teacher ."
+		// 					WHERE id_ledger = $id";
+		// mysqli_query($connect, $sql_update_ledger);
+
+		$value = [
+			'ledger_status' => 'Duyệt',
+			'id_teacher' =>  $_SESSION['id_teacher']
+		];
+		$condition = [
+			'id_ledger' => $_POST['id_ledger']
+		];
+		update('ledgers', $value, $condition);
 		echo '<script>alert("Đã duyệt hồ sơ thành công!")</script>';
 		echo "<script>location.reload();</script>";
 	}
 	
 	// xử lí nút deny
 	if(isset($_POST['deny']) && ($_SESSION['token'] == $_POST['_token'])){
-		$id = $_POST['id_ledger'];
-		$sql_update_ledger = "UPDATE ledgers SET
-								ledger_status = 'Không duyệt',
-								id_teacher = " . $_SESSION['id_teacher'] ."
-							WHERE id_ledger = $id";
-		mysqli_query($connect, $sql_update_ledger);
+		// updateLedger('Không duyệt', $_POST['id_ledger'], $_SESSION['id_teacher']);
+		$value = [
+			'ledger_status' => 'Không duyệt',
+			'id_teacher' =>  $_SESSION['id_teacher']
+		];
+		$condition = [
+			'id_ledger' => $_POST['id_ledger']
+		];
+		update('ledgers', $value, $condition);
 		echo '<script>alert("Đã không duyệt hồ sơ thành công!")</script>';
 		echo "<script>location.reload();</script>";
 	}
@@ -407,11 +435,6 @@
 <script>
 	const nganh_selected = document.getElementById("chonnganh_select");
 	const chuyennganh = nganh_selected.value;
-	console.log(chuyennganh);
-
-	// const tohop_selected = document.getElementById("get_to_hop");
-	// const tohop = tohop_selected.textContent;
-	// console.log(tohop);
 
 	document.querySelectorAll('button[name="show"]').forEach(button => {
 		button.addEventListener('click', function(event) {
@@ -432,7 +455,6 @@
 			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 			xhr.onload = function() {
 				if (xhr.status === 200) {
-					// console.log(this.response);
 					form_ajax.innerHTML = this.response; // Cập nhật nội dung overlay
 					form_ajax.style.display = 'block'; // Hiển thị overlay
 				} else {
@@ -450,7 +472,6 @@
 	a.addEventListener('click', function() {
 		this.style.display = 'none';
 	});
-
 </script>
 
 <script>

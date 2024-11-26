@@ -1,6 +1,7 @@
 <?php 
     include './layouts/header.php';
     include './XuLyPhien/all.php';
+    include './functions.php';
 ?>
 
 <div style="display: flex; justify-content: center;">
@@ -19,8 +20,9 @@
 ?>
 
 <?php
-    $sql_select_subject_combination = "SELECT * FROM subject_combination";
-    $query_select_subject_combination = mysqli_query($connect, $sql_select_subject_combination);
+    // $sql_select_subject_combination = "SELECT * FROM subject_combination";
+    // $query_select_subject_combination = mysqli_query($connect, $sql_select_subject_combination);
+    $query_select_subject_combination = select('subject_combination', '*', '');
     $result_select_subject_combination = mysqli_num_rows($query_select_subject_combination);
     $arr_select_subject_combination = mysqli_fetch_all($query_select_subject_combination);
     
@@ -56,16 +58,18 @@
                 // echo "<script>alert('$token2');</script>";
                 $major_name = $_POST['major_name'];
 
-                $sql_select_major_name = "SELECT * FROM majors WHERE major_name = '$major_name'";
-                $query_select_major_name = mysqli_query($connect, $sql_select_major_name);
+                // $sql_select_major_name = "SELECT * FROM majors WHERE major_name = '$major_name'";
+                // $query_select_major_name = mysqli_query($connect, $sql_select_major_name);
+                $query_select_major_name = select('majors', '*', ['major_name' => $major_name]);
                 $result_select_major_name = mysqli_num_rows($query_select_major_name);
 
                 if($result_select_major_name > 0) {
                     echo "<script>alert('Ngành này đã tồn tại');</script>";
                 } else {
-                    $tmp = mysqli_num_rows(mysqli_query($connect,"SELECT * FROM majors"));
-                    $sql_insert_major_name = "INSERT INTO majors(major_name) VALUES ('$major_name');";
-                    $query_insert_major_name = mysqli_query($connect, $sql_insert_major_name);
+                    // $tmp = mysqli_num_rows(mysqli_query($connect,"SELECT * FROM majors"));
+                    // $sql_insert_major_name = "INSERT INTO majors(major_name) VALUES ('$major_name');";
+                    // $query_insert_major_name = mysqli_query($connect, $sql_insert_major_name);
+                    $query_insert_major_name = insert('majors', ['major_name' => $major_name]);
 
                     if($query_insert_major_name) {
                         echo "<script>alert('Đã thêm ngành thành công!');</script>";
@@ -78,8 +82,10 @@
         ?>
         <h4 style="color: #0c6efd;">Danh sách ngành</h4>
         <?php
-            $sql_major = "SELECT * FROM majors";
-            $query_major = mysqli_query($connect, $sql_major);
+            // $sql_major = "SELECT * FROM majors";
+            // $query_major = mysqli_query($connect, $sql_major);
+
+            $query_major = select('majors', '*', '');
             $result_major = mysqli_num_rows($query_major);
             if($result_major == 0) {
                 echo "Chưa có ngành nào";
@@ -242,12 +248,14 @@
 
             if(isset($_POST['delete_major']) && isset($_SESSION['token']) && $_SESSION['token'] == $_POST['_token']) {
                 $id_major = $_POST['row_id'];
-                $sql_delete_chuyennganh = "   DELETE FROM chuyennganh
-                                                WHERE id_major=$id_major";
-                $sql_delete_major = "   DELETE FROM majors
-                                                WHERE id_major=$id_major";
-                mysqli_query($connect, $sql_delete_chuyennganh);
-                mysqli_query($connect, $sql_delete_major);
+                // $sql_delete_chuyennganh = "   DELETE FROM chuyennganh
+                //                                 WHERE id_major=$id_major";
+                // $sql_delete_major = "   DELETE FROM majors
+                //                                 WHERE id_major=$id_major";
+                // mysqli_query($connect, $sql_delete_chuyennganh);
+                // mysqli_query($connect, $sql_delete_major);
+                delete('chuyennganh', ['id_major' => $id_major]);
+                delete('majors', ['id_major' => $id_major]);
                 echo '<script>window.location="danh_sach_nganh.php";</script>';
             }
 
@@ -258,8 +266,9 @@
                 if($id_SB == '') {
                     echo "<script>alert('Bạn chưa chọn tổ hợp môn!');</script>";
                 } else {
-                    $sql_select_chuyennganh = "SELECT id_SB FROM chuyennganh WHERE id_major = $id_major;";
-                    $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
+                    // $sql_select_chuyennganh = "SELECT id_SB FROM chuyennganh WHERE id_major = $id_major;";
+                    // $query_select_chuyennganh = mysqli_query($connect, $sql_select_chuyennganh);
+                    $query_select_chuyennganh = select('chuyennganh', ['id_SB'], ['id_major' => $id_major]);
                     $arr_select_chuyennganh = mysqli_fetch_all($query_select_chuyennganh);
 
                     $tmp_arr = array();
@@ -275,8 +284,9 @@
                     if(in_array($id_SB, $tmp_arr)) {
                         echo "<script>alert('Tổ hợp môn này đã tồn tại trong mã ngành!');</script>";
                     } else {
-                        $sql_insert_chuyennganh = "INSERT INTO chuyennganh(id_major, id_SB, status) VALUES($id_major, '$id_SB', 'Ẩn')";
-                        mysqli_query($connect, $sql_insert_chuyennganh);
+                        // $sql_insert_chuyennganh = "INSERT INTO chuyennganh(id_major, id_SB, status) VALUES($id_major, '$id_SB', 'Ẩn')";
+                        // mysqli_query($connect, $sql_insert_chuyennganh);
+                        insert('chuyennganh', ['id_major' => $id_major, 'id_SB' => $id_SB, 'status' => 'Ẩn']);
                         echo "<script>alert('Đã thêm tổ hợp môn thành công!');</script>";
                         echo '<script>window.location="danh_sach_nganh.php";</script>';
                     }
@@ -292,9 +302,10 @@
                 if($id_SB == '') {
                     echo "<script>alert('Bạn chưa chọn tổ hợp môn!');</script>";
                 } else {
-                    $sql_delete_sb_in_major = "DELETE FROM chuyennganh WHERE id_major=$id_major AND id_SB='$id_SB';";
-                    mysqli_query($connect, $sql_delete_sb_in_major);
+                    // $sql_delete_sb_in_major = "DELETE FROM chuyennganh WHERE id_major=$id_major AND id_SB='$id_SB';";
+                    // mysqli_query($connect, $sql_delete_sb_in_major);
                     // echo "<script>alert('" . $id_major . " " . $id_SB . "');</script>";
+                    delete('chuyennganh', ['id_major'=>$id_major, 'id_SB'=>$id_SB]);
                     echo "<script>alert('Đã xóa tổ hợp môn thành công!');</script>";
                     echo '<script>window.location="danh_sach_nganh.php";</script>';
                 }
