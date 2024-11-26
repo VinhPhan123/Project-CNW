@@ -104,25 +104,20 @@
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item"><a class="nav-link active"
-						aria-current="page" href="#">Trang chủ</a></li>
+						aria-current="page" href="#" style="font-weight: 400; font-size: 20px;">Bla Website</a></li>
 					<li class="nav-item"><a class="nav-link" href="#"></a></li>
-					<li class="nav-item dropdown"><a
+					<li class="nav-item dropdown">
+						<!-- <a
 						class="nav-link dropdown-toggle" href="#" role="button"
-						data-bs-toggle="dropdown" aria-expanded="false"> Thể loại </a>
-						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="#">Quần Jean</a></li>
-							<li><a class="dropdown-item" href="#">Áo thun</a></li>
-							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="#">Áo sơ mi</a></li>
-						</ul></li>
-					<li class="nav-item"><a class="nav-link disabled">Hết hàng</a>
+						data-bs-toggle="dropdown" aria-expanded="false"> Thể loại </a> -->
+					<!-- <li class="nav-item"><a class="nav-link disabled">Hết hàng</a> -->
 					</li>
 				</ul>
 				
 				<form class="d-flex" role="search" style="position: relative;display: block;float: right;" method="post">
 					<input class="form-control me-2" type="search"
 						placeholder="Nội dung tìm kiếm" aria-label="Search">
-					<button class="btn btn-outline-success" type="submit">Tìm</button>
+					<!-- <button class="btn btn-outline-success" type="submit">Tìm</button> -->
                 
                 <?php 
 					// if(isset($_SESSION['taiKhoan'])){
@@ -135,9 +130,9 @@
 							<?php echo($_SESSION['hoVaTen']); ?>
 							</a>
 							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="#">Đơn hàng của tôi</a></li>
-								<li><a class="dropdown-item" href="#">Thông báo</a></li>
-								<li><a class="dropdown-item" href="thaydoithongtin.jsp">Thay đổi thông tin</a></li>
+								<!-- <li><a class="dropdown-item" href="#">Đơn hàng của tôi</a></li> -->
+								<!-- <li><a class="dropdown-item" href="#">Thông báo</a></li> -->
+								<!-- <li><a class="dropdown-item" href="thaydoithongtin.jsp">Thay đổi thông tin</a></li> -->
 								<li><a class="dropdown-item" href="doimatkhau.jsp">Đổi mật khẩu</a></li>
 								<li><hr class="dropdown-divider"></li>
 								<li><a class="dropdown-item" href="logout.php" id="logout">Thoát tài khoản</a></li>
@@ -158,10 +153,10 @@
                         </a>
                     <?php } else {?>
                         <a class="btn btn-primary" style="white-space: nowrap;" href="<?php echo 'dangnhap.php'?>">
-                                Đăng nhập
+							Đăng nhập
                         </a>
                         <a class="btn btn-primary" style="white-space: nowrap;" href="<?php echo 'dangky.php'?>">
-                                Đăng ký
+							Đăng ký
                         </a>
                     <?php } ?>
                 <?php } ?>

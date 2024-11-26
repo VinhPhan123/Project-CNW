@@ -25,6 +25,41 @@
 ?>
 
 <?php
+    function send_email($email_admin, $emailTeacher, $randomCode){
+        $mail = new PHPMailer(true);
+
+        try {
+            //Server settings
+            $mail->isSMTP();                                            //Send using SMTP
+            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+            $mail->Username   = $email_admin;                     //SMTP username
+            $mail->Password   = 'fobc yprh fdlx jfss';                                //SMTP password
+            $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
+            $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS
+    
+            //Recipients
+            $mail->setFrom($emailTeacher, 'Admin');
+            $mail->addAddress($emailTeacher, 'Admin');     //Add a recipient
+
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->Subject = 'Pass Code';
+            $mail->Body    = '<b>This is your passcode</b>';
+
+            // lấy code bất kì còn hạn
+            $mail->Body    = '<b>' . $randomCode . '</b>';
+    
+            $mail->send();
+
+            header("location: admin_duyetTK.php");
+            exit();
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+    }
+?>
+
+<?php
     $j = 0;
 
     // lấy ra email admin
@@ -59,52 +94,28 @@
     if(isset($_POST['submitAccess']) && $_SESSION['token'] == $_POST['_token']){
         // randomCode luu vao bang gen_code
         $randomCode = generateRandomString();
-        $a1 = "INSERT INTO gen_code(id_admin, code, gen_time, expiry_time) VALUES ('$id_admin', '$randomCode', NOW(), DATE_ADD(NOW(), INTERVAL 1 MINUTE));";
+
+        $a1 = "INSERT INTO gen_code(id_admin, code, gen_time, expiry_time) VALUES ('$id_admin', '$randomCode', NOW(), DATE_ADD(NOW(), INTERVAL 2 MINUTE));";
         mysqli_query($connect, $a1);
         
         $row_id = $_POST['row_id'];
 
         $emailTeacher = $getEmails[$row_id];
         // echo $emailTeacher;
-        $mail = new PHPMailer(true);
-
-        try {
-            //Server settings
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = $email_admin;                     //SMTP username
-            $mail->Password   = 'viek drjk jasi chbq';                                //SMTP password
-            $mail->SMTPSecure = 'tls';            //Enable implicit TLS encryption
-            $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS
-    
-            //Recipients
-            $mail->setFrom($emailTeacher, 'Admin');
-            $mail->addAddress($emailTeacher, 'Admin');     //Add a recipient
-
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = 'Pass Code';
-            $mail->Body    = '<b>This is your passcode</b>';
-
-            // lấy code bất kì còn hạn
-            $mail->Body    = '<b>' . $randomCode . '</b>';
-    
-            $mail->send();
-
-            header("location: duyetTK.php");
-            exit();
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        }
+       
+        send_email($email_admin, $emailTeacher, $randomCode);
+        
+        echo($emailTeacher);
     }
 
     if(isset($_POST['submitDeny'])){
         $row_id = $_POST['row_id'];
         $email_guest = $getEmails[$row_id];
+        echo ($email_guest);
         $b = "UPDATE guest SET status = 0 WHERE teacher_email = '$email_guest';";
         mysqli_query($connect, $b);
 
-        header("location: duyetTK.php");
+        header("location: admin_duyetTK.php");
         exit();
     }
 ?>

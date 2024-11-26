@@ -84,6 +84,9 @@
             VALUES ('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh', '$diaChi', '$email');"; 
             mysqli_query($connect, $insert_teacher);
 
+            $update_status = "UPDATE guest SET status = 0 WHERE teacher_email = '$email';";
+            mysqli_query($connect, $update_status);
+
             $_SESSION['role'] = "teacher";
             ?>
             <script>
