@@ -667,19 +667,20 @@
                 
     
                 // kiểm tra nếu chuyên ngành-tổ hợp đã được nộp trước đó chưa, nếu có rồi thì báo Chuyên ngành - tổ hợp đã đăng ký trước đó
-                $b1 = "SELECT * FROM ledgers WHERE id_student = $id_student AND id_major = $id_major AND id_SB='$tohopdangky';";
-                $query_ledgers = mysqli_query($connect, $b1);
+                // $b1 = "SELECT * FROM ledgers WHERE id_student = $id_student AND id_major = $id_major AND id_SB='$tohopdangky';";
+                // $query_ledgers = mysqli_query($connect, $b1);
 
-                // $condition = [
-                //     'id_student' => $id_student,
-                //     'id_major' => $id_major,
-                //     'id_SB' => $tohopdangky
-                // ];
+                $condition = [
+                    'id_student' => $id_student,
+                    'id_major' => $id_major,
+                    'id_SB' => $tohopdangky
+                ];
     
-                // $query_ledgers = select('ledgers', '*', $condition);
+                $query_ledgers = select('ledgers', '*', $condition);
 
                 $count_row = mysqli_num_rows($query_ledgers);
-                if($count_row >= 1){
+
+                if($count_row > 0 && isset($_POST['send'])){
                     $check = 0;
                     ?>
                     <script>
@@ -759,95 +760,103 @@
         // nếu check=1, insert truongchuyen
             $truong_chuyen = $_POST['truongchuyen'];
             $lop_chuyen = $_POST['lopchuyen'];
-            $file_name = $_FILES['fileInput_truongchuyen']['name'];
-            $fileInput_truongchuyen = $_FILES['fileInput_truongchuyen'];
-            $file_name = $fileInput_truongchuyen['name'];
-            $generated_file_name = time().'-'.$file_name;
-            $destination_path = $upload_dir . time() . '-' . $file_name;
-            $file_tmp_name = $fileInput_truongchuyen['tmp_name'];
-            if($file_name != ""){
-                move_uploaded_file($file_tmp_name, $destination_path);
-                $truong_chuyen_insert = $truong_chuyen . " | " . $lop_chuyen . " | " . $destination_path;
-                // echo $truong_chuyen_insert;
-                $sql2 = "UPDATE students SET truong_chuyen = '$truong_chuyen_insert' WHERE id_student = '$id_student';";
-                mysqli_query($connect, $sql2);
-            }
-            $data_parts = [$truong_chuyen, $lop_chuyen]; // Dữ liệu cần lưu
-            // $fileInput = 'fileInput_truongchuyen'; // Tên input file
 
-            // uploadAndUpdate($connect, $upload_dir, $id_student, 'truong_chuyen', $data_parts, $fileInput);
+            // $file_name = $_FILES['fileInput_truongchuyen']['name'];
+            // $fileInput_truongchuyen = $_FILES['fileInput_truongchuyen'];
+            // $file_name = $fileInput_truongchuyen['name'];
+            // $generated_file_name = time().'-'.$file_name;
+            // $destination_path = $upload_dir . time() . '-' . $file_name;
+            // $file_tmp_name = $fileInput_truongchuyen['tmp_name'];
+            // if($file_name != ""){
+            //     move_uploaded_file($file_tmp_name, $destination_path);
+            //     $truong_chuyen_insert = $truong_chuyen . " | " . $lop_chuyen . " | " . $destination_path;
+            //     // echo $truong_chuyen_insert;
+            //     $sql2 = "UPDATE students SET truong_chuyen = '$truong_chuyen_insert' WHERE id_student = '$id_student';";
+            //     mysqli_query($connect, $sql2);
+            // }
+            $data_parts = [$truong_chuyen, $lop_chuyen];
+            uploadAndUpdate($upload_dir, $id_student, 'truong_chuyen', $data_parts, 'fileInput_truongchuyen');
 
 
         // check=1, insert giai_hsg
             $monthi = $_POST['monthi'];
             $giai = $_POST['giai'];
-            $file_name = $_FILES['fileInput_hsg']['name'];
-            $fileInput_hsg = $_FILES['fileInput_hsg'];
-            $file_name = $fileInput_hsg['name'];
-            $generated_file_name = time().'-'.$file_name;
-            $destination_path = $upload_dir . time() . '-' . $file_name;
-            $file_tmp_name = $fileInput_hsg['tmp_name'];
-            if($file_name != ""){
-                move_uploaded_file($file_tmp_name, $destination_path);
-                $giai_hs_gioi_insert = $monthi . " | " . $giai . " | " . $destination_path;
-                // echo $giai_hs_gioi_insert;
-                $sql3 = "UPDATE students SET giai_hs_gioi = '$giai_hs_gioi_insert' WHERE id_student = '$id_student';";
-                mysqli_query($connect, $sql3);
-            }
+            // $file_name = $_FILES['fileInput_hsg']['name'];
+            // $fileInput_hsg = $_FILES['fileInput_hsg'];
+            // $file_name = $fileInput_hsg['name'];
+            // $generated_file_name = time().'-'.$file_name;
+            // $destination_path = $upload_dir . time() . '-' . $file_name;
+            // $file_tmp_name = $fileInput_hsg['tmp_name'];
+            // if($file_name != ""){
+            //     move_uploaded_file($file_tmp_name, $destination_path);
+            //     $giai_hs_gioi_insert = $monthi . " | " . $giai . " | " . $destination_path;
+            //     // echo $giai_hs_gioi_insert;
+            //     $sql3 = "UPDATE students SET giai_hs_gioi = '$giai_hs_gioi_insert' WHERE id_student = '$id_student';";
+            //     mysqli_query($connect, $sql3);
+            // }
+            $data_parts = [$monthi, $giai];
+            uploadAndUpdate($upload_dir, $id_student, 'giai_hs_gioi', $data_parts, 'fileInput_hsg');
 
         // check=1, insert giai_thuong_khac
             $giaithuongkhac = $_POST['giaithuongkhac'];
             $file_name = $_FILES['fileInput_otherAchieve']['name'];
-            $fileInput_otherAchieve = $_FILES['fileInput_otherAchieve'];
-            $file_name = $fileInput_otherAchieve['name'];
-            $generated_file_name = time().'-'.$file_name;
-            $destination_path = $upload_dir . time() . '-' . $file_name;
-            $file_tmp_name = $fileInput_otherAchieve['tmp_name'];
-            if($file_name != ""){
-                move_uploaded_file($file_tmp_name, $destination_path);
-                $giai_thuong_khac_array = $giaithuongkhac . " | " . $destination_path;
-                // echo $giai_thuong_khac_array;
-                $sql4 = "UPDATE students SET giai_thuong_khac = '$giai_thuong_khac_array' WHERE id_student = '$id_student';";
-                mysqli_query($connect, $sql4);
-            }
+            // $fileInput_otherAchieve = $_FILES['fileInput_otherAchieve'];
+            // $file_name = $fileInput_otherAchieve['name'];
+            // $generated_file_name = time().'-'.$file_name;
+            // $destination_path = $upload_dir . time() . '-' . $file_name;
+            // $file_tmp_name = $fileInput_otherAchieve['tmp_name'];
+            // if($file_name != ""){
+            //     move_uploaded_file($file_tmp_name, $destination_path);
+            //     $giai_thuong_khac_array = $giaithuongkhac . " | " . $destination_path;
+            //     // echo $giai_thuong_khac_array;
+            //     $sql4 = "UPDATE students SET giai_thuong_khac = '$giai_thuong_khac_array' WHERE id_student = '$id_student';";
+            //     mysqli_query($connect, $sql4);
+            // }
+            $data_parts = [$giaithuongkhac];
+            uploadAndUpdate($upload_dir, $id_student, 'giai_thuong_khac', $data_parts, 'fileInput_otherAchieve');
 
         // check=1, insert chung_chi_ielts
             $ma_chung_nhan = $_POST['machungnhan'];
             $diem = $_POST['diem'];
-            $file_name = $_FILES['fileInput_ielts']['name'];
-            $fileInput_ielts = $_FILES['fileInput_ielts'];
-            $file_name = $fileInput_ielts['name'];
-            $generated_file_name = time().'-'.$file_name;
-            $destination_path = $upload_dir . time() . '-' . $file_name;
-            $file_tmp_name = $fileInput_ielts['tmp_name'];
-            if($file_name != ""){
-                move_uploaded_file($file_tmp_name, $destination_path);
-                $chung_chi_ielts_insert = $ma_chung_nhan . " | " . $diem . " | " . $destination_path;
-                // echo $chung_chi_ielts_insert;
-                $sql6 = "UPDATE students SET chung_chi_ielts = '$chung_chi_ielts_insert' WHERE id_student = '$id_student';";
-                mysqli_query($connect, $sql6);
-            }
+            // $file_name = $_FILES['fileInput_ielts']['name'];
+            // $fileInput_ielts = $_FILES['fileInput_ielts'];
+            // $file_name = $fileInput_ielts['name'];
+            // $generated_file_name = time().'-'.$file_name;
+            // $destination_path = $upload_dir . time() . '-' . $file_name;
+            // $file_tmp_name = $fileInput_ielts['tmp_name'];
+            // if($file_name != ""){
+            //     move_uploaded_file($file_tmp_name, $destination_path);
+            //     $chung_chi_ielts_insert = $ma_chung_nhan . " | " . $diem . " | " . $destination_path;
+            //     // echo $chung_chi_ielts_insert;
+            //     $sql6 = "UPDATE students SET chung_chi_ielts = '$chung_chi_ielts_insert' WHERE id_student = '$id_student';";
+            //     mysqli_query($connect, $sql6);
+            // }
+            $data_parts = [$ma_chung_nhan, $diem];
+            uploadAndUpdate($upload_dir, $id_student, 'chung_chi_ielts', $data_parts, 'fileInput_ielts');
 
         // check=1, insert doi_tuong_uu_tien
             $doi_tuong_uu_tien = $_POST['doituonguutien'];
-            $file_name = $_FILES['fileInput_priority']['name'];
-            $fileInput_priority = $_FILES['fileInput_priority'];
-            $file_name = $fileInput_priority['name'];
-            $generated_file_name = time().'-'.$file_name;
-            $destination_path = $upload_dir . time() . '-' . $file_name;
-            $file_tmp_name = $fileInput_priority['tmp_name'];
-            if($file_name != ""){
-                move_uploaded_file($file_tmp_name, $destination_path);
-                $doi_tuong_uu_tien_insert = $doi_tuong_uu_tien . " | " . $destination_path;
-                // echo $doi_tuong_uu_tien_insert;
-                $sql5 = "UPDATE students SET doi_tuong_uu_tien = '$doi_tuong_uu_tien_insert' WHERE id_student = '$id_student';";
-                mysqli_query($connect, $sql5);
-            }
+            // $file_name = $_FILES['fileInput_priority']['name'];
+            // $fileInput_priority = $_FILES['fileInput_priority'];
+            // $file_name = $fileInput_priority['name'];
+            // $generated_file_name = time().'-'.$file_name;
+            // $destination_path = $upload_dir . time() . '-' . $file_name;
+            // $file_tmp_name = $fileInput_priority['tmp_name'];
+            // if($file_name != ""){
+            //     move_uploaded_file($file_tmp_name, $destination_path);
+            //     $doi_tuong_uu_tien_insert = $doi_tuong_uu_tien . " | " . $destination_path;
+            //     // echo $doi_tuong_uu_tien_insert;
+            //     $sql5 = "UPDATE students SET doi_tuong_uu_tien = '$doi_tuong_uu_tien_insert' WHERE id_student = '$id_student';";
+            //     mysqli_query($connect, $sql5);
+            // }
+            $data_parts = [$doi_tuong_uu_tien];
+            uploadAndUpdate($upload_dir, $id_student, 'doi_tuong_uu_tien', $data_parts, 'fileInput_priority');
 
         // check=1, insert khu_vuc_uu_tien
             $khu_vuc_uu_tien = $_POST['khuvuc'];
-            $sql6 = "UPDATE students SET khu_vuc_uu_tien = '$khu_vuc_uu_tien' WHERE id_student = '$id_student';";
-            mysqli_query($connect, $sql6);
+            // $sql6 = "UPDATE students SET khu_vuc_uu_tien = '$khu_vuc_uu_tien' WHERE id_student = '$id_student';";
+            // mysqli_query($connect, $sql6);
+            update('students', ['khu_vuc_uu_tien' => $khu_vuc_uu_tien], ['id_student' => $id_student]);
 
         
 

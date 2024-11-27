@@ -109,7 +109,7 @@
 						// if(in_array($file_extension, $permitted_extensions)){
 						// 	move_uploaded_file($file_tmp_name, $destination_path);
 						// }
-						uploadFileAndSave('fileInput_potrait', $upload_dir, $fullname);
+						$destination_path = uploadFileAndSave('fileInput_potrait', $upload_dir, $fullname);
 
 						$sql_update_students = "UPDATE students
 										SET fullname = '$fullname',
@@ -120,6 +120,7 @@
 											email = '$email',
 											avt = '$destination_path'
 										WHERE id_student = $id_student;";
+						
 
 						mysqli_query($connect, $sql_update_students);
 						

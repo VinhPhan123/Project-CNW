@@ -297,37 +297,53 @@
         if(in_array($file_extension, $permitted_extensions)){
             move_uploaded_file($file_tmp_name, $destination_path);
         }
+        return $destination_path;
     }
     
 
-    function uploadAndUpdate($upload_dir, $id_student, $column_name, $data_parts, $fileInput) {
-        global $connect;
-        // Lấy thông tin file
-        $file_name = $_FILES[$fileInput]['name'];
-        $file_tmp_name = $_FILES[$fileInput]['tmp_name'];
+    // function uploadAndUpdate($upload_dir, $id_student, $column_name, $data_parts, $fileInput) {
+    //     global $connect;
+    //     // Lấy thông tin file
+    //     $file_name = $_FILES[$fileInput]['name'];
+    //     $file_tmp_name = $_FILES[$fileInput]['tmp_name'];
         
-        // Kiểm tra nếu có file
-        if ($file_name != "") {
-            $generated_file_name = time() . '-' . $file_name;
-            $destination_path = $upload_dir . $generated_file_name;
+    //     // Kiểm tra nếu có file
+    //     if ($file_name != "") {
+    //         $generated_file_name = time() . '-' . $file_name;
+    //         $destination_path = $upload_dir . $generated_file_name;
     
-            // Di chuyển file vào thư mục upload
-            if (move_uploaded_file($file_tmp_name, $destination_path)) {
-                // Gộp các phần dữ liệu lại thành chuỗi
-                $data_parts[] = $destination_path; // Thêm đường dẫn file vào dữ liệu
-                $final_value = implode(" | ", $data_parts);
+    //         // Di chuyển file vào thư mục upload
+    //         if (move_uploaded_file($file_tmp_name, $destination_path)) {
+    //             // Gộp các phần dữ liệu lại thành chuỗi
+    //             $data_parts[] = $destination_path; // Thêm đường dẫn file vào dữ liệu
+    //             $final_value = implode(" | ", $data_parts);
     
-                // Tạo câu lệnh SQL cập nhật
-                // $sql = "UPDATE students SET $column_name = '$final_value' WHERE id_student = '$id_student';";
-                // mysqli_query($connect, $sql);
-                update('students', [$column_name => $final_value], ['id_student' => $id_student]);
+    //             // Tạo câu lệnh SQL cập nhật
+    //             // $sql = "UPDATE students SET $column_name = '$final_value' WHERE id_student = '$id_student';";
+    //             // mysqli_query($connect, $sql);
+    //             update('students', [$column_name => $final_value], ['id_student' => $id_student]);
     
-                return true; // Thành công
-            }
+    //             return true; // Thành công
+    //         }
+    //     }
+    //     return false; // Thất bại
+    // }
+    
+    function uploadAndUpdate($upload_dir, $id_student, $column_name, $data_parts, $fileInput) {
+        $this_file = $_FILES[$fileInput];
+        $file_name = $this_file['name'];
+        $file_tmp_name = $this_file['tmp_name'];
+        $destination_path = $upload_dir . time() . '-' . $file_name;
+        if($file_name != ""){
+            move_uploaded_file($file_tmp_name, $destination_path);
+            // $data_parts[] = $destination_path; // Thêm đường dẫn file vào dữ liệu
+            array_push($data_parts, $destination_path);
+            $value_update = implode(" | ", $data_parts);
+            update('students', [$column_name => $value_update], ['id_student' => $id_student]);
+            return true;
         }
-        return false; // Thất bại
+        return false;
     }
-    
     
     // student_knowled_record
     function selectRecordStudent($id_student){
