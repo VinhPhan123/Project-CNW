@@ -1,5 +1,6 @@
 <?php 
     include './layouts/header.php';
+    include 'function.php';
 ?>
 
 <style>
@@ -196,51 +197,6 @@
 	}
 </style>
 
-<?php 
-    // lấy ra các id_student trong bảng student
-    $array_id_student = array();
-    $sql1 = "SELECT * FROM students;";
-    $query1 = mysqli_query($connect, $sql1);
-    while($r1 = mysqli_fetch_array($query1)){
-        array_push($array_id_student, $r1['id_student']);
-    }
-    // print_r($array_id_student);
-
-    // tạo array (key-value) = (id_student - [id_major - list_id_SB]);
-    $array_idStudent_idMajor_listIdSB = array();
-    foreach($array_id_student as $id_student){
-        $a = array();
-
-        $list_id_major = array();
-        $sql2 = "SELECT distinct id_major FROM ledgers WHERE id_student='$id_student';";
-        $query2 = mysqli_query($connect, $sql2);
-        while($r2 = mysqli_fetch_array($query2)){
-            array_push($list_id_major, $r2['id_major']);
-        }
-        // print_r($list_id_major);
-
-        foreach($list_id_major as $id_major){
-            $list_id_SB = array();
-            $sql3 = "SELECT * FROM ledgers WHERE id_student='$id_student' AND id_major='$id_major';";
-            $query3 = mysqli_query($connect, $sql3);
-            while($r3 = mysqli_fetch_array($query3)){
-                array_push($list_id_SB, $r3['id_SB']);
-            }
-            $a[$id_major] = $list_id_SB;
-        }
-        $array_idStudent_idMajor_listIdSB[$id_student] = $a;
-    }
-
-    // print_r($array_idStudent_idMajor_listIdSB);
-
-    // lấy ra số lượng ledgers;
-    $s1 = "SELECT * FROM ledgers;";
-    $q1 = mysqli_query($connect, $s1);
-    $count_ledger = mysqli_num_rows($q1);
-    // echo $count_ledger;
-
-?>
-
 <div style="display: flex; justify-content: center;">
 
 <?php 
@@ -248,11 +204,6 @@
 		include './layouts/menu.php';
 	}
 ?>
-
-<?php
-
-?> 
-
 
 <div style="display: block; width: 100%;">
 	
@@ -270,79 +221,65 @@
         <th>Trạng thái</th>
     </tr>
 
-    <?php 
-        if($count_ledger > 0){
-            // lấy ra các id_student trong bảng ledgers
-            $array_id_student_ledgers = array();
-            $sql11 = "SELECT DISTINCT id_student FROM ledgers;";
-            $query11 = mysqli_query($connect, $sql11);
-            while($r4 = mysqli_fetch_array($query11)){
-                array_push($array_id_student_ledgers, $r4['id_student']);
-            }
+    <?php
+        $array_ledger = sql_query_fetchAll(
+            "SELECT
+                l.id_ledger,
+                (SELECT count(l1.id_student) FROM xettuyen.ledgers AS l1 WHERE l.id_student = l1.id_student) AS count_ledger_of_student,
+                s.fullname AS TenThiSinh,
+                (SELECT count(l2.id_major) FROM xettuyen.ledgers AS l2 WHERE l.id_major = l2.id_major AND l.id_student = l2.id_student) AS count_major_of_student,
+                m.major_name AS NganhXT,
+                l.id_SB AS ToHopDK,
+                t.fullname AS GVPhuTrach,
+                l.ledger_status AS TrangThai
+            FROM xettuyen.ledgers AS l
+            JOIN xettuyen.students AS s ON l.id_student = s.id_student
+            JOIN xettuyen.majors AS m ON l.id_major = m.id_major
+            LEFT OUTER JOIN xettuyen.teachers AS t ON l.id_teacher = t.id_teacher
+            ORDER BY l.id_student, l.id_major, l.id_SB;");
 
-            $index = 0;
-            foreach($array_idStudent_idMajor_listIdSB as $id_student => $array_idMajor_listIdSB){
-                if(in_array($id_student, $array_id_student_ledgers)){
-                    // lấy ra username_student
-                    $sql4 = "SELECT * FROM students WHERE id_student='$id_student';";
-                    $query4 = mysqli_query($connect, $sql4);
-                    $username_student = mysqli_fetch_array($query4)['username'];
-
-                    // lấy ra số lượng id_SB
-                    $sql6 = "SELECT * FROM ledgers WHERE id_student='$id_student'";
-                    $query6 = mysqli_query($connect, $sql6);
-                    $count = mysqli_num_rows($query6);
-                    // echo $count;
-                    echo '<tr>';
-                    echo '<td rowspan="'. $count . '">' . $index . '</td>';
-                    echo '<td rowspan="'. $count . '">' . $username_student . '</td>';
-                    foreach($array_idMajor_listIdSB as $id_major => $listIdSB){
-                        // lấy ra số lượng id_SB
-                        $count_id_SB = count($listIdSB);
-
-                        // lấy ra tên ngành dựa vào id_major
-                        $sql5 = "SELECT * FROM majors WHERE id_major='$id_major';";
-                        $query5 = mysqli_query($connect, $sql5);
-                        $ten_nganh = mysqli_fetch_array($query5)['major_name'];
-
-                        echo '<td id="chuyennganh" rowspan="'. $count_id_SB . '">' . $ten_nganh . '</td>';
-                        foreach($listIdSB as $id_SB){
-                            $sql10 = "SELECT * FROM ledgers where id_student='$id_student' and id_major='$id_major' and id_SB='$id_SB';";
-                            $query10 = mysqli_query($connect, $sql10);
-                            $id_ledger = mysqli_fetch_array($query10)['id_ledger'];
-                            echo '<td class="get_to_hop">' . $id_SB . '</td>';
-                            echo '<td><button style="color: #fff;" class="btn btn-warning" name="show">Click</button></td>';
-                            echo '<input type="hidden" name="get_id_ledger" class="get_id_ledger" value="' . $id_ledger . '">';
-                                
-
-                            // lấy ra id_teacher dựa vào id_student, id_major, id_SB
-                            $sql7 = "SELECT * FROM ledgers where id_student='$id_student' and id_major='$id_major' and id_SB='$id_SB';";
-                            $query7 = mysqli_query($connect, $sql7);
-                            $id_teacher = mysqli_fetch_array($query7)['id_teacher'];
-                            if($id_teacher != NULL){
-                                $sql8 = "SELECT * FROM teachers WHERE id_teacher='$id_teacher';";
-                                $query8 = mysqli_query($connect, $sql8);
-                                $teacher_name = mysqli_fetch_array($query8)['fullname'];
-
-                                // lấy ra ledger_status
-                                $sql9 = "SELECT * FROM ledgers where id_student='$id_student' and id_major='$id_major' and id_SB='$id_SB';";
-                                $query9 = mysqli_query($connect, $sql9);
-                                $ledger_status = mysqli_fetch_array($query9)['ledger_status'];
-            
-                                echo '<td>' . $teacher_name .'</td>
-                                    <td>' . $ledger_status . '</td>
-                                    </tr>';
-                            } else {
-                                echo '<td colspan="2">Chờ duyệt</td>';
-                                echo '</tr>';
-                            }
-                        }
-                    }
-                    $index += 1;
+        // array_ledger:
+            // 0   =>   id_ledger
+            // 1   =>   count_ledger_of_student
+            // 2   =>   TenThiSinh
+            // 3   =>   count_major_of_student
+            // 4   =>   NganhXT
+            // 5   =>   ToHopDK
+            // 6   =>   GVPhuTrach
+            // 7   =>   TrangThai
+        $count_student = 0;
+        $count_major = 0;
+        $STT = 0;
+        foreach($array_ledger as $key => $value) {
+            $count_student += 1;
+            $count_major += 1;
+            echo '<tr>';
+            if($count_student == 1) {
+                $STT += 1;
+                echo '<td rowspan="'.$value[1].'">'.$STT.'</td>';
+                echo '<td rowspan="'.$value[1].'">'.$value[2].'</td>';
+            } else {
+                if($count_student == $value[1]) {
+                    $count_student = 0;
                 }
             }
-        } else {
-            echo '<tr><td colspan="7">Không có hồ sơ nào được nộp</td></tr>';
+            if($count_major == 1) {
+                echo '<td id="chuyennganh" rowspan="'.$value[3].'">'.$value[4].'</td>';
+            } else {
+                if($count_major == $value[3]) {
+                    $count_major = 0;
+                }
+            }
+            echo '<td class="get_to_hop">'.$value[5].'</td>';
+            echo '<td><button style="color: #fff;" class="btn btn-warning" name="show">Click</button></td>';
+            echo '<input type="hidden" name="get_id_ledger" class="get_id_ledger" value="'.$value[0].'">';
+            if($value[6] != NULL) {
+                echo '<td>'.$value[6].'</td>';
+                echo '<td>'.$value[7].'</td>';
+            } else {
+                echo '<td colspan="2">Chờ duyệt</td>';
+            }
+            echo '</tr>';
         }
     ?>
 </table>
@@ -406,16 +343,14 @@
 			const form_ajax = document.querySelector('.overlay');
 			const inputElement = this.closest('tr').querySelector('input[class="get_id_ledger"]');
 			const id_ledger = inputElement.value;
-			console.log(id_ledger);
 
 			const tohop_selected = this.closest('tr').querySelector('.get_to_hop');
 			const tohop = tohop_selected.textContent;
-			console.log(tohop);
 
             const nganh_selected = document.getElementById("chuyennganh");
             const chuyennganh = nganh_selected.textContent;
-        	console.log(chuyennganh);
 
+            console.log(id_ledger, tohop, chuyennganh);
 
 			const xhr = new XMLHttpRequest();
 			xhr.open('POST', "admin_hien_thi_ho_so_ajax.php", true);
@@ -425,7 +360,7 @@
 					// console.log(this.response);
 					form_ajax.innerHTML = this.response; // Cập nhật nội dung overlay
 					form_ajax.style.display = 'block'; // Hiển thị overlay
-                    console.log(this.response);
+                    // console.log(this.response);
 				} else {
 					console.log('Failed to send data');
 				}

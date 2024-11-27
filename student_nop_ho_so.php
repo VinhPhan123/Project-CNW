@@ -616,6 +616,7 @@
                         ?>
                         <script>
                             alert("Nop ho so thanh cong!");
+                            location.reload(true);
                         </script>
                         <?php
                     }
