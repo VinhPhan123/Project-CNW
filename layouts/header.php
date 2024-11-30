@@ -10,7 +10,6 @@
 
 	$uri = $_SERVER['REQUEST_URI'];
 	// kiểm tra nếu ko phải trang xác thực, tài khoản chưa được lưu trên csdl thì sẽ xóa session
-	// if(!strpos($uri, "/xacthuc.php")) {
 	if(!strpos($current_page, "xacthuc.php")) {
 		if(!strpos($current_page, "student.php")){
 			if(isset($_SESSION['taiKhoan'])) {
@@ -23,9 +22,6 @@
 				$sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' and password='$matKhau'";
 				$sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$matKhau'";
 				$sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$matKhau'";
-				// $sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
-				// $sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$matKhau' and email='$email' and ngaysinh='$ngaySinh'";
-				// echo $sql_admins;
 				$query_admins = mysqli_query($connect, $sql_admins);
 				$query_teachers = mysqli_query($connect, $sql_teachers);
 				$query_students = mysqli_query($connect, $sql_students);
@@ -47,17 +43,8 @@
 				} else if($result_teachers == 0 && $result_students==0) {
 					$check = false;
 				}
-				// echo $check;
-				// var_dump($result_admins == 1);
-				// var_dump($result_teachers == 1);
-				// var_dump($result_students == 1);
 				if($check == false) {
 					$email = $_SESSION['email'];
-					// $sql = "DELETE FROM guest WHERE teacher_email = '$email'";
-					// mysqli_query($connect, $sql);
-					// header("location: logout.php");
-					// echo "false check";
-
 					// khi teacher nhập emai đã được sử dụng, cho phép giữ lại session và quay trở lại trang dangky
 					if(!strpos($current_page, 'dangky.php')){
 						header("location: logout.php");
@@ -85,6 +72,11 @@
     <link rel="stylesheet" href="./assets/css/dangky.css">
 	<link rel="stylesheet" href="./assets/css/index.css">
 	<link rel="stylesheet" href="./assets/css/admin_tao_ho_so.css">
+	<style>
+		.container-fluid {
+			margin-left: 60px;
+		}
+	</style>
 </head>
 <body>
 
@@ -107,10 +99,6 @@
 						aria-current="page" href="#" style="font-weight: 400; font-size: 20px;">Bla Website</a></li>
 					<li class="nav-item"><a class="nav-link" href="#"></a></li>
 					<li class="nav-item dropdown">
-						<!-- <a
-						class="nav-link dropdown-toggle" href="#" role="button"
-						data-bs-toggle="dropdown" aria-expanded="false"> Thể loại </a> -->
-					<!-- <li class="nav-item"><a class="nav-link disabled">Hết hàng</a> -->
 					</li>
 				</ul>
 				
@@ -130,10 +118,7 @@
 							<?php echo($_SESSION['hoVaTen']); ?>
 							</a>
 							<ul class="dropdown-menu">
-								<!-- <li><a class="dropdown-item" href="#">Đơn hàng của tôi</a></li> -->
-								<!-- <li><a class="dropdown-item" href="#">Thông báo</a></li> -->
-								<!-- <li><a class="dropdown-item" href="thaydoithongtin.jsp">Thay đổi thông tin</a></li> -->
-								<li><a class="dropdown-item" href="doimatkhau.jsp">Đổi mật khẩu</a></li>
+								<li><a class="dropdown-item" href="doi_mat_khau.php">Đổi mật khẩu</a></li>
 								<li><hr class="dropdown-divider"></li>
 								<li><a class="dropdown-item" href="logout.php" id="logout">Thoát tài khoản</a></li>
 							</ul></li>

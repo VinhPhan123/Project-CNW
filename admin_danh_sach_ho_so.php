@@ -254,10 +254,6 @@
 	}
 ?>
 
-<?php
-
-?> 
-
 
 <div style="display: block; width: 100%;">
 	

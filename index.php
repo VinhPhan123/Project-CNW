@@ -9,6 +9,8 @@
     if(isset($_SESSION['role'])) {
 		include './layouts/menu.php';
 	}
+
+    // echo $_SESSION['taiKhoan'];
 ?>
 
 <style>

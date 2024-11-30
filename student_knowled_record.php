@@ -173,7 +173,7 @@
 				<div style="width: 100%; text-align: center;">Bạn có muốn sửa thông tin cá nhân?</div>
 				<div style="text-align: center; margin-top: 30px;">
 					<dev style="margin-left: auto; margin-right: auto; width: 100px; display: inline-block; margin-left: auto; margin-right: auto; " class="btn btn-primary">
-						<a style="color: white; text-decoration: none;" href="student_knowled_record_edit_infor.php">Sửa</a>
+						<a style="color: white; text-decoration: none; padding: 8px 30px;" href="student_knowled_record_edit_infor.php">Sửa</a>
 					</dev>
 					<button type="button" id="btn-close-infor" style="color: #0b5ed7; background-color: white; width: 100px; display: inline-block ;margin-left: auto; margin-right: auto; " class="btn btn-primary">Hủy</button>
 				</div>
@@ -187,7 +187,7 @@
 				<div style="width: 100%; text-align: center;">Bạn có muốn sửa thông tin học bạ?</div>
 				<div style="text-align: center; margin-top: 30px;">
 					<dev style="margin-left: auto; margin-right: auto; width: 100px; display: inline-block; margin-left: auto; margin-right: auto; " class="btn btn-primary">
-						<a style="color: white; text-decoration: none;" href="student_knowled_record_edit_record.php">Sửa</a>
+						<a style="color: white; text-decoration: none; padding: 8px 30px;" href="student_knowled_record_edit_record.php">Sửa</a>
 					</dev>
 					<button type="button" id="btn-close-record" style="color: #0b5ed7; background-color: white; width: 100px; display: inline-block ;margin-left: auto; margin-right: auto; " class="btn btn-primary">Hủy</button>
 				</div>
