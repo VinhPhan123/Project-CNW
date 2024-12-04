@@ -81,53 +81,57 @@
 <link rel="stylesheet" href="./assets/css/index.css">
 <div style="display: block; width: 100%;">
 	
-<?php 
-    if($countEmails != 0){
-        echo '<form action="" method="post" style="min-height: 500px;">
-                <table>
-                    <th>STT</th>
-                    <th>Email</th>
-                    <th>Access</th>
-                    <th>Deny</th>
+    <div class="container mt-4" style="width: max-content; margin-left: auto; margin-right: auto;">
+	<!-- Page content -->
+        <?php 
+            if($countEmails != 0){
+                echo '<form action="" method="post" style="min-height: 500px;">
+                        <table>
+                            <th>STT</th>
+                            <th>Email</th>
+                            <th>Access</th>
+                            <th>Deny</th>
 
-                    <form action="" method="post">'?>
-                    <?php
-                    foreach($emails as $index => $email){
-                        echo '<tr id="id_' . $j . '">';
-                            echo '<td>' . $j . '</td>';
-                            echo '<td>' . $email .'</td>';
-                            echo '<td>
-                                    <form action="" method="post">
-                                        <input type="hidden" name="row_id" value="' . $j . '">
-                                        <button type="submit" class="btn btn-primary" name="submitAccess">Click</button>
-                                        <input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
-				                        <?php $_SESSION['token'] = $token; ?>
-                                    <?php echo '</form>
-                                </td>';
-                            echo '<td>
-                                    <form action="" method="post">
-                                        <input type="hidden" name="row_id" value="' . $j . '">
-                                        <button type="submit" class="btn btn-danger" name="submitDeny">Click</button>
-                                    </form>
-                                </td>';
-                            $j += 1;
-                        echo '</tr>';
-                    }
-                    ?>
-                        <?php
-                    echo'
-                    </form>
-                </table>
-            </form>'
-                ?>
-    <?php
-    } else {
-        echo '<div style="text-align: center; min-height: 1000px;">
-                <h4>Không có tài khoản giáo viên đăng ký mới</h4>
-            </div>';
-    }
-    ?>
+                            <form action="" method="post">'?>
+                            <?php
+                            foreach($emails as $index => $email){
+                                echo '<tr id="id_' . $j . '">';
+                                    echo '<td>' . $j . '</td>';
+                                    echo '<td>' . $email .'</td>';
+                                    echo '<td>
+                                            <form action="" method="post">
+                                                <input type="hidden" name="row_id" value="' . $j . '">
+                                                <button type="submit" class="btn btn-primary" name="submitAccess">Click</button>
+                                                <input type="hidden" name="_token" value="'?><?php echo $token .'"/>' ?>
+                                                <?php $_SESSION['token'] = $token; ?>
+                                            <?php echo '</form>
+                                        </td>';
+                                    echo '<td>
+                                            <form action="" method="post">
+                                                <input type="hidden" name="row_id" value="' . $j . '">
+                                                <button type="submit" class="btn btn-danger" name="submitDeny">Click</button>
+                                            </form>
+                                        </td>';
+                                    $j += 1;
+                                echo '</tr>';
+                            }
+                            ?>
+                                <?php
+                            echo'
+                            </form>
+                        </table>
+                    </form>'
+                        ?>
+            <?php
+            } else {
+                echo '<div style="text-align: center; min-height: 1000px;">
+                        <h4>Không có tài khoản giáo viên đăng ký mới</h4>
+                    </div>';
+            }
+            ?>
 
+	<!-- End Page content -->
+	</div>
 
 	<?php 
 		include './layouts/footer.php';

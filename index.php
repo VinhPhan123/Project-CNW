@@ -54,7 +54,7 @@ body {
 
 .navbar {
     padding-top: 20px;
-    z-index: 0;
+    z-index: 100;
     background-color: rgb(0, 0, 0, 0) !important;   
 }
 
@@ -107,8 +107,7 @@ width: 100vw;
 <div style="display: block; width: 100%;" class="app-container">
     <div class="homepage-container">
         <video autoplay muted loop>
-            <source src='./assets/video/video-homepage.mp4'
-            type='video/mp4' />
+            <source src='./assets/video/video-homepage.mp4' type='video/mp4' />
         </video>
 
         <div class='homepage-content'>
@@ -118,7 +117,7 @@ width: 100vw;
             the results of the high school transcript-based admission process to universities and colleges nationwide.
             </div>
             <div class='title-3'>
-                <button>Get's started. It's free</button>
+                <a href="dangnhap.php"><button>Get's started. It's free</button></a>
             </div>
         </div>
     </div>
