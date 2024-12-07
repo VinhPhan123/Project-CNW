@@ -12,8 +12,6 @@
         <div class="button-close" id="button-close">X</div>
         <ul class="dropdown">
             <li class="dropdown-item"><a href="index.php?#">Trang chủ</a></li>
-            <!-- <li class="dropdown-item"><a href="#">test</a></li>
-            <li class="dropdown-item"><a href="#">test</a></li> -->
         </ul>
         <ul class="dropdown">
             <?php

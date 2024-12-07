@@ -6,9 +6,6 @@
 ?>
 
 <?php
-	// echo $_SESSION['taiKhoan'] . '----';
-
-
 	$uri = $_SERVER['REQUEST_URI'];
 	// kiểm tra nếu ko phải trang xác thực, tài khoản chưa được lưu trên csdl thì sẽ xóa session
 	if(!strpos($current_page, "xacthuc.php")) {
@@ -20,13 +17,6 @@
 				$ngaySinh = $_SESSION['ngaySinh'];
 
 				// AND để tránh trường hợp tài khoản teacher, admin và student có các trường thông tin giống nhau
-				// $sql_admins = "SELECT * FROM admins WHERE username ='$taiKhoan' and password='$matKhau'";
-				// $sql_teachers = "SELECT * FROM teachers WHERE username ='$taiKhoan' and password='$matKhau'";
-				// $sql_students = "SELECT * FROM students WHERE username ='$taiKhoan' and password='$matKhau'";
-				// $query_admins = mysqli_query($connect, $sql_admins);
-				// $query_teachers = mysqli_query($connect, $sql_teachers);
-				// $query_students = mysqli_query($connect, $sql_students);
-
 				$query_admins = select('admins', '*', ['username'=>$taiKhoan, 'password'=>$matKhau]);
 				$query_teachers = select('teachers', '*', ['username'=>$taiKhoan, 'password'=>$matKhau]);
 				$query_students = select('students', '*', ['username'=>$taiKhoan, 'password'=>$matKhau]);
