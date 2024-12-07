@@ -27,9 +27,6 @@
         echo "Chưa có ngành nào";
     } else {
         $arr_select_majors = mysqli_fetch_all($query_select_majors);
-        // echo "<pre>";
-        // echo print_r($arr_select_majors);
-        // echo "</pre>";
 ?>
 <link rel="stylesheet" href="./assets/css/admin_tao_ho_so.css">
 <div style="display: block; width: 100%;">

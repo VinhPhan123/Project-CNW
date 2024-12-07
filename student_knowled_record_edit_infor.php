@@ -1,7 +1,6 @@
 <?php 
 	include './layouts/header.php';
 	include './XuLyPhien/student.php';
-	include './functions.php';
 ?>
 
 <div style="display: flex; justify-content: center;">
@@ -99,16 +98,6 @@
 						if (!is_dir($upload_dir)) {
 							mkdir($upload_dir, 0755, true);
 						}
-						// $permitted_extensions = ['jpg', 'png', 'jpeg'];
-						// $file_name = $_FILES['fileInput_potrait']['name'];
-						// $file_tmp_name = $_FILES['fileInput_potrait']['tmp_name'];
-						// $file_extension = explode('.', $file_name);
-						// $file_extension = strtolower(end($file_extension));
-						// $generated_file_name = $fullname . '-' . time() . '.' . $file_extension;
-						// $destination_path = $upload_dir . $generated_file_name;
-						// if(in_array($file_extension, $permitted_extensions)){
-						// 	move_uploaded_file($file_tmp_name, $destination_path);
-						// }
 						$destination_path = uploadFileAndSave('fileInput_potrait', $upload_dir, $fullname);
 
 						$sql_update_students = "UPDATE students

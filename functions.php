@@ -22,10 +22,6 @@
 
     function checkEmailExist($email){
         global $connect;
-        // $sql1 = "SELECT * FROM teachers WHERE email='$email';";
-        // $sql2 = "SELECT * FROM students WHERE email='$email';";
-        // $result1 = mysqli_query($connect, $sql1);
-        // $result2 = mysqli_query($connect, $sql2);
         $condition = [
             'email' => $email
         ];
@@ -69,8 +65,6 @@
 
     function getAllUsernameTeacher(){
         global $connect;
-        // $a = "SELECT * FROM teachers;";
-        // $res = mysqli_query($connect, $a);
         $res = select('teachers', '*', '');
         $array_username_teacher = array();
         while($r = mysqli_fetch_array($res)){

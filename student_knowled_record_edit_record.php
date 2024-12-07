@@ -1,7 +1,6 @@
 <?php 
 	include './layouts/header.php';
 	include './XuLyPhien/student.php';
-	include './functions.php';
 ?>
 
 <div style="display: flex; justify-content: center;">
@@ -115,48 +114,11 @@
 						$GiaoDucCongDan = (float)$_POST['GiaoDucCongDan'];
 						$GiaoDucTheChat = (float)$_POST['GiaoDucTheChat'];
 
-						// $sql = "SELECT
-						// 			ar.school,
-						// 			ar.address,
-						// 			ar.Toan,
-						// 			ar.NguVan,
-						// 			ar.TiengAnh,
-						// 			ar.VatLy,
-						// 			ar.HoaHoc,
-						// 			ar.SinhHoc,
-						// 			ar.LichSu,
-						// 			ar.DiaLy,
-						// 			ar.TinHoc,
-						// 			ar.CongNghe,
-						// 			ar.GiaoDucCongDan,
-						// 			ar.GiaoDucTheChat
-						// 		FROM academic_records AS ar
-						// 		WHERE ar.id_student = '$id_student';";
-						
-						// $query = mysqli_query($connect, $sql);
 
 						$query = select('academic_records', ['school', 'address', 'Toan', 'NguVan', 'TiengAnh', 'VatLy', 'HoaHoc', 'SinhHoc',
 							'LichSu', 'DiaLy', 'TinHoc', 'CongNghe', 'GiaoDucCongDan', 'GiaoDucTheChat'], ['id_student' => $id_student]);
 						$result = mysqli_num_rows($query);
 						if ($result > 0) {
-							// $sql_update_academic_records = "UPDATE academic_records
-							// SET school = '$school',
-							// 	address = '$school_address',
-							// 	Toan = $Toan,
-							// 	NguVan = $NguVan,
-							// 	TiengAnh = $TiengAnh,
-							// 	VatLy = $VatLy,
-							// 	HoaHoc = $HoaHoc,
-							// 	SinhHoc = $SinhHoc,
-							// 	LichSu = $LichSu,
-							// 	DiaLy = $DiaLy,
-							// 	TinHoc = $TinHoc,
-							// 	CongNghe = $CongNghe,
-							// 	GiaoDucCongDan = $GiaoDucCongDan,
-							// 	GiaoDucTheChat = $GiaoDucTheChat
-							// WHERE id_student = $id_student;";
-
-							// mysqli_query($connect, $sql_update_academic_records);
 							$value = [
 								'school' => $school,
 								'address' => $school_address,
@@ -175,37 +137,6 @@
 							];
 							update('academic_records', $value, ['id_student' => $id_student]);
 						} else {
-							// $sql_insert_academic_records = "INSERT INTO academic_records(id_student, 
-							// 																school, 
-							// 																address, 
-							// 																Toan, 
-							// 																NguVan, 
-							// 																TiengAnh, 
-							// 																VatLy, 
-							// 																HoaHoc, 
-							// 																SinhHoc, 
-							// 																LichSu, 
-							// 																DiaLy, 
-							// 																TinHoc, 
-							// 																CongNghe, 
-							// 																GiaoDucCongDan, 
-							// 																GiaoDucTheChat)
-							// 								VALUES($id_student,  
-							// 										'$school', 
-							// 										'$school_address', 
-							// 										$Toan, 
-							// 										$NguVan, 
-							// 										$TiengAnh, 
-							// 										$VatLy, 
-							// 										$HoaHoc, 
-							// 										$SinhHoc, 
-							// 										$LichSu, 
-							// 										$DiaLy, 
-							// 										$TinHoc, 
-							// 										$CongNghe, 
-							// 										$GiaoDucCongDan, 
-							// 										$GiaoDucTheChat);";
-							// mysqli_query($connect, $sql_insert_academic_records);
 							$data = [
 								'id_student' => $id_student,
 								'school' => $school,

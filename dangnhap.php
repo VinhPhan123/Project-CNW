@@ -1,6 +1,5 @@
 <?php 
     include './layouts/header.php';
-    include './functions.php';
 ?>
 <pre>
 <?php 
@@ -84,8 +83,6 @@
     </div>
     <button name="submit" class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
     <a href="dangky.php">Đăng ký tài khoản mới</a>
-    <!-- <a href="forgot_pasword.php">Forgot passowrd</a> -->
-    
     <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2024</p>
     </form>
 </main>

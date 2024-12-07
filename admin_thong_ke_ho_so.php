@@ -1,6 +1,6 @@
 <?php 
     include './layouts/header.php';
-    include './functions.php';
+    // include './functions.php';
 ?>
 
 <style>
@@ -25,9 +25,6 @@
     while($r = mysqli_fetch_array($query1)){
         $arr_majors[$r['id_major']] = $r['major_name'];
     }
-
-    // print_r($arr_majors);
-
 ?>
 
 

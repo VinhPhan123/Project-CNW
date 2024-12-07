@@ -10,7 +10,6 @@
 		include './layouts/menu.php';
 	}
 
-    // echo $_SESSION['taiKhoan'];
 ?>
 
 <style>

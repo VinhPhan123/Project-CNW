@@ -1,7 +1,6 @@
 <?php 
 	include './layouts/header.php';
 	include './XuLyPhien/teacher.php';
-	include './functions.php';
 ?>
 
 <?php $token = md5(uniqid()); ?>
@@ -237,8 +236,6 @@
     $nganh = $_SESSION['nganh'];
 	
     // lấy ra id của ngành
-    // $sql3 = "SELECT id_major FROM majors WHERE major_name='$nganh';";
-    // $query3 = mysqli_query($connect, $sql3);
 	$condition = [
 		'major_name' => $nganh
 	];
@@ -247,9 +244,6 @@
     // echo $id_major;
 
     // array lưu các student đăng ký xét tuyển ngành được chọn
-    // $sql4 = "SELECT * FROM ledgers WHERE id_major = '$id_major';";
-    // $query4 = mysqli_query($connect, $sql4);
-
 	$condition = [
 		'id_major' => $id_major
 	];
@@ -296,9 +290,6 @@
 								$student_name = getStudentNameById($id_student);
 
 								// lấy ra id_ledgers
-								// $sql5 = "SELECT * FROM ledgers WHERE id_student = '$id_student';";
-								// $query5 = mysqli_query($connect, $sql5);
-
 								$condition = [
 									'id_student' => $id_student
 								];
@@ -306,9 +297,6 @@
 								$id_ledgers = mysqli_fetch_array($query5)['id_ledger'];
 
 								// lấy ra số lượng tohop có status = null với id_major
-								// $sql7 = "SELECT * FROM ledgers WHERE id_major=$id_major AND id_student=$id_student";
-								// $query7 = mysqli_query($connect, $sql7);
-
 								$condition = [
 									'id_major' => $id_major,
 									'id_student' => $id_student
@@ -327,9 +315,6 @@
 
 								foreach($array_tohop as $tohop){
 									// kiểm tra status, nếu NULL thì hiển thị
-									// $sql6 = "SELECT * FROM ledgers WHERE id_major=$id_major AND id_student=$id_student AND id_SB='$tohop';";
-									// $query6 = mysqli_query($connect, $sql6);
-
 									$condition = [
 										'id_major' => $id_major,
 										'id_student' => $id_student,
@@ -396,13 +381,6 @@
 <?php
 	// xử lí nút access
 	if(isset($_POST['access']) && ($_SESSION['token'] == $_POST['_token'])){
-		// updateLedger('Duyệt', $_POST['id_ledger'], $_SESSION['id_teacher']);
-		// $sql_update_ledger = "UPDATE ledgers SET
-		// 						ledger_status = '$status',
-		// 						id_teacher = " . $id_teacher ."
-		// 					WHERE id_ledger = $id";
-		// mysqli_query($connect, $sql_update_ledger);
-
 		$value = [
 			'ledger_status' => 'Duyệt',
 			'id_teacher' =>  $_SESSION['id_teacher']
@@ -417,7 +395,6 @@
 	
 	// xử lí nút deny
 	if(isset($_POST['deny']) && ($_SESSION['token'] == $_POST['_token'])){
-		// updateLedger('Không duyệt', $_POST['id_ledger'], $_SESSION['id_teacher']);
 		$value = [
 			'ledger_status' => 'Không duyệt',
 			'id_teacher' =>  $_SESSION['id_teacher']

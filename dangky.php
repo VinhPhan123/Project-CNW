@@ -1,19 +1,11 @@
 <?php 
     include './layouts/header.php';
-	include './functions.php';
 ?>	
 
 <?php 
 	$error_taiKhoan = "";
 	$error_mail = "";
 	$token = md5(uniqid());
-
-	// echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email . '  27 <br>';
-
-	
-	// echo $_POST['_token'] . '<br>'; // biến $_POST['_token'] không thay đổi vì nó không thực hiện submit
-	// echo $_SESSION['token'] . '<br>';
-
     if(isset($_POST['submit1']) && $_SESSION['token'] == $_POST['_token']) {
 
 		// validate thẻ....
@@ -55,11 +47,6 @@
 			if(mysqli_num_rows($query) > 0){
 				$error_taiKhoan = 'Tài khoản đã tồn tại';
 			} else {
-				// $sql3 = "INSERT INTO students(username, password, fullname, ngaysinh, phone_number, gender, address, email) VALUES 
-				// 		('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh','$diaChi', '$email');";
-				
-				// $result3 = mysqli_query($connect, $sql3);
-
 				$data = [
 					'username' => $taiKhoan,
 					'password' => $matKhau,
@@ -76,9 +63,6 @@
 					$affected_row = mysqli_affected_rows($connect);
 					if($affected_row > 0){
 						$_SESSION['taiKhoan'] = $taiKhoan;
-						// $sql4 = "SELECT id_student FROM students WHERE username = '$taiKhoan'";
-						// $query4 = mysqli_query($connect, $sql4);
-
 						$query4 = select('students', ['id_student'], ['username' => $taiKhoan]);
 						$result4 = mysqli_fetch_row($query4);
 						$_SESSION["id_student"] = $result4[0];
@@ -120,24 +104,14 @@
 		$_SESSION['email'] = $email;
 		$_SESSION['menu_status'] = "close";
 
-		// header("location: xacthuc.php"); 
-        // $sql1 = "SELECT * FROM teachers WHERE email='$email';";
-        // $sql2 = "SELECT * FROM students WHERE email='$email';";
-    
-        // $result1 = mysqli_query($connect, $sql1);
-        // $result2 = mysqli_query($connect, $sql2);
-    
 		$check_mail = checkEmailExist($email);
         if($check_mail){
             echo 'alert("Email đã được đăng ký, hãy chọn email khác");';
         } else {
-			// $s = "SELECT username FROM students WHERE username='$taiKhoan'";
-			// $query = mysqli_query($connect, $s);
 			$query = select('students', ['username'], ['username'=>$taiKhoan]);
 			if(mysqli_num_rows($query) > 0){
 				$error_taiKhoan = 'Tài khoản đã tồn tại';
 			} else {
-				// header("location: student.php");
 				?>
 				<script>
 					window.location.href = "xacthuc.php";
@@ -212,8 +186,6 @@
 				  	</div>
 				  	
 				  	<div class="mb-3" id="mail">
-					    <!-- <label for="dongYNhanMail" class="form-label">Đồng ý nhận email</label>
-					    <input type="checkbox" class="form-check-input" id="dongYNhanMail" name="dongYNhanMail"> -->
 				  	</div>
 
 					<div class="mb-3">

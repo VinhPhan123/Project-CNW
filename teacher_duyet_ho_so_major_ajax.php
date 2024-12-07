@@ -15,10 +15,6 @@ if (isset($_POST['id_ledger'])) {
         die("Connection failed: " . $connect->connect_error);
     }
 
-    // Lấy ra id_student
-    // $sql1 = "SELECT * FROM ledgers WHERE id_ledger='$id_ledger';";
-    // $query1 = mysqli_query($connect, $sql1);
-
     $condition = [
         'id_ledger' => $id_ledger
     ];
@@ -31,9 +27,6 @@ if (isset($_POST['id_ledger'])) {
         $score = $array_query1['score'];
 
         // lấy ra ledger_status, nếu bằng NULL - chưa duyệt, 1 - đã duyệt
-
-        // $sql2 = "SELECT * FROM students WHERE id_student = '$id_student';";
-        // $query2 = mysqli_query($connect, $sql2);
 
         $condition = [
             'id_student' => $id_student

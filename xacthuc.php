@@ -1,6 +1,5 @@
 <?php 
    include './layouts/header.php';
-   include './functions.php';
 ?>
 
 <script>
@@ -20,7 +19,6 @@
         <?php
     }
 
-    // echo $hoVaTen . '-' . $taiKhoan . '-' . $matKhau . '-' . $gioiTinh . '-' . $ngaySinh . '-' . $diaChi . '-' . $soDienThoai . '-' . $email;
     $email = $_SESSION['email'];
 
     $check_email_exist = checkEmailExist($email);
@@ -67,12 +65,6 @@
     if(isset($_POST['submit'])){
         $verify_code = $_POST['verifyCode'];
         if(in_array($verify_code, $array_codes)){
-            // $b = "UPDATE guest SET status = 2 WHERE teacher_email = '$email';";
-            // mysqli_query($connect, $b);
-
-            // $insert_teacher = "INSERT INTO teachers(username, password, fullname, ngaysinh, phone_number, gender, address, email)
-            // VALUES ('$taiKhoan', '$matKhau', '$hoVaTen', '$ngaySinh', '$soDienThoai', '$gioiTinh', '$diaChi', '$email');"; 
-            // mysqli_query($connect, $insert_teacher);
 
             $data = [
                 'username' => $taiKhoan,
@@ -85,9 +77,6 @@
                 'email' => $email,
             ];
             $check_insert = insert('teachers', $data);
-
-            // $update_status = "UPDATE guest SET status = 0 WHERE teacher_email = '$email';";
-            // mysqli_query($connect, $update_status);
 
             $value = [
                 'status' => 0
@@ -123,7 +112,6 @@
     $condition = [
         'teacher_email' => $email
     ];
-    // $c = "SELECT * FROM guest WHERE teacher_email='$email';";
     $query_mail = select('guest', '*', $condition);
 
     $kq = mysqli_fetch_array($query_mail);
@@ -131,8 +119,6 @@
 
     if($status_mail == 0){
         // xóa email đã gửi yêu cầu đăng ký giáo viên trong bảng guest vì có thể đăng ký lại với email đó và được admin phê duyệt
-        // $m = "DELETE FROM guest WHERE teacher_email='$email';";
-        // mysqli_query($connect, $m)
         $condition = [
             'teacher_email' => $email
         ];

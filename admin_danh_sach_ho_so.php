@@ -1,6 +1,5 @@
 <?php 
     include './layouts/header.php';
-    include './functions.php';
 ?>
 
 <style>
@@ -204,8 +203,9 @@
 <?php 
     // lấy ra các id_student trong bảng student
     $array_id_student = array();
-    $sql1 = "SELECT * FROM students;";
-    $query1 = mysqli_query($connect, $sql1);
+    // $sql1 = "SELECT * FROM students;";
+    // $query1 = mysqli_query($connect, $sql1);
+    $query1 = select('students', '*', '');
     while($r1 = mysqli_fetch_array($query1)){
         array_push($array_id_student, $r1['id_student']);
     }
@@ -226,8 +226,9 @@
 
         foreach($list_id_major as $id_major){
             $list_id_SB = array();
-            $sql3 = "SELECT * FROM ledgers WHERE id_student='$id_student' AND id_major='$id_major';";
-            $query3 = mysqli_query($connect, $sql3);
+            // $sql3 = "SELECT * FROM ledgers WHERE id_student='$id_student' AND id_major='$id_major';";
+            // $query3 = mysqli_query($connect, $sql3);
+            $query3 = select('ledgers', '*', ['id_student'=>$id_student, 'id_major'=>$id_major]);
             while($r3 = mysqli_fetch_array($query3)){
                 array_push($list_id_SB, $r3['id_SB']);
             }
@@ -239,8 +240,9 @@
     // print_r($array_idStudent_idMajor_listIdSB);
 
     // lấy ra số lượng ledgers;
-    $s1 = "SELECT * FROM ledgers;";
-    $q1 = mysqli_query($connect, $s1);
+    // $s1 = "SELECT * FROM ledgers;";
+    // $q1 = mysqli_query($connect, $s1);
+    $q1 = select('ledgers', '*', '');
     $count_ledger = mysqli_num_rows($q1);
     // echo $count_ledger;
 
@@ -285,13 +287,11 @@
             foreach($array_idStudent_idMajor_listIdSB as $id_student => $array_idMajor_listIdSB){
                 if(in_array($id_student, $array_id_student_ledgers)){
                     // lấy ra username_student
-                    $sql4 = "SELECT * FROM students WHERE id_student='$id_student';";
-                    $query4 = mysqli_query($connect, $sql4);
+                    $query4 = select('students', '*', ['id_student'=>$id_student]);
                     $username_student = mysqli_fetch_array($query4)['username'];
 
                     // lấy ra số lượng id_SB
-                    $sql6 = "SELECT * FROM ledgers WHERE id_student='$id_student'";
-                    $query6 = mysqli_query($connect, $sql6);
+                    $query6 = select('ledgers', '*', ['id_student'=>$id_student]);
                     $count = mysqli_num_rows($query6);
                     // echo $count;
                     echo '<tr>';
@@ -302,14 +302,12 @@
                         $count_id_SB = count($listIdSB);
 
                         // lấy ra tên ngành dựa vào id_major
-                        $sql5 = "SELECT * FROM majors WHERE id_major='$id_major';";
-                        $query5 = mysqli_query($connect, $sql5);
+                        $query5 = select('majors', '*', ['id_major'=>$id_major]);
                         $ten_nganh = mysqli_fetch_array($query5)['major_name'];
 
                         echo '<td id="chuyennganh" rowspan="'. $count_id_SB . '">' . $ten_nganh . '</td>';
                         foreach($listIdSB as $id_SB){
-                            $sql10 = "SELECT * FROM ledgers where id_student='$id_student' and id_major='$id_major' and id_SB='$id_SB';";
-                            $query10 = mysqli_query($connect, $sql10);
+                            $query10 = select('ledgers', '*', ['id_student'=>$id_student, 'id_major'=>$id_major, 'id_SB'=>$id_SB]);
                             $id_ledger = mysqli_fetch_array($query10)['id_ledger'];
                             echo '<td class="get_to_hop">' . $id_SB . '</td>';
                             echo '<td><button style="color: #fff;" class="btn btn-warning" name="show">Click</button></td>';
@@ -317,17 +315,14 @@
                                 
 
                             // lấy ra id_teacher dựa vào id_student, id_major, id_SB
-                            $sql7 = "SELECT * FROM ledgers where id_student='$id_student' and id_major='$id_major' and id_SB='$id_SB';";
-                            $query7 = mysqli_query($connect, $sql7);
+                            $query7 = select('ledgers', '*', ['id_student'=>$id_student, 'id_major'=>$id_major, 'id_SB'=>$id_SB]);
                             $id_teacher = mysqli_fetch_array($query7)['id_teacher'];
                             if($id_teacher != NULL){
-                                $sql8 = "SELECT * FROM teachers WHERE id_teacher='$id_teacher';";
-                                $query8 = mysqli_query($connect, $sql8);
+                                $query8 = select('teachers', '*', ['id_teacher'=>$id_teacher]);
                                 $teacher_name = mysqli_fetch_array($query8)['fullname'];
 
                                 // lấy ra ledger_status
-                                $sql9 = "SELECT * FROM ledgers where id_student='$id_student' and id_major='$id_major' and id_SB='$id_SB';";
-                                $query9 = mysqli_query($connect, $sql9);
+                                $query9 = select('ledgers', '*', ['id_student'=>$id_student, 'id_major'=>$id_major, 'id_SB'=>$id_SB]);
                                 $ledger_status = mysqli_fetch_array($query9)['ledger_status'];
             
                                 echo '<td>' . $teacher_name .'</td>
@@ -386,7 +381,7 @@
 	// observe(targetNode, config)
 	observer.observe(overlay, {
 		childList: true, // Theo dõi thêm hoặc xóa các phần tử con
-		subtree: true    //  Theo dõi tất cả các phần tử con trong cây DOM, không chỉ phần tử trực tiếp con của overlay.
+		subtree: true    //  Theo dõi tất cả các phần tử con trong cây DOM
 	});
 </script>
 
@@ -405,6 +400,8 @@
 			event.preventDefault(); 
 
 			const form_ajax = document.querySelector('.overlay');
+            // Trả về phần tử <tr> (hàng của bảng) gần nhất chứa phần tử hiện tại.
+            // tìm <input> nằm trong hàng (<tr>) gần nhất chứa phần tử this.
 			const inputElement = this.closest('tr').querySelector('input[class="get_id_ledger"]');
 			const id_ledger = inputElement.value;
 			console.log(id_ledger);
@@ -419,6 +416,7 @@
 
 
 			const xhr = new XMLHttpRequest();
+            // gửi http POST tới trang admin_hien_thi_ho_so_ajax
 			xhr.open('POST', "admin_hien_thi_ho_so_ajax.php", true);
 			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 			xhr.onload = function() {

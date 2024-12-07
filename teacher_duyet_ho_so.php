@@ -1,7 +1,6 @@
 <?php 
 	include './layouts/header.php';
 	include './XuLyPhien/teacher.php';
-	include './functions.php';
 ?>
 
 <?php $token = md5(uniqid()); ?>

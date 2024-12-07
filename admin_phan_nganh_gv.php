@@ -2,14 +2,9 @@
 	include './layouts/header.php';
 	include './XuLyPhien/admin.php';
 	include './database/connect.php';
-	include './functions.php';
 ?>
 
 <style>
-	/* .form_add, .form_delete {
-		display: flex;
-		justify-content: space-around;
-	} */
 
 	.select_tohop {
 		width: 100px;
@@ -33,9 +28,6 @@
 
 <?php 
 	// lấy ra các chuyên ngành đã được xét tổ hợp xét tuyển
-    // $s2 = "SELECT * FROM majors;";
-    // $query_major = mysqli_query($connect, $s2);
-
 	$query_major = select('majors', '*', '');
 	// tạo array lưu tất cả các chuyên ngành
     $majors = array();
@@ -45,21 +37,17 @@
     }
 ?>
 
-<?php 
-    // $s_0 = "SELECT * FROM teachers;";
-	// $query_0 = mysqli_query($connect, $s_0);
+<?php
 	$query_0 = select('teachers', '*', '');
 
 	// tạo array teachers (key-value) = (username-email)
 	$teachers = array();
 	while($row = mysqli_fetch_array($query_0)){
-		// echo $row['username'] . '-' . $row['email'] . '<br>';
 		$teachers[$row['username']] = $row['email'];
 	}
 
 	// đếm số lượng teacher trong bảng teachers
 	$count_teacher = mysqli_num_rows($query_0);
-	// echo $count_teacher;
 
 ?>
 
@@ -67,13 +55,9 @@
 <?php 
 	// tạo 1 array lưu id_teacher và tập hợp các id_major trong bảng phannganh_giaovien
 	$idTeacher_listIdMajor_array = array();
-	// $s5 = "SELECT * FROM teachers;";
-	// $query5 = mysqli_query($connect, $s5);
 	$query5 = select('teachers', '*', '');
 	while($row1 = mysqli_fetch_array($query5)){
 		$id_teacher = $row1['id_teacher'];
-		// $s6 = "SELECT * FROM phannganh_giaovien WHERE id_teacher = '$id_teacher';";
-		// $query6 = mysqli_query($connect, $s6);
 		$query6 = select('phannganh_giaovien', '*', ['id_teacher' => $id_teacher]);
 		$listMajor = array();
 		while($row2 = mysqli_fetch_array($query6)){
@@ -82,10 +66,8 @@
 		}
 	}	
 
-	// tạo 1 array lưu id_major - major tương ứng trong bảng majors
+	// tạo 1 array lưu id_major - major_name tương ứng trong bảng majors
 	$idMajor_major_array = array();
-	// $s6 = "SELECT * FROM majors;";
-	// $query6 = mysqli_query($connect, $s6);
 	$query6 = select('majors', '*', '');
 	while($row3 = mysqli_fetch_array($query6)){
 		$idMajor_major_array[$row3['id_major']] = $row3['major_name'];
@@ -94,8 +76,6 @@
 
 	// tạo 1 array lưu id_teacher và username_teacher tương ứng trong bảng teachers
 	$idTeacher_username_array = array();
-	// $s7 = "SELECT * FROM teachers;";
-	// $query7 = mysqli_query($connect, $s7);
 	$query7 = select('teachers', '*', '');
 	while($row4 = mysqli_fetch_array($query7)){
 		$idTeacher_username_array[$row4['id_teacher']] = $row4['username'];
@@ -124,23 +104,16 @@
 			// echo $teacher_username . '-' . $teacher_email . '-' . $major_at_row;
 	
 			// lấy ra id teacher tương ứng trong bảng teachers
-			// $s1 = "SELECT * FROM teachers WHERE username='$teacher_username';";
-			// $query1 = mysqli_query($connect, $s1);
 			$query1 = select('teachers', '*', ['username' => $teacher_username]);
 			$teacher_id = mysqli_fetch_array($query1)['id_teacher'];
 			// echo 'teacher id: ' . $teacher_id;
 			
 			// lấy ra id major tương ứng trong bảng majors
-			// $s2 = "SELECT * FROM majors WHERE major_name='$major_at_row';";
-			// $query2 = mysqli_query($connect, $s2);
 			$query2 = select('majors', '*', ['major_name' => $major_at_row]);
 			$major_id = mysqli_fetch_array($query2)['id_major'];
 			// echo 'major id : ' . $major_id;
 	
 			// lưu teacher_id va và major_id vào bảng phannganh_gv
-			// $s3 = "CALL insert_if_not_exist($major_id, $teacher_id);";
-			// mysqli_query($connect, $s3);
-
 			insertIfNotExist($major_id, $teacher_id);
 
 			header("location: admin_phan_nganh_gv.php");
@@ -162,9 +135,6 @@
 			$id_teacher = array_search($teacher_username, $idTeacher_username_array);
 			$id_major = array_search($major_at_row, $idMajor_major_array);
 
-			// echo $id_teacher . '-' . $id_major;
-			// $s8 = "DELETE FROM phannganh_giaovien WHERE id_teacher = '$id_teacher' AND id_major = '$id_major';";
-			// mysqli_query($connect, $s8);
 			delete('phannganh_giaovien', ['id_teacher'=>$id_teacher, 'id_major' => $id_major]);
 			header("location: admin_phan_nganh_gv.php");
 		}
@@ -188,13 +158,9 @@
 				}
 				$id_major_list_array = implode(" - ", $idMajor_array);
 				
-				// $s9 = "UPDATE teachers SET major_id_list = '$id_major_list_array' WHERE username = '$teacher_username';";
-				// mysqli_query($connect, $s9);
 				update('teachers', ['major_id_list'=>$id_major_list_array], ['username'=>$teacher_username]);
 			}
 		} else {
-			// $s10 = "UPDATE teachers SET major_id_list = '' WHERE username = '$teacher_username';";
-			// mysqli_query($connect, $s10);
 			update('teachers', ['major_id_list'=>''], ['username'=>$teacher_username]);
 		}
 	}
@@ -206,8 +172,6 @@
 
 	// Nếu major_id_list trong bảng teachers khác với tập các major trong phân ngành thì hiển thị nút save -> Modify
 	foreach($teachers as $teacher => $email){
-		// $s9 = "SELECT * FROM teachers WHERE username = '$teacher';";
-		// $query9 = mysqli_query($connect, $s9);
 		$query9 = select('teachers', '*', ['username' => $teacher]);
 		$list_id_major_in_teachers_table_string = mysqli_fetch_array($query9)['major_id_list'];
 		if($list_id_major_in_teachers_table_string == ''){
@@ -235,11 +199,6 @@
 		sort($list_id_major_in_teachers_table_array);
 		sort($list_id_major_in_phannganh_gv_table);
 
-		// print_r($list_id_major_in_teachers_table_array);
-		// print_r($list_id_major_in_phannganh_gv_table);
-
-		// var_dump($list_id_major_in_teachers_table_array == $list_id_major_in_phannganh_gv_table);
-		// echo "<br>";
 		if ($list_id_major_in_teachers_table_array !== $list_id_major_in_phannganh_gv_table) {
 			
 		}
@@ -288,8 +247,6 @@
 														foreach($listMajor as $value){
 															echo $value .'<br>';
 														}
-														// $majors_string = implode(" - ", $listMajor);
-														// echo '<td>' . $majors_string . '</td>';
 													} 
 													echo '</td>';
 												}
@@ -317,6 +274,16 @@
 										echo '</td>';
 
 
+										$query = select('teachers', '*', ['username'=>$teacher]);
+										$id_teacher = mysqli_fetch_array($query)['id_teacher'];
+										$arr_id_major_by_id_teacher = array();
+										$arr_id_major_by_id_teacher = isset($idTeacher_listIdMajor_array[$id_teacher]) ? $idTeacher_listIdMajor_array[$id_teacher] : array();
+										$arr_major_name_of_teacher = array();
+										foreach($arr_id_major_by_id_teacher as $major_id){
+											array_push($arr_major_name_of_teacher, $idMajor_major_array[$major_id]);
+										}										
+										
+
                                         echo '<td>
 											<div class="flex">
 											<form class="form_delete" method="post">
@@ -324,7 +291,7 @@
 												<input type="hidden" name="teacher_email" value="' . $email . '">
 												<select name="tohop_delete" class="select_tohop">
 													<option></option>';?>
-													<?php foreach($majors as $major) { ?>
+													<?php foreach($arr_major_name_of_teacher as $major) { ?>
 														<?php echo '<option value="' . $major .'">' . $major . '</option>'?>
 													<?php } ?>
 												<?php
@@ -337,11 +304,6 @@
 										echo '</td>';
 										
 
-
-                                        
-
-										// $s9 = "SELECT * FROM teachers WHERE username = '$teacher';";
-										// $query9 = mysqli_query($connect, $s9);
 										$query9 = select('teachers', '*', ['username' => $teacher]);
 										$list_id_major_in_teachers_table_string = mysqli_fetch_array($query9)['major_id_list'];
 										// lấy ra major_id_list từ bảng teachers nếu rỗng thì sẽ thành Array([0]=> ) vì vậy cần chuyển thành array rỗng
@@ -384,7 +346,6 @@
 											echo '</div>';
 											echo '</td>';
 										} else {
-											// echo '<td></td>';
 											echo '<td> <button type="submit" id="btn_save" class="btn btn-success" name="">Already save</button> </td>';
 										}
                                         

@@ -3,10 +3,6 @@
         include './database/connect.php';
         include './functions.php';
         
-        // $tenNganh = $_POST['tenNganh'];
-        // $query1 = "SELECT * FROM majors WHERE major_name = '$tenNganh';";
-
-        // $result1 = mysqli_query($connect, $query1);
         $result1 = select('majors', '*', ['major_name' => $_POST['tenNganh']]);
         $id_major = mysqli_fetch_array($result1)['id_major'];
 

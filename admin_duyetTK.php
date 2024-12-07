@@ -1,7 +1,6 @@
 <?php 
     include './layouts/header.php';
     include './XuLyPhien/admin.php';
-    include './functions.php';
 ?>
 <?php 
     $token = md5(uniqid());
@@ -27,8 +26,6 @@
     $getEmails = array(); // [key-value]
     $emails = [];
     $statuses = [];
-    // $sql = "SELECT * FROM guest WHERE status=1;";
-    // $result = mysqli_query($connect, $sql);
     $result = select('guest', '*', ['status'=>1]);
     while($row = mysqli_fetch_array($result)){
         array_push($emails, $row['teacher_email']);
@@ -61,8 +58,6 @@
         $row_id = $_POST['row_id'];
         $email_guest = $getEmails[$row_id];
         echo ($email_guest);
-        // $b = "UPDATE guest SET status = 0 WHERE teacher_email = '$email_guest';";
-        // mysqli_query($connect, $b);
         update('guest', ['status'=>0], ['teacher_email'=>$email_guest]);
 
         header("location: admin_duyetTK.php");

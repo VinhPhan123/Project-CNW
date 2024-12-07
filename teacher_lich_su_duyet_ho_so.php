@@ -1,7 +1,6 @@
 
 <?php 
     include './layouts/header.php';
-    include './functions.php';
 	include './XuLyPhien/teacher.php';
 ?>
 
@@ -24,8 +23,6 @@
         $id_teacher = $r['id_teacher'];
         $string_list_id_major = $r['major_id_list'];
     }
-    // echo $id_teacher . '<br>';
-    // echo $string_list_id_major;
 
     $list_id_major = $array = array_map('intval', array_map('trim', explode('-', $string_list_id_major)));
 
@@ -36,7 +33,6 @@
             array_push($list_major, $r['major_name']);
         }
     }
-    // print_r($list_major);
 ?>
 
 <div style="display: block; width: 100%;">

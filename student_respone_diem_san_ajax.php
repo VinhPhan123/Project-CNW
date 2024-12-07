@@ -6,10 +6,6 @@
         $tenNganh = $_POST['tenNganh'];
         $toHop = $_POST['toHop'];
 
-        // lấy ra id_major
-        // $query1 = "SELECT * FROM majors WHERE major_name = '$tenNganh';";
-        // $result1 = mysqli_query($connect, $query1);
-
         $condition = [
             'major_name' => $tenNganh
         ];
@@ -17,10 +13,6 @@
         $id_major = mysqli_fetch_array($result1)['id_major'];
 
         // lấy ra điểm sàn thông qua id_major và id_SB
-        // $query2 = "SELECT diem_san from chuyennganh
-        //         where id_major=$id_major and id_SB='$toHop'";
-        // $result2 = mysqli_query($connect, $query2);
-
         $condition = [
             'id_major' => $id_major,
             'id_SB' => $toHop
