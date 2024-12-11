@@ -32,7 +32,6 @@
 <div style="display: block; width: 100%;">
 	<div class="container mt-4" style="width: max-content; margin-left: auto; margin-right: auto;">
         <h4 style="color: #0c6efd;">Danh sách hồ sơ</h4>
-        <!-- <p style="color: #;"></p> -->
         <?php
             echo "<table>
                 <tr>
@@ -53,9 +52,7 @@
                     $query_select_chuyennganh_of_major = mysqli_query($connect, $sql_select_chuyennganh_of_major);
                     $result_select_chuyennganh_of_major = mysqli_num_rows($query_select_chuyennganh_of_major);
                     $arr_select_chuyennganh_of_major = mysqli_fetch_all($query_select_chuyennganh_of_major);
-                    // echo "<pre>";
-                    // echo print_r($arr_select_chuyennganh_of_major);
-                    // echo "</pre>";
+
                     if($result_select_chuyennganh_of_major == 0) {
                         echo "<tr>";
                         echo "<td rowspan='" . $result_select_chuyennganh_of_major . "'>" . $tmp . "</td>";

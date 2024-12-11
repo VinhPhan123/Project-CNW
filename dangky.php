@@ -249,9 +249,3 @@
 <?php 
     include './layouts/footer.php'
 ?>
-
-
-<script>
-	var checkButtonDangKyGiaoVien = document.getElementById('dangKyGiaoVien');
-	console.log(checkButtonDangKyGiaoVien.checked);
-</script>

@@ -23,9 +23,6 @@
     $result_select_subject_combination = mysqli_num_rows($query_select_subject_combination);
     $arr_select_subject_combination = mysqli_fetch_all($query_select_subject_combination);
     
-    // echo "<pre>";
-    // echo print_r($arr_select_subject_combination);
-    // echo "</pre>";
 ?>
 
 <link rel="stylesheet" href="./assets/css/danh_sach_nganh.css">
@@ -74,9 +71,6 @@
                 echo "Chưa có ngành nào";
             } else {
                 $arr_major = mysqli_fetch_all($query_major);
-                // echo "<pre>";
-                // echo print_r($arr_major);
-                // echo "</pre>";
 
                 echo "
                 <table>
@@ -159,7 +153,6 @@
                             echo '<button id="insert-button" type="submit" class="btn btn-success" name="insert">Thêm</button>';
                             echo ' <input type="hidden" name="_token" value="'. $token .'"/></form>';                        
                         } else {
-                            // print_r($arr_major);
                             if($result_select_subject_combination != count($tmp_arr_select_chuyennganh)) {
                                 echo '<td id="insert_button" sytle="display: flex;">
                                     <form action="" method="post">
@@ -250,9 +243,6 @@
                     for($i= 0; $i<count($arr_select_chuyennganh); $i++) {
                         array_push($tmp_arr, $arr_select_chuyennganh[$i][0]);
                     }
-                    // echo "<pre>";
-                    // echo print_r($tmp_arr);
-                    // echo "</pre>";
                     if(in_array($id_SB, $tmp_arr)) {
                         echo "<script>alert('Tổ hợp môn này đã tồn tại trong mã ngành!');</script>";
                     } else {

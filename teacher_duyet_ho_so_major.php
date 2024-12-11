@@ -455,13 +455,14 @@
 	const overlay = document.querySelector('.overlay');
 
 	// Tạo một observer
+	// mutations là một danh sách các thay đổi phát hiện được, ví dụ như thêm hoặc xóa phần tử con.
 	const observer = new MutationObserver(mutations => {
 		mutations.forEach(mutation => {
+			// nếu phát hiện phần tử con được thêm vào
 			if (mutation.type === 'childList') {
 				const btn_close = document.getElementById('close');
 
 				if (btn_close) {
-					// console.log(btn_close);
 					btn_close.addEventListener('click', function() {
 						overlay.style.display = 'none';
 					});
@@ -476,7 +477,6 @@
 	});
 
 	// Bắt đầu theo dõi sự thay đổi trong overlay
-	// observe(targetNode, config)
 	observer.observe(overlay, {
 		childList: true, // Theo dõi thêm hoặc xóa các phần tử con
 		subtree: true    //  Theo dõi tất cả các phần tử con trong cây DOM, không chỉ phần tử trực tiếp con của overlay.

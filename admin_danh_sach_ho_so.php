@@ -1,5 +1,6 @@
 <?php 
     include './layouts/header.php';
+    include './XuLyPhien/admin.php';
 ?>
 
 <style>
@@ -142,7 +143,7 @@
 </style>
 
 <style>
-	.img_truong_chuyen:hover{
+	.show_img .img_truong_chuyen:hover{
 		width: 500px;
 		height: 500px;
 		background-size: cover;
@@ -203,14 +204,10 @@
 <?php 
     // lấy ra các id_student trong bảng student
     $array_id_student = array();
-    // $sql1 = "SELECT * FROM students;";
-    // $query1 = mysqli_query($connect, $sql1);
     $query1 = select('students', '*', '');
     while($r1 = mysqli_fetch_array($query1)){
         array_push($array_id_student, $r1['id_student']);
     }
-    // print_r($array_id_student);
-
     // tạo array (key-value) = (id_student - [id_major - list_id_SB]);
     $array_idStudent_idMajor_listIdSB = array();
     foreach($array_id_student as $id_student){
@@ -222,12 +219,8 @@
         while($r2 = mysqli_fetch_array($query2)){
             array_push($list_id_major, $r2['id_major']);
         }
-        // print_r($list_id_major);
-
         foreach($list_id_major as $id_major){
             $list_id_SB = array();
-            // $sql3 = "SELECT * FROM ledgers WHERE id_student='$id_student' AND id_major='$id_major';";
-            // $query3 = mysqli_query($connect, $sql3);
             $query3 = select('ledgers', '*', ['id_student'=>$id_student, 'id_major'=>$id_major]);
             while($r3 = mysqli_fetch_array($query3)){
                 array_push($list_id_SB, $r3['id_SB']);
@@ -236,15 +229,9 @@
         }
         $array_idStudent_idMajor_listIdSB[$id_student] = $a;
     }
-
-    // print_r($array_idStudent_idMajor_listIdSB);
-
     // lấy ra số lượng ledgers;
-    // $s1 = "SELECT * FROM ledgers;";
-    // $q1 = mysqli_query($connect, $s1);
     $q1 = select('ledgers', '*', '');
     $count_ledger = mysqli_num_rows($q1);
-    // echo $count_ledger;
 
 ?>
 
@@ -293,7 +280,6 @@
                     // lấy ra số lượng id_SB
                     $query6 = select('ledgers', '*', ['id_student'=>$id_student]);
                     $count = mysqli_num_rows($query6);
-                    // echo $count;
                     echo '<tr>';
                     echo '<td rowspan="'. $count . '">' . $index . '</td>';
                     echo '<td rowspan="'. $count . '">' . $username_student . '</td>';

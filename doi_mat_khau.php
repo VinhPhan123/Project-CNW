@@ -1,5 +1,4 @@
 <?php
-    include './functions.php';
     include './database/connect.php';
     include './layouts/header.php';
     include './XuLyPhien/all.php';
@@ -11,9 +10,6 @@
     if(isset($_SESSION['role'])) {
 		include './layouts/menu.php';
 	}
-    // echo $_SESSION['role'];
-    // echo '<br>';
-    // echo $_SESSION['taiKhoan'];
     $token = md5(uniqid());
 ?>
 

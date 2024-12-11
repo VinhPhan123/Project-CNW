@@ -1,6 +1,5 @@
 <?php 
     include './layouts/header.php';
-    // include './functions.php';
 ?>
 
 <style>

@@ -36,7 +36,6 @@
 
     // lấy ra số lượng email chưa được duyệt (status=1)
     $countEmails = mysqli_num_rows($result);
-    // echo ($_POST['submitAccess']);
     // token ngăn gửi email nhiều lần nếu teachers chưa xác thực mà admin reload lại trang
     if(isset($_POST['submitAccess']) && $_SESSION['token'] == $_POST['_token']){
         // randomCode luu vao bang gen_code
@@ -47,7 +46,6 @@
         $row_id = $_POST['row_id'];
 
         $emailTeacher = $getEmails[$row_id];
-        // echo $emailTeacher;
        
         send_email($email_admin, $emailTeacher, $randomCode);
         

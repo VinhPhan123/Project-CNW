@@ -72,7 +72,6 @@
 	while($row3 = mysqli_fetch_array($query6)){
 		$idMajor_major_array[$row3['id_major']] = $row3['major_name'];
 	}
-	// print_r($idMajor_major_array);
 
 	// tạo 1 array lưu id_teacher và username_teacher tương ứng trong bảng teachers
 	$idTeacher_username_array = array();
@@ -101,18 +100,15 @@
 		if($_POST['tohop_add'] != '') {
 			$teacher_username = $_POST['teacher_username'];
 			$major_at_row = $_POST['tohop_add'];
-			// echo $teacher_username . '-' . $teacher_email . '-' . $major_at_row;
 	
 			// lấy ra id teacher tương ứng trong bảng teachers
 			$query1 = select('teachers', '*', ['username' => $teacher_username]);
 			$teacher_id = mysqli_fetch_array($query1)['id_teacher'];
-			// echo 'teacher id: ' . $teacher_id;
 			
 			// lấy ra id major tương ứng trong bảng majors
 			$query2 = select('majors', '*', ['major_name' => $major_at_row]);
 			$major_id = mysqli_fetch_array($query2)['id_major'];
-			// echo 'major id : ' . $major_id;
-	
+
 			// lưu teacher_id va và major_id vào bảng phannganh_gv
 			insertIfNotExist($major_id, $teacher_id);
 
@@ -150,7 +146,6 @@
 		if (isset($username_listMajor_array[$teacher_username])) {
 			// list major của username tương ứng
 			$listMajors = $username_listMajor_array[$teacher_username];
-			// $string_major_list = implode(" - ", $listMajors);
 			if (is_array($listMajors)) {
 				$idMajor_array = array();
 				foreach($listMajors as $major){
@@ -168,7 +163,6 @@
 
 
 <?php
-	// $hideSaveButton = false;
 
 	// Nếu major_id_list trong bảng teachers khác với tập các major trong phân ngành thì hiển thị nút save -> Modify
 	foreach($teachers as $teacher => $email){
