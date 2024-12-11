@@ -1,7 +1,7 @@
 <?php
     $server = 'localhost';
     $user = 'root';
-    $pass = '22042004';
+    $pass = '';
     $database = 'K72_Nhom21';
     $connect = new mysqli($server, $user,$pass, $database);
     if($connect){
