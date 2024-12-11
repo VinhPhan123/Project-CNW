@@ -55,7 +55,7 @@
         $s2 = "SELECT code FROM gen_code WHERE NOW() <= expiry_time;";
         $query_code = mysqli_query($connect, $s2);
         while($row = mysqli_fetch_array($query_code)) {
-            // echo $row['code'];
+            echo $row['code'] . '<br>';
             array_push($array_codes, $row['code']);
         }
     }
