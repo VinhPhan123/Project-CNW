@@ -234,6 +234,7 @@
                             alert("Đã có học sinh nộp hồ sơ, không thể xóa chuyên ngành!");
                         </script>
                     <?php
+                    echo '<script>window.location="danh_sach_nganh.php";</script>';
                 }
             }
 
