@@ -224,9 +224,17 @@
 
             if(isset($_POST['delete_major']) && isset($_SESSION['token']) && $_SESSION['token'] == $_POST['_token']) {
                 $id_major = $_POST['row_id'];
-                delete('chuyennganh', ['id_major' => $id_major]);
-                delete('majors', ['id_major' => $id_major]);
-                echo '<script>window.location="danh_sach_nganh.php";</script>';
+                $check_delete_chuyennganh = delete('chuyennganh', ['id_major' => $id_major]);
+                $check_delete_majors = delete('majors', ['id_major' => $id_major]);
+                if($check_delete_chuyennganh && $check_delete_majors) {
+                    echo '<script>window.location="danh_sach_nganh.php";</script>';
+                } else {
+                    ?>
+                        <script>
+                            alert("Đã có học sinh nộp hồ sơ, không thể xóa chuyên ngành!");
+                        </script>
+                    <?php
+                }
             }
 
             if(isset($_POST['insert']) && isset($_SESSION['token']) && $_SESSION['token'] == $_POST['_token']) {

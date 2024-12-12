@@ -27,6 +27,7 @@
         echo "Chưa có ngành nào";
     } else {
         $arr_select_majors = mysqli_fetch_all($query_select_majors);
+        // print_r($arr_select_majors);
 ?>
 <link rel="stylesheet" href="./assets/css/admin_tao_ho_so.css">
 <div style="display: block; width: 100%;">
@@ -53,10 +54,13 @@
                     $result_select_chuyennganh_of_major = mysqli_num_rows($query_select_chuyennganh_of_major);
                     $arr_select_chuyennganh_of_major = mysqli_fetch_all($query_select_chuyennganh_of_major);
 
+                    // print_r($arr_select_chuyennganh_of_major) . '<br>';
+                    echo $result_select_chuyennganh_of_major;
+
                     if($result_select_chuyennganh_of_major == 0) {
                         echo "<tr>";
-                        echo "<td rowspan='" . $result_select_chuyennganh_of_major . "'>" . $tmp . "</td>";
-                        echo "<td style='text-align: left;' rowspan='" . $result_select_chuyennganh_of_major . "'>" . $arr_select_majors[$i][1] . "</td>";
+                        echo "<td>" . $tmp . "</td>";
+                        echo "<td style='text-align: left;'>" . $arr_select_majors[$i][1] . "</td>";
                         echo "<td colspan='6'>Chưa có tổ hợp môn của ngành này!</td>";
                         echo "</tr>";
                     } else {

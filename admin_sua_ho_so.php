@@ -100,7 +100,8 @@
             $id_major = $_POST['id_major'];
             $id_SB = $_POST['id_SB'];
 
-            delete('chuyennganh', ['id_major' => $id_major, 'id_SB' => $id_SB]);
+            $check_delete_chuyennganh = delete('chuyennganh', ['id_major' => $id_major, 'id_SB' => $id_SB]);
+            var_dump($check_delete_chuyennganh);
 
             echo '<script>window.location="admin_tao_ho_so.php";</script>';
         }

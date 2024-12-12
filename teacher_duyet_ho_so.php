@@ -76,9 +76,6 @@
         height: 28px;
     }
 
-</style>
-
-<style>
 	.chonnganh_xettuyen {
 		display: flex;
 		margin: auto;
@@ -124,9 +121,6 @@
 	.open {
 		display: flex;
 	}
-</style>
-
-<style>
 	.img_truong_chuyen:hover{
 		width: 500px;
 		height: 500px;

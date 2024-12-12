@@ -17,9 +17,7 @@
         font-size: 15px;
         font-weight: 500;
     }
-</style>
 
-<style>
     .infor_text {
         color: #b50206;
         font-weight: bold;
@@ -88,9 +86,6 @@
         height: 28px;
     }
 
-</style>
-
-<style>
 	.chonnganh_xettuyen {
 		display: flex;
 		margin: auto;
@@ -140,9 +135,7 @@
     .overlay {
         z-index: 11;
     }
-</style>
-
-<style>
+    
 	.show_img .img_truong_chuyen:hover{
 		width: 500px;
 		height: 500px;
